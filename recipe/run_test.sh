@@ -21,3 +21,11 @@ echo " "
 echo "environment vars:"
 env | sort
 echo " "
+
+# this should run
+setup doxygen
+
+# and we need the right spot
+if [[ ! `eups list -v doxygen | grep "lsst_home/stackvana_doxygen"` ]]; then
+    exit 1
+fi
