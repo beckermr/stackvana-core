@@ -1,5 +1,5 @@
 # stackvana-core
-[![Build Status](https://dev.azure.com/beckermr/beckermr%20conda%20channel/_apis/build/status/beckermr.stackvana-core?branchName=master)](https://dev.azure.com/beckermr/beckermr%20conda%20channel/_build/latest?definitionId=7&branchName=master)
+[![Anaconda-Server Badge](https://anaconda.org/beckermr/stackvana-core/badges/version.svg)](https://anaconda.org/beckermr/stackvana-core) [![Anaconda-Server Badge](https://anaconda.org/beckermr/stackvana-core/badges/downloads.svg)](https://anaconda.org/beckermr/stackvana-core) [![Build Status](https://dev.azure.com/beckermr/beckermr%20conda%20channel/_apis/build/status/beckermr.stackvana-core?branchName=master)](https://dev.azure.com/beckermr/beckermr%20conda%20channel/_build/latest?definitionId=7&branchName=master)
 
 core build tooling for stackvana
 
