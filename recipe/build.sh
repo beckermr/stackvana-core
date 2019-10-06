@@ -147,7 +147,7 @@ done
 mkdir -p ${EUPS_DIR}/site
 echo "hooks.config.site.lockDirectoryBase = None" >> ${EUPS_DIR}/site/startup.py
 
-# make eups use a sane shebang line for python
+# make eups use a sane path python in scripts
 # the long line causes failures on linux
 for fname in "eups" "eups_setup"; do
     cp ${EUPS_DIR}/bin/${fname} ${EUPS_DIR}/bin/${fname}.bak
