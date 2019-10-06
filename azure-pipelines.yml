@@ -1,0 +1,55 @@
+variables:
+  buildtag: v1
+
+jobs:
+- job: osx_python37
+  pool:
+    vmImage: 'macOS-10.13'
+  steps:
+  - checkout: self
+    clean: true
+  - bash: |
+      if [ "$BUILD_REPOSITORY_NAME" != "beckermr/conda-package-tools" ]
+      then
+          git clone -b ${BUILDTAG} https://github.com/beckermr/conda-package-tools.git
+      else
+          ./bootstrap.sh
+      fi
+    displayName:
+      bootstrap
+  - bash: ./conda-package-tools/install_miniconda.sh
+    displayName: install miniconda
+    env:
+      CONFIG: 'osx_python3.7'
+
+  - bash: ./conda-package-tools/build.sh
+    displayName: build and upload package
+    env:
+      CONFIG: 'osx_python3.7'
+      ANACONDA_TOKEN: $(anaconda.token)
+
+- job: linux_python37
+  pool:
+    vmImage: 'Ubuntu-16.04'
+  steps:
+  - checkout: self
+    clean: true
+  - bash: |
+      if [ "$BUILD_REPOSITORY_NAME" != "beckermr/conda-package-tools" ]
+      then
+          git clone -b ${BUILDTAG} https://github.com/beckermr/conda-package-tools.git
+      else
+          ./bootstrap.sh
+      fi
+    displayName:
+      bootstrap
+  - bash: ./conda-package-tools/install_miniconda.sh
+    displayName: install miniconda
+    env:
+      CONFIG: 'linux_python3.7'
+
+  - bash: ./conda-package-tools/build.sh
+    displayName: build and upload package
+    env:
+      CONFIG: 'linux_python3.7'
+      ANACONDA_TOKEN: $(anaconda.token)
