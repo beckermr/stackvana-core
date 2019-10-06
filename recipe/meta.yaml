@@ -17,7 +17,7 @@ package:
   version: {{ version }}
 
 build:
-  number: 0
+  number: 1
   skip: True  # [win or py < 37]
   run_exports:
     strong:
@@ -62,6 +62,8 @@ requirements:
     - xorg-libxt =1.2.0  # [linux]
     - zlib =1.2.11
     - libiconv =1.15
+    - flex
+    - bison
 
     # compilers for compiling
     - c-compiler
