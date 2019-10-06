@@ -149,11 +149,13 @@ echo "hooks.config.site.lockDirectoryBase = None" >> ${EUPS_DIR}/site/startup.py
 
 # make eups use a sane shebang line for python
 # the long line causes failures on linux
-cp ${EUPS_DIR}/bin/eups_setup ${EUPS_DIR}/bin/eups_setup.bak
-echo "#!/usr/bin/env python" > ${EUPS_DIR}/bin/eups_setup
-tail -n +1 ${EUPS_DIR}/bin/eups_setup.bak >> ${EUPS_DIR}/bin/eups_setup
-chmod 755 ${EUPS_DIR}/bin/eups_setup
-rm ${EUPS_DIR}/bin/eups_setup.bak
+for fname in "eups" "eups_setup"; do
+    cp ${EUPS_DIR}/bin/${fname} ${EUPS_DIR}/bin/${fname}.bak
+    echo "#!/usr/bin/env python" > ${EUPS_DIR}/bin/${fname}
+    tail -n +1 ${EUPS_DIR}/bin/${fname}.bak >> ${EUPS_DIR}/bin/${fname}
+    chmod 755 ${EUPS_DIR}/bin/${fname}
+    rm ${EUPS_DIR}/bin/${fname}.bak
+done
 
 # patch doxygn since the build is so hard and it is a binary
 # now setup eups
