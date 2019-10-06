@@ -149,6 +149,8 @@ echo "hooks.config.site.lockDirectoryBase = None" >> ${EUPS_DIR}/site/startup.py
 
 # patch doxygn since the build is so hard and it is a binary
 # now setup eups
+cat ${EUPS_DIR}/bin/setups.sh
+
 export EUPS_DIR=${EUPS_DIR}
 source ${EUPS_DIR}/bin/setups.sh
 export -f setup
