@@ -21,8 +21,6 @@ export EUPS_PKGROOT="${EUPS_PKGROOT}"
 # I am hard coding these options
 EUPS_PYTHON=$PYTHON  # use PYTHON in the host env for eups
 
-NOOP_FLAG=false  # useful for debugging
-
 # tell it where CURL is
 CURL="${PREFIX}/bin/curl"
 # disable curl progress meter unless running under a tty -- this is intended
@@ -74,19 +72,11 @@ n8l::ln_rel() {
 ##########################
 # actual build
 
-# If no-op, prefix every install command with echo
-if [[ $NOOP_FLAG == true ]]; then
-    cmd="echo"
-    echo "!!! NOOP_FLAG specified, no install commands will be really executed"
-else
-    cmd=""
-fi
-
-$cmd mkdir -p ${LSST_HOME}
-$cmd pushd ${LSST_HOME}
+mkdir -p ${LSST_HOME}
+pushd ${LSST_HOME}
 
 # the install expects this symlink
-$cmd n8l::ln_rel "${PREFIX}" current
+n8l::ln_rel "${PREFIX}" current
 
 # now the main script
 echo " "
@@ -99,46 +89,42 @@ echo "Installing EUPS (${LSST_EUPS_VERSION})..."
 echo "Using python at ${EUPS_PYTHON} to install EUPS"
 echo "Configured EUPS_PKGROOT: ${EUPS_PKGROOT}"
 
-$cmd mkdir -p "$LSST_HOME/_build"
-$cmd pushd "$LSST_HOME/_build"
+mkdir -p "$LSST_HOME/_build"
+pushd "$LSST_HOME/_build"
 
-if [[ $NOOP_FLAG == true ]]; then
-    echo "downloading eups"
-else
-    "$CURL" "$CURL_OPTS" -L "$LSST_EUPS_TARURL" | tar xzvf -
-fi
+"$CURL" "$CURL_OPTS" -L "$LSST_EUPS_TARURL" | tar xzvf -
 
-$cmd mkdir -p "eups-${LSST_EUPS_VERSION}"
-$cmd pushd "eups-${LSST_EUPS_VERSION}"
+mkdir -p "eups-${LSST_EUPS_VERSION}"
+pushd "eups-${LSST_EUPS_VERSION}"
 
-$cmd mkdir -p "${EUPS_PATH}"
-$cmd mkdir -p "${EUPS_DIR}"
-$cmd ./configure \
+mkdir -p "${EUPS_PATH}"
+mkdir -p "${EUPS_DIR}"
+./configure \
     --prefix="${EUPS_DIR}" \
     --with-eups="${EUPS_PATH}" \
     --with-python="${EUPS_PYTHON}"
-$cmd make install
+make install
 
-$cmd popd  # eups-${LSST_EUPS_VERSION}
-$cmd popd  # $LSST_HOME/_build
+popd  # eups-${LSST_EUPS_VERSION}
+popd  # $LSST_HOME/_build
 
-$cmd rm -rf "$LSST_HOME/_build"
+rm -rf "$LSST_HOME/_build"
 
 # the eups install messes up permissions?
 chmod -R a+r ${EUPS_DIR}
 chmod -R u+w ${EUPS_DIR}
 
 # update $EUPS_DIR current symlink
-$cmd n8l::ln_rel "${EUPS_DIR}" current
+n8l::ln_rel "${EUPS_DIR}" current
 
 # update EUPS_PATH current symlink
-$cmd n8l::ln_rel "${EUPS_PATH}" current
+n8l::ln_rel "${EUPS_PATH}" current
 
-$cmd popd  # LSST_HOME
+popd  # LSST_HOME
 
 # eups needs these dirs to be around...
-$cmd mkdir -p "${EUPS_PATH}/ups_db"
-$cmd mkdir -p "${EUPS_PATH}/site"
+mkdir -p "${EUPS_PATH}/ups_db"
+mkdir -p "${EUPS_PATH}/site"
 touch "${EUPS_PATH}/ups_db/.conda_keep_me_please"
 touch "${EUPS_PATH}/site/.conda_keep_me_please"
 
@@ -160,3 +146,22 @@ done
 # turn off locking
 mkdir -p ${EUPS_DIR}/site
 echo "hooks.config.site.lockDirectoryBase = None" >> ${EUPS_DIR}/site/startup.py
+
+# patch doxygn since the build is so hard and it is a binary
+# now setup eups
+export EUPS_DIR=${EUPS_DIR}
+source ${EUPS_DIR}/bin/setups.sh
+export -f setup
+export -f unsetup
+
+mkdir -p ${LSST_HOME}/stackvana_doxygen/bin
+pushd ${LSST_HOME}/stackvana_doxygen/bin
+ln -s ../../../bin/doxygen doxygen
+popd
+
+eups declare -m none -r ${LSST_HOME}/stackvana_doxygen doxygen stackvana_doxygen
+
+mkdir -p ${EUPS_PATH}/site
+echo "doxygen stackvana_doxygen" >> ${EUPS_PATH}/site/manifest.remap
+
+unset EUPS_DIR

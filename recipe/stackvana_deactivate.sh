@@ -44,6 +44,6 @@ stackvana_backup_and_append_envvar \
 
 stackvana_backup_and_append_envvar \
     deactivate \
-    EUPSPKG_SCONSFLAGS
+    CC
 
 unset -f stackvana_backup_and_append_envvar

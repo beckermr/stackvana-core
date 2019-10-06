@@ -17,7 +17,7 @@ package:
   version: {{ version }}
 
 build:
-  number: 1
+  number: 0
   skip: True  # [win or py < 37]
   run_exports:
     strong:
@@ -31,6 +31,8 @@ requirements:
     - git
     - perl
     - make
+    - cmake
+    - doxygen =1.8.13
   run:
     - python
     - pip
@@ -38,6 +40,7 @@ requirements:
     - git
     - perl
     - make
+    - cmake
 
     # "real" deps
     - expat =2.2.5
@@ -62,6 +65,7 @@ requirements:
     - xorg-libxt =1.2.0  # [linux]
     - zlib =1.2.11
     - libiconv =1.15
+    - doxygen =1.8.13
     - flex
     - bison
 

@@ -84,6 +84,6 @@ stackvana_backup_and_append_envvar \
 # make scons happy
 stackvana_backup_and_append_envvar \
     activate \
-    EUPSPKG_SCONSFLAGS \
-    "cc=gcc" \
+    CC \
+    "gcc" \
     " "
