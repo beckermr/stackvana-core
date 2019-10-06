@@ -62,4 +62,4 @@ for details on how to build the DM stack using ``eups``.
 
    Only the `log` package is known to require this at the moment.
 
-2. Builds of some packages on OSX currently fail.
+2. Builds of some packages on OSX from source currently fail.
