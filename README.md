@@ -36,13 +36,6 @@ for details on how to build the DM stack using ``eups``.
   this package, and those made by activating `eups`, are removed, leaving the original
   environment intact.
 
-- I have disabled `eups`'s locking mechanism to help multiple processes simultaneously
-  use the same `conda` environment with this package. According to Robert Lupton, this choice should
-  be fine. However, as usual with all `conda` environments, do not install packages via
-  `conda` or `eups` into an environment while running code is using that same environment.
-  Many thanks to Robert Lupton for pointing out how to do modify this configuration option
-  elegantly!
-
 - The `eups` installation in this environment is not completely isolated from
   the outside world. Global `eups` configuration and caching done in your `~/.eups`
   directory is still visible to all environments.
@@ -52,10 +45,33 @@ for details on how to build the DM stack using ``eups``.
   by the project is old enough), that it is pretty safe to also allow `eups` to use
   precompiled binaries.
 
+
+## Things that I did that don't make me feel like a good person.
+
+- I have disabled `eups`'s locking mechanism to help multiple processes simultaneously
+  use the same `conda` environment with this package. According to Robert Lupton, this choice should
+  be fine. However, as usual with all `conda` environments, do not install packages via
+  `conda` or `eups` into an environment while running code is using that same environment.
+  Many thanks to Robert Lupton for pointing out how to do modify this configuration option
+  elegantly!
+
 - I have removed the build of `doxygen` from `eups` in favor of installing it with
   `conda`. I used the `manifest.remap` feature of `eups` to make sure this works with
   the existing stack installation routine. Many thanks to Jim Bosch for pointing out
   this feature of `eups`!
+
+- I changed the first line, `#!${PREFIX}/bin/python`, in the `eups` and `eups_setup`
+  scripts to `#!/usr/bin/env python`. This doesn't seem to make a difference and
+  the CI services that build the stack were failing on the long prefixes used by
+  `conda-build`.
+
+- I applied a patch to the `${EUPS_DIR}/lib/eupspkg.sh` script so that it uses
+  old-style `distutils` installs. (I added `--single-version-externally-managed --record record.txt`
+  to `PYSETUP_INSTALL_OPTIONS`.) This change ensures that python packages installed by
+  `eups` do not install their dependencies from `PyPi` using `setuptools`. Instead,
+  you must install the appropriate package using `conda`. `setuptools` should have been
+  able to detect the dependencies in the `conda` environment in the first place, but sometimes
+  this was failing for some reason unknown to me.
 
 
 ## Known Build Issues

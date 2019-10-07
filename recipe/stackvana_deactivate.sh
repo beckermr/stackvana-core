@@ -6,6 +6,8 @@ done
 
 # clean out the path, removing EUPS_DIR/bin
 # https://stackoverflow.com/questions/370047/what-is-the-most-elegant-way-to-remove-a-path-from-the-path-variable-in-bash
+# we are not using the function below because this seems to mess with conda's
+# own path manipulations
 WORK=:$PATH:
 REMOVE="${EUPS_DIR}/bin"
 WORK=${WORK/:$REMOVE:/:}
@@ -45,5 +47,9 @@ stackvana_backup_and_append_envvar \
 stackvana_backup_and_append_envvar \
     deactivate \
     CC
+
+stackvana_backup_and_append_envvar \
+    deactivate \
+    PYTHONPATH
 
 unset -f stackvana_backup_and_append_envvar

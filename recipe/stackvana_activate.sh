@@ -17,6 +17,9 @@ export LSST_CONDA_ENV_NAME=${CONDA_DEFAULT_ENV}
 export STACKVANA_BACKUP_EUPS_PATH=${EUPS_PATH}
 unset EUPS_PATH
 
+# backeup the python path since eups will muck with it
+export STACKVANA_BACKUP_PYTHONPATH=${PYTHONPATH}
+
 # now setup eups
 export EUPS_DIR="${LSST_HOME}/eups/2.1.5"
 source ${EUPS_DIR}/bin/setups.sh
