@@ -74,7 +74,6 @@ requirements:
     # compilers for compiling
     - c-compiler
     - cxx-compiler
-    - fortran-compiler
 
 test:
   imports:
