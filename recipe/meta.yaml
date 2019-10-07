@@ -69,7 +69,7 @@ requirements:
     - flex
     - bison
     - setuptools_scm
-    - apipkg
+    - apipkg >=1.4
 
     # compilers for compiling
     - c-compiler
