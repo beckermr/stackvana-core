@@ -37,9 +37,11 @@ for details on how to build the DM stack using ``eups``.
   environment intact.
 
 - I have disabled `eups`'s locking mechanism to help multiple processes simultaneously
-  use the same `conda` environment with this package. According to RKL, this choice should
+  use the same `conda` environment with this package. According to Robert Lupton, this choice should
   be fine. However, as usual with all `conda` environments, do not install packages via
   `conda` or `eups` into an environment while running code is using that same environment.
+  Many thanks to Robert Lupton for pointing out how to do modify this configuration option
+  elegantly!
 
 - The `eups` installation in this environment is not completely isolated from
   the outside world. Global `eups` configuration and caching done in your `~/.eups`
@@ -49,6 +51,11 @@ for details on how to build the DM stack using ``eups``.
   Linux. On OSX systems, the build tooling is stable enough (and the OSX version used
   by the project is old enough), that it is pretty safe to also allow `eups` to use
   precompiled binaries.
+
+- I have removed the build of `doxygen` from `eups` in favor of installing it with
+  `conda`. I used the `manifest.remap` feature of `eups` to make sure this works with
+  the existing stack installation routine. Many thanks to Jim Bosch for pointing out
+  this feature of `eups`!
 
 
 ## Known Build Issues
