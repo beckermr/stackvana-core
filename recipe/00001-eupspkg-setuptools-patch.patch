@@ -1,11 +1,15 @@
 --- a/eupspkg.sh
 +++ b/eupspkg.sh
-@@ -1204,7 +1204,7 @@
- # We can only specify a value for either --home XOR --prefix, not both.
- # So if we specify --home, we have to blank out --prefix:
- # See, e.g.,   http://stackoverflow.com/questions/4495120/combine-user-with-prefix-error-with-setup-py-install
--PYSETUP_INSTALL_OPTIONS=${PYSETUP_INSTALL_OPTIONS:-"--home \"$PREFIX\" --prefix="}	# Options passed to setup.py install. Note that --home is NOT passed separately!
-+PYSETUP_INSTALL_OPTIONS=${PYSETUP_INSTALL_OPTIONS:-"--single-version-externally-managed --record record.txt --home \"$PREFIX\" --prefix="}	# Options passed to setup.py install. Note that --home is NOT passed separately!
-
- export CC=${CC:-cc}				# Autoconf prefers to look for gcc first, and the proper thing is to default to cc. This helps on Darwin.
- export CXX=${CXX:-c++}				# Autoconf prefers to look for gcc first, and the proper thing is to default to c++. This helps on Darwin.
+@@ -853,7 +853,11 @@
+ 		PYDEST="$PREFIX/lib/python"
+ 		mkdir -p "$PYDEST"
+ 		# eval is needed to allow $PYSETUP_INSTALL_OPTIONS to include double quotes
+-		PYTHONPATH="$PYDEST:$PYTHONPATH" eval python setup.py install $PYSETUP_INSTALL_OPTIONS
++		{
++            PYTHONPATH="$PYDEST:$PYTHONPATH" eval python setup.py install --single-version-externally-managed --record record.txt $PYSETUP_INSTALL_OPTIONS
++        } || {
++            PYTHONPATH="$PYDEST:$PYTHONPATH" eval python setup.py install $PYSETUP_INSTALL_OPTIONS
++        }
+ 		evil_setuptools_pth_fix "$PYDEST"
+ 	else
+ 		# just copy everything, except for the ups directory
