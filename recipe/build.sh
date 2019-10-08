@@ -157,8 +157,17 @@ for fname in "eups" "eups_setup"; do
     rm ${EUPS_DIR}/bin/${fname}.bak
 done
 
-# patch doxygn since the build is so hard and it is a binary
-# now setup eups
+# and now make sure eupspkg.sh doesn't install deps of its python packages
+# via setuptools by accident
+# we are reaching well into the source here and applying a patch
+# fundamentally this is a VERY bad thing to do
+# I feel ashamed to be doing this and ashamed that some other person might
+# actually see this. OTOH, IDK what else to do and YOLO. /shrug
+pushd ${EUPS_DIR}/lib
+patch eupspkg.sh ${RECIPE_DIR}/00001-eupspkg-setuptools-patch.patch
+popd
+
+# use doxygn from conda since the build is so hard and it is a binary
 export EUPS_DIR=${EUPS_DIR}
 source ${EUPS_DIR}/bin/setups.sh
 export -f setup

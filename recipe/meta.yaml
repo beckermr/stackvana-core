@@ -68,11 +68,13 @@ requirements:
     - doxygen =1.8.13
     - flex
     - bison
+    - setuptools_scm
+    - apipkg >=1.4
+    - pytest-runner
 
     # compilers for compiling
     - c-compiler
     - cxx-compiler
-    - fortran-compiler
 
 test:
   imports:
