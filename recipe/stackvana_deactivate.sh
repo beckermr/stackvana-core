@@ -1,6 +1,5 @@
 # unsetup any products to keep env clean
-for val in `eups list -s 2> /dev/null | awk '{ print $1 }'`;
-do
+for val in `eups list -s 2> /dev/null | awk '{ print $1 }'`; do
     unsetup $val
 done
 

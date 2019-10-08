@@ -20,7 +20,7 @@ unset EUPS_PATH
 # backup the python path since eups will muck with it
 export STACKVANA_BACKUP_PYTHONPATH=${PYTHONPATH}
 
-# make scons happy on linux
+# make scons happy
 if [[ `uname -s` == "Darwin" ]]; then
     export STACKVANA_BACKUP_CC=${CC}
     export CC=clang
