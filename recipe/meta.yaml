@@ -17,7 +17,7 @@ package:
   version: {{ version }}
 
 build:
-  number: 0
+  number: 1
   skip: True  # [win or py < 37]
   run_exports:
     strong:

@@ -44,11 +44,9 @@ stackvana_backup_and_append_envvar \
     deactivate \
     LDFLAGS
 
-if [[ `uname -s` != "Darwin" ]]; then
-    stackvana_backup_and_append_envvar \
-        deactivate \
-        CC
-fi
+stackvana_backup_and_append_envvar \
+    deactivate \
+    CC
 
 stackvana_backup_and_append_envvar \
     deactivate \

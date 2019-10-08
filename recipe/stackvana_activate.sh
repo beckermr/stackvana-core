@@ -21,7 +21,10 @@ unset EUPS_PATH
 export STACKVANA_BACKUP_PYTHONPATH=${PYTHONPATH}
 
 # make scons happy on linux
-if [[ `uname -s` != "Darwin" ]]; then
+if [[ `uname -s` == "Darwin" ]]; then
+    export STACKVANA_BACKUP_CC=${CC}
+    export CC=clang
+else
     export STACKVANA_BACKUP_CC=${CC}
     export CC=gcc
 fi
