@@ -46,7 +46,7 @@ for details on how to build the DM stack using ``eups``.
   precompiled binaries.
 
 
-## Things that I did that don't make me feel like a good person.
+## Things that I did that don't make me feel like a good person
 
 - I have disabled `eups`'s locking mechanism to help multiple processes simultaneously
   use the same `conda` environment with this package. According to Robert Lupton, this choice should
