@@ -67,8 +67,8 @@ for details on how to build the DM stack using ``eups``.
 
 - I applied a patch to the `${EUPS_DIR}/lib/eupspkg.sh` script so that it uses
   old-style `distutils` installs. (I added `--single-version-externally-managed --record record.txt`
-  to `PYSETUP_INSTALL_OPTIONS`.) This change ensures that python packages installed by
-  `eups` do not install their dependencies from `PyPi` using `setuptools`. Instead,
+  to `PYSETUP_INSTALL_OPTIONS`.) This change helps `setuptools` find dependencies installed by `conda`
+  and appears to help prevent the downloading of dependencies from `PyPi`. Instead,
   you must install the appropriate package using `conda`. `setuptools` should have been
   able to detect the dependencies in the `conda` environment in the first place, but sometimes
   this was failing for some reason unknown to me.
