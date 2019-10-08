@@ -20,6 +20,12 @@ unset EUPS_PATH
 # backeup the python path since eups will muck with it
 export STACKVANA_BACKUP_PYTHONPATH=${PYTHONPATH}
 
+# make scons happy on linux
+if [[ `uname -s` != "Darwin" ]]; then
+    export STACKVANA_BACKUP_CC=${CC}
+    export CC=gcc
+fi
+
 # now setup eups
 export EUPS_DIR="${LSST_HOME}/eups/2.1.5"
 source ${EUPS_DIR}/bin/setups.sh
@@ -82,11 +88,4 @@ stackvana_backup_and_append_envvar \
     activate \
     LDFLAGS \
     "-Wl,-rpath,${CONDA_PREFIX}/lib -L${CONDA_PREFIX}/lib" \
-    " "
-
-# make scons happy
-stackvana_backup_and_append_envvar \
-    activate \
-    CC \
-    "gcc" \
     " "
