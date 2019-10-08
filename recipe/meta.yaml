@@ -73,10 +73,11 @@ requirements:
     - pytest-runner
     - pytest-flake8
     - flake8-polyfill
+    - pytest =3.6.2
 
-    # compilers for compiling
-    - c-compiler
-    - cxx-compiler
+    # compilers for compiling on linux
+    - c-compiler  # [linux]
+    - cxx-compiler  # [linux]
 
 test:
   imports:
