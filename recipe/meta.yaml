@@ -71,6 +71,8 @@ requirements:
     - setuptools_scm
     - apipkg >=1.4
     - pytest-runner
+    - pytest-flake8
+    - flake8-polyfill
 
     # compilers for compiling
     - c-compiler
