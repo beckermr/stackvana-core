@@ -249,6 +249,7 @@ else
     else
         made_gpp_link=0
     fi
+    echo "${CC} ${CXX}"
     echo "gcc: "`which gcc`
     echo "g++: "`which g++`
 
