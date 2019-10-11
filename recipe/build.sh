@@ -240,7 +240,8 @@ else
         made_gpp_link=0
     fi
 
-    eups distrib install -v -t ${LSST_TAG} sconsUtils
+    EUPSPKG_SCONSFLAGS='--setenv cc=gcc cxx=g++' \
+        eups distrib install -v -t ${LSST_TAG} sconsUtils
 
     if [[ "${made_gcc_link}" == "1" ]]; then
         sudo rm /usr/bin/gcc
