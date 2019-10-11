@@ -224,11 +224,15 @@ source ${RECIPE_DIR}/pybind11_remap.sh
 echo "
 Building scons+sconsUtils..."
 if [[ `uname -s` == "Darwin" ]]; then
-    eups distrib install -v -t ${LSST_TAG} sconsUtils
+    # scons utils is pure python
+    # we are feeding it the osx system compiler since it uses itself to build
+    # itself and so we need to make it happy
+    CC=clang eups distrib install -v -t ${LSST_TAG} sconsUtils
 else
     # we have to do this once - the rest of the stack uses sconsUtils which
     # is patched to find the conda stuff
     # in the linux CI, there are no system compilers so this is very safe
+    # the checks ensure we don't kill another systems stuff
     if [ ! -f "${PREFIX}/bin/gcc" ]; then
         ln -s ${CC} ${PREFIX}/bin/gcc
         made_prefix_gcc_link=1
@@ -253,11 +257,8 @@ else
     else
         made_gpp_link=0
     fi
-    echo "${CC} ${CXX}"
-    echo "gcc: "`which gcc`
-    echo "g++: "`which g++`
 
-    CC=gcc eups distrib install -v -t ${LSST_TAG} sconsUtils
+    CC=gcc CXX=g++ eups distrib install -v -t ${LSST_TAG} sconsUtils
 
     if [[ "${made_gcc_link}" == "1" ]]; then
         sudo rm /usr/bin/gcc
