@@ -225,7 +225,18 @@ else
     # we have to do this once - the rest of the stack uses sconsUtils which
     # is patched to find the conda stuff
     # in the linux CI, there are no system compilers so this is very safe
-    echo `ls -1 ${PREFIX}/bin/g*`
+    if [ ! -f "${PREFIX}/bin/gcc" ]; then
+        ln -s ${CC} ${PREFIX}/bin/gcc
+        made_prefix_gcc_link=1
+    else
+        made_prefix_gcc_link=0
+    fi
+    if [ ! -f "${PREFIX}/bin/g++" ]; then
+        ln -s ${CXX} ${PREFIX}/bin/g++
+        made_prefix_gpp_link=1
+    else
+        made_prefix_gpp_link=0
+    fi
     if [ ! -f "/usr/bin/gcc" ]; then
         sudo ln -s ${PREFIX}/bin/gcc /usr/bin/gcc
         made_gcc_link=1
@@ -247,6 +258,12 @@ else
     fi
     if [[ "${made_gpp_link}" == "1" ]]; then
         sudo rm /usr/bin/g++
+    fi
+    if [[ "${made_prefix_gcc_link}" == "1" ]]; then
+        sudo rm ${PREFIX}/bin/gcc
+    fi
+    if [[ "${made_prefix_gpp_link}" == "1" ]]; then
+        sudo rm ${PREFIX}/bin/g++
     fi
 fi
 
