@@ -228,12 +228,26 @@ else
     echo `which gcc`
     echo `which g++`
     if [ ! -f "/usr/bin/gcc" ]; then
-        ln -s ${PREFIX}/bin/gcc /usr/bin/gcc
+        sudo ln -s ${PREFIX}/bin/gcc /usr/bin/gcc
+        made_gcc_link=1
+    else
+        made_gcc_link=0
     fi
     if [ ! -f "/usr/bin/g++" ]; then
-        ln -s ${PREFIX}/bin/g++ /usr/bin/g++
+        sudo ln -s ${PREFIX}/bin/g++ /usr/bin/g++
+        made_gpp_link=1
+    else
+        made_gpp_link=0
     fi
+
     eups distrib install -v -t ${LSST_TAG} sconsUtils
+
+    if [[ "${made_gcc_link}" == "1"]]; then
+        sudo rm /usr/bin/gcc
+    fi
+    if [[ "${made_gpp_link}" == "1"]]; then
+        sudo rm /usr/bin/g++
+    fi
 fi
 
 # and then we then patch sconsUtils to work better with conda
