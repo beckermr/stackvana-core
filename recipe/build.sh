@@ -219,7 +219,14 @@ source ${RECIPE_DIR}/pybind11_remap.sh
 # this brings most of the basic build tools in the env
 echo "
 Building scons+sconsUtils..."
-eups distrib install -v -t ${LSST_TAG} sconsUtils
+if [[ `uname -s` != "Darwin" ]]; then
+    eups distrib install -v -t ${LSST_TAG} sconsUtils
+else
+    # we have to do this once - the rest of the stack uses sconsUtils which
+    # is patched to find the conda stuff
+    # in the linux CI, there are no system compilers so this is very safe
+    CC=gcc eups distrib install -v -t ${LSST_TAG} sconsUtils
+fi
 
 # and then we then patch sconsUtils to work better with conda
 # again I hate myself for doing this but moving on
