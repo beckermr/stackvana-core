@@ -33,6 +33,11 @@ requirements:
     - make
     - cmake
 
+    # I should be putting these in the build section using jinja2, but
+    # I am very much hacking this recipe
+    - c-compiler
+    - cxx-compiler
+
     # these are needed to make the symlinks for remapping
     - doxygen =1.8.13
     - boost =1.69
