@@ -249,6 +249,8 @@ else
     else
         made_gpp_link=0
     fi
+    echo "gcc: "`which gcc`
+    echo "g++: "`which g++`
 
     CC=gcc eups distrib install -v -t ${LSST_TAG} sconsUtils
 
