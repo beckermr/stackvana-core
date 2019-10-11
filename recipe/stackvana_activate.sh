@@ -10,37 +10,40 @@
 export STACKVANA_ACTIVATED=1
 
 # LSST vars
-export LSST_HOME="${CONDA_PREFIX}/lsst_home"
+export STACKVANA_BACKUP_LSST_CONDA_ENV_NAME=${LSST_CONDA_ENV_NAME}
 export LSST_CONDA_ENV_NAME=${CONDA_DEFAULT_ENV}
 
-# clean out the EUPS path so we have only one env
+# clean/backup any EUPS stuff
+export STACKVANA_BACKUP_EUPS_PKGROOT=${EUPS_PKGROOT}
+unset EUPS_PKGROOT
+export STACKVANA_BACKUP_EUPS_SHELL=${EUPS_SHELL}
+unset EUPS_SHELL
+export STACKVANA_BACKUP_SETUP_EUPS=${SETUP_EUPS}
+unset SETUP_EUPS
 export STACKVANA_BACKUP_EUPS_PATH=${EUPS_PATH}
 unset EUPS_PATH
+export STACKVANA_BACKUP_setup=`declare -f setup`
+unset -f setup
+export STACKVANA_BACKUP_unsetup=`declare -f unsetup`
+unset -f unsetup
 
 # backup the python path since eups will muck with it
 export STACKVANA_BACKUP_PYTHONPATH=${PYTHONPATH}
 
-# make scons happy
-if [[ `uname -s` == "Darwin" ]]; then
-    export STACKVANA_BACKUP_CC=${CC}
-    export CC=clang
-else
-    export STACKVANA_BACKUP_CC=${CC}
-    export CC=gcc
-fi
+# backup the LD paths since the DM stack will muck with them
+export STACKVANA_BACKUP_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+export STACKVANA_BACKUP_DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}
+export STACKVANA_BACKUP_LSST_LIBRARY_PATH=${LSST_LIBRARY_PATH}
+
+# removing this flag since it is suspect
+export STACKVANA_BACKUP_CXXFLAGS=${CXXFLAGS}
+export CXXFLAGS=${CXXFLAGS//-fvisibility-inlines-hidden}
 
 # now setup eups
-export EUPS_DIR="${LSST_HOME}/eups/2.1.5"
 source ${EUPS_DIR}/bin/setups.sh
 export -f setup
 export -f unsetup
-LSST_EUPS_PKGROOT_BASE_URL="https://eups.lsst.codes/stack"
-if [[ `uname -s` == "Darwin" ]]; then
-    EUPS_PKGROOT="${LSST_EUPS_PKGROOT_BASE_URL}/osx/10.9/clang-1000.10.44.4/miniconda3-4.5.12-1172c30|$LSST_EUPS_PKGROOT_BASE_URL/src"
-else
-    EUPS_PKGROOT="$LSST_EUPS_PKGROOT_BASE_URL/src"
-fi
-export EUPS_PKGROOT="${EUPS_PKGROOT}"
+export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
 
 # finally setup env so we can build packages
 function stackvana_backup_and_append_envvar() {
@@ -87,8 +90,16 @@ stackvana_backup_and_append_envvar \
     ":"
 
 # set rpaths to resolve links properly at run time
-stackvana_backup_and_append_envvar \
-    activate \
-    LDFLAGS \
-    "-Wl,-rpath,${CONDA_PREFIX}/lib -L${CONDA_PREFIX}/lib" \
-    " "
+if [[ `uname -s` == "Darwin" ]]; then
+    stackvana_backup_and_append_envvar \
+        activate \
+        LDFLAGS \
+        "-Wl,-rpath,${CONDA_PREFIX}/lib -L${CONDA_PREFIX}/lib" \
+        " "
+else
+    stackvana_backup_and_append_envvar \
+        activate \
+        LDFLAGS \
+        "-Wl,-rpath,${CONDA_PREFIX}/lib -Wl,-rpath-link,${CONDA_PREFIX}/lib -L${CONDA_PREFIX}/lib" \
+        " "
+fi

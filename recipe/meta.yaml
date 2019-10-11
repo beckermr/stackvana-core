@@ -10,7 +10,7 @@
 #  - for a major version 'v18_1', the conda version is '18.1.0'
 #
 # Note the exta micro version in order to match the tags in the DM eups system.
-{% set version = "18.1.0" %}
+{% set version = "2019.40w" %}
 
 package:
   name: {{ name|lower }}
@@ -32,7 +32,35 @@ requirements:
     - perl
     - make
     - cmake
+
+    # these are needed to make the symlinks for remapping
     - doxygen =1.8.13
+    - boost =1.69
+    - boost-cpp =1.69
+    - fftw =3.3.4
+    - gsl =2.6
+    - libapr =1.6.5
+    - libaprutil =1.6.1
+    - log4cxx =0.10.0
+    - pybind11 =2.4.2
+
+    # and these are needed for the build of sconsUtils
+    - setuptools_scm
+    - apipkg >=1.4
+    - pytest-runner
+    - pytest-flake8
+    - flake8-polyfill
+    - pluggy =0.6
+    - expat =2.2.5
+    - more-itertools =6.0.0
+    - attrs =17.4.0
+    - atomicwrites =1.3.0
+    - six =1.12.0
+    - numpy =1.16.2
+    - expat =2.2.5
+    - zlib =1.2.11
+    - libiconv =1.15
+
   run:
     - python
     - pip
@@ -62,10 +90,22 @@ requirements:
     - numexpr =2.6.9
     - future =0.17.1
     - deprecated =1.2.6
-    - xorg-libxt =1.2.0  # [linux]
     - zlib =1.2.11
     - libiconv =1.15
+
+    # I am shipping these by hand from conda forge using remap
     - doxygen =1.8.13
+    - boost =1.69
+    - boost-cpp =1.69
+    - fftw =3.3.4
+    - gsl =2.6
+    - libapr =1.6.5
+    - libaprutil =1.6.1
+    - log4cxx =0.10.0
+    - pybind11 =2.4.2
+
+    # stuff added outside of the main LSST DM conda envs
+    - xorg-libxt =1.2.0  # [linux]
     - flex
     - bison
     - setuptools_scm
@@ -73,11 +113,16 @@ requirements:
     - pytest-runner
     - pytest-flake8
     - flake8-polyfill
-    - pytest =3.6.2
 
-    # compilers for compiling on linux
-    - c-compiler  # [linux]
-    - cxx-compiler  # [linux]
+    # these deps shadow those installed by eups
+    # this means two copies are in the final downstream envs
+    # this tends to help the build
+    - pytest =3.6.2
+    - lsstdesc.coord =1.1
+
+    # compilers for compiling
+    - c-compiler
+    - cxx-compiler
 
 test:
   imports:

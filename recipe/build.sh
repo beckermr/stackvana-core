@@ -7,16 +7,9 @@ LSST_HOME="${PREFIX}/lsst_home"
 
 LSST_EUPS_VERSION="2.1.5"
 LSST_EUPS_TARURL="https://github.com/RobertLuptonTheGood/eups/archive/${LSST_EUPS_VERSION}.tar.gz"
-LSST_EUPS_PKGROOT_BASE_URL="https://eups.lsst.codes/stack"
 EUPS_DIR="${LSST_HOME}/eups/${LSST_EUPS_VERSION}"
-EUPS_PATH="${LSST_HOME}/stack/miniconda"
-
-if [[ `uname -s` == "Darwin" ]]; then
-    EUPS_PKGROOT="${LSST_EUPS_PKGROOT_BASE_URL}/osx/10.9/clang-1000.10.44.4/miniconda3-4.5.12-1172c30|$LSST_EUPS_PKGROOT_BASE_URL/src"
-else
-    EUPS_PKGROOT="$LSST_EUPS_PKGROOT_BASE_URL/src"
-fi
-export EUPS_PKGROOT="${EUPS_PKGROOT}"
+export EUPS_PATH="${LSST_HOME}/stack/miniconda"
+export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
 
 # I am hard coding these options
 EUPS_PYTHON=$PYTHON  # use PYTHON in the host env for eups
@@ -30,6 +23,12 @@ if [[ ! -t 1 ]]; then
     CURL_OPTS='-sS'
 fi
 
+if [[ ${PKG_VERSION} == *"w" ]]; then
+    LSST_TAG=${PKG_VERSION%w}
+    LSST_TAG="w_"${LSST_TAG//./_}
+else
+    LSST_TAG="v"${PKG_VERSION//./_}
+fi
 
 ##########################
 # functions
@@ -79,13 +78,12 @@ pushd ${LSST_HOME}
 n8l::ln_rel "${PREFIX}" current
 
 # now the main script
-echo " "
-echo "LSST Software Stack Builder"
-echo "======================================================================="
-echo " "
+echo "
+LSST DM TAG: "${LSST_TAG}
 
 # Install EUPS
-echo "Installing EUPS (${LSST_EUPS_VERSION})..."
+echo "
+Installing EUPS (${LSST_EUPS_VERSION})..."
 echo "Using python at ${EUPS_PYTHON} to install EUPS"
 echo "Configured EUPS_PKGROOT: ${EUPS_PKGROOT}"
 
@@ -134,8 +132,26 @@ touch "${EUPS_PATH}/site/.conda_keep_me_please"
 
 # copy the stackvana activate and deactivate scripts
 # these are sourced by the conda ones of the same name if needed
-cp ${RECIPE_DIR}/stackvana_activate.sh ${LSST_HOME}/stackvana_activate.sh
 cp ${RECIPE_DIR}/stackvana_deactivate.sh ${LSST_HOME}/stackvana_deactivate.sh
+
+echo "
+# ==================== added by build.sh in recipe build
+
+export STACKVANA_BACKUP_LSST_EUPS_VERSION=\${LSST_EUPS_VERSION}
+export LSST_EUPS_VERSION=${LSST_EUPS_VERSION}
+
+export STACKVANA_BACKUP_LSST_HOME=\${LSST_HOME}
+export LSST_HOME=\"\${CONDA_PREFIX}/lsst_home\"
+
+export LSST_DM_TAG=${LSST_TAG}
+
+export STACKVANA_BACKUP_EUPS_DIR=\${EUPS_DIR}
+export EUPS_DIR=\"\${LSST_HOME}/eups/\${LSST_EUPS_VERSION}\"
+
+# ==================== end of added stuff
+
+" > ${LSST_HOME}/stackvana_activate.sh
+cat ${RECIPE_DIR}/stackvana_activate.sh >> ${LSST_HOME}/stackvana_activate.sh
 
 # copy the conda ones
 for CHANGE in "activate" "deactivate"; do
@@ -165,22 +181,77 @@ done
 # actually see this. OTOH, IDK what else to do and YOLO. /shrug
 pushd ${EUPS_DIR}/lib
 patch eupspkg.sh ${RECIPE_DIR}/00001-eupspkg-setuptools-patch.patch
+if [[ "$?" != "0" ]]; then
+    exit 1
+fi
 popd
 
-# use doxygn from conda since the build is so hard and it is a binary
+# now handle some remaps
 export EUPS_DIR=${EUPS_DIR}
 source ${EUPS_DIR}/bin/setups.sh
 export -f setup
 export -f unsetup
 
-mkdir -p ${LSST_HOME}/stackvana_doxygen/bin
-pushd ${LSST_HOME}/stackvana_doxygen/bin
-ln -s ../../../bin/doxygen doxygen
+echo "
+Remapping some stuff to conda..."
+# use doxygen from conda since the build is so hard and it is a binary
+source ${RECIPE_DIR}/doxygen_remap.sh
+
+# use boost from conda and live on the edge
+source ${RECIPE_DIR}/boost_remap.sh ${LSST_TAG}
+
+# ditto for fftw
+source ${RECIPE_DIR}/fftw_remap.sh
+
+# ditto for gsl
+source ${RECIPE_DIR}/gsl_remap.sh
+
+# ditto for apr & apr_util
+source ${RECIPE_DIR}/apr_aprutil_remap.sh
+
+# ditto for log4cxx
+source ${RECIPE_DIR}/log4cxx_remap.sh
+
+# ditto for pybind11
+source ${RECIPE_DIR}/pybind11_remap.sh
+
+# now install sconsUtils
+# this brings most of the basic build tools in the env
+echo "
+Building scons+sconsUtils..."
+eups distrib install -v -t ${LSST_TAG} sconsUtils
+
+# and then we then patch sconsUtils to work better with conda
+# again I hate myself for doing this but moving on
+# this path is pretty explicit - helps the code fail when a version is bumped
+if [[ `uname -s` == "Darwin" ]]; then
+    sconsdir="${LSST_HOME}/stack/miniconda/DarwinX86/sconsUtils/18.1.0-2-ga35c153/python/lsst/sconsUtils"
+else
+    sconsdir="${LSST_HOME}/stack/miniconda/Linux64/sconsUtils/18.1.0-2-ga35c153/python/lsst/sconsUtils"
+fi
+echo "
+Patching sconsUtils for conda in '${sconsdir}'..."
+pushd ${sconsdir}
+patch state.py ${RECIPE_DIR}/00002-sconsUtils-conda-for-state.patch
+patch builders.py ${RECIPE_DIR}/00003-sconsUtils-conda-for-pybind11-builder.patch
 popd
 
-eups declare -m none -r ${LSST_HOME}/stackvana_doxygen doxygen stackvana_doxygen
+# now fix up the python paths
+curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
 
-mkdir -p ${EUPS_PATH}/site
-echo "doxygen stackvana_doxygen" >> ${EUPS_PATH}/site/manifest.remap
+# clean out .pyc files not in the standard spots
+pushd ${LSST_HOME}
+if [[ `uname -s` == "Darwin" ]]; then
+    find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
+else
+    find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
+fi
+popd
 
 unset EUPS_DIR
+unset EUPS_PKGROOT
+unset -f setup
+unset -f unsetup
+unset EUPS_SHELL
+unset SETUP_EUPS
+unset EUPS_PATH
