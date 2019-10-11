@@ -1,0 +1,177 @@
+--- a/state.py
++++ b/state.py
+--- /Users/Matt/Desktop/state.py	2019-10-10 07:00:12.000000000 -0500
++++ state.py	2019-10-10 14:03:24.000000000 -0500
+@@ -166,6 +166,14 @@
+     global env
+     sconsUtilsPath, thisFile = os.path.split(__file__)
+     toolPath = os.path.join(sconsUtilsPath, "tools")
++
++    ###########################################
++    # added by stackvana to help make scons sane
++    ourEnv['PATH'] = os.environ['PATH']
++    # end of stackvana additions
++    ###########################################
++
++
+     env = SCons.Script.Environment(
+         ENV=ourEnv,
+         variables=opts,
+@@ -196,6 +204,64 @@
+         #
+         env['LIBDIRSUFFIX'] = '/'
+
++    ###########################################
++    # stackvana additions to this file!
++    # FIXME: these are hard coded flags from the conda compilers!
++    _conda_prefix = os.environ['CONDA_PREFIX']
++    env.Append(LINKFLAGS=["-Wl,-rpath,%s/lib" % _conda_prefix])
++    env.Append(SHLINKFLAGS=["-Wl,-rpath,%s/lib" % _conda_prefix])
++    env.Append(LIBPATH=["%s/lib" % _conda_prefix])
++    if env['PLATFORM'] == 'darwin':
++        env.Append(LINKFLAGS=["-Wl,-pie", "-Wl,-dead_strip_dylibs"])
++        env.Append(SHLINKFLAGS=["-Wl,-pie", "-Wl,-dead_strip_dylibs"])
++    else:
++        env.Append(LINKFLAGS=[
++            "-Wl,--sort-common",
++            "-Wl,--as-needed",
++            "-Wl,-z,relro",
++            "-Wl,-z,now",
++            "-Wl,--disable-new-dtags",
++            "-Wl,--gc-sections",
++            "-Wl,-rpath-link,%s/lib" % _conda_prefix])
++        env.Append(SHLINKFLAGS=[
++            "-Wl,--sort-common",
++            "-Wl,--as-needed",
++            "-Wl,-z,relro",
++            "-Wl,-z,now",
++            "-Wl,--disable-new-dtags",
++            "-Wl,--gc-sections",
++            "-Wl,-rpath-link,%s/lib" % _conda_prefix])
++
++    if env['PLATFORM'] == 'darwin':
++        env.Append(CCFLAGS=[
++            "-march=core2",
++            "-mtune=haswell",
++            "-mssse3",
++            "-ftree-vectorize",
++            "-fPIC",
++            "-fPIE",
++            "-fstack-protector-strong",
++            "-pipe"])
++        env.Append(CXXFLAGS=[
++            "-stdlib=libc++",
++            "-fvisibility-inlines-hidden",
++            "-fmessage-length=0"])
++    else:
++        env.Append(CCFLAGS=[
++            "-march=nocona",
++            "-mtune=haswell",
++            "-ftree-vectorize",
++            "-fPIC",
++            "-fstack-protector-strong",
++            "-fno-plt",
++            "-ffunction-sections",
++            "-pipe"])
++        env.Append(CXXFLAGS=[
++            "-fvisibility-inlines-hidden",
++            "-fmessage-length=0"])
++    # end of stackvana additions
++    ###########################################
++
+     #
+     # Remove valid options from the arguments
+     #
+@@ -329,40 +395,60 @@
+     if env.GetOption("clean") or env.GetOption("no_exec") or env.GetOption("help"):
+         env.whichCc = "unknown"         # who cares? We're cleaning/not execing, not building
+     else:
+-        if env['cc'] != '':
+-            CC = CXX = None
+-            if re.search(r"^gcc(-\d+(\.\d+)*)?( |$)", env['cc']):
+-                CC = env['cc']
+-                CXX = re.sub(r"^gcc", "g++", CC)
+-            elif re.search(r"^icc( |$)", env['cc']):
+-                CC = env['cc']
+-                CXX = re.sub(r"^icc", "icpc", CC)
+-            elif re.search(r"^clang( |$)", env['cc']):
+-                CC = env['cc']
+-                CXX = re.sub(r"^clang", "clang++", CC)
+-            elif re.search(r"^cc( |$)", env['cc']):
+-                CC = env['cc']
+-                CXX = re.sub(r"^cc", "c++", CC)
+-            else:
+-                log.fail("Unrecognised compiler:%s" % env['cc'])
+-            env0 = SCons.Script.Environment()
+-            if CC and env['CC'] == env0['CC']:
+-                env['CC'] = CC
+-            if CC and env['CXX'] == env0['CXX']:
+-                env['CXX'] = CXX
+-        conf = env.Configure(custom_tests={'ClassifyCc': ClassifyCc})
+-        env.whichCc, env.ccVersion = conf.ClassifyCc()
+-
+-        # If we have picked up a default compiler called gcc that is really
+-        # clang, we call it clang to avoid confusion (gcc on macOS has subtly
+-        # different options)
+-        if not env['cc'] and env.whichCc == "clang" and env['CC'] == "gcc":
+-            env['CC'] = "clang"
+-            env['CXX'] = "clang++"
++        ###########################################
++        # removed by stackvana to help with conda
++        # if env['cc'] != '':
++        #     CC = CXX = None
++        #     if re.search(r"^gcc(-\d+(\.\d+)*)?( |$)", env['cc']):
++        #         CC = env['cc']
++        #         CXX = re.sub(r"^gcc", "g++", CC)
++        #     elif re.search(r"^icc( |$)", env['cc']):
++        #         CC = env['cc']
++        #         CXX = re.sub(r"^icc", "icpc", CC)
++        #     elif re.search(r"^clang( |$)", env['cc']):
++        #         CC = env['cc']
++        #         CXX = re.sub(r"^clang", "clang++", CC)
++        #     elif re.search(r"^cc( |$)", env['cc']):
++        #         CC = env['cc']
++        #         CXX = re.sub(r"^cc", "c++", CC)
++        #     else:
++        #         log.fail("Unrecognised compiler:%s" % env['cc'])
++        #     env0 = SCons.Script.Environment()
++        #     if CC and env['CC'] == env0['CC']:
++        #         env['CC'] = CC
++        #     if CC and env['CXX'] == env0['CXX']:
++        #         env['CXX'] = CXX
++        # conf = env.Configure(custom_tests={'ClassifyCc': ClassifyCc})
++        # env.whichCc, env.ccVersion = conf.ClassifyCc()
++        #
++        # # If we have picked up a default compiler called gcc that is really
++        # # clang, we call it clang to avoid confusion (gcc on macOS has subtly
++        # # different options)
++        # if not env['cc'] and env.whichCc == "clang" and env['CC'] == "gcc":
++        #     env['CC'] = "clang"
++        #     env['CXX'] = "clang++"
++        #
++        # if not env.GetOption("no_progress"):
++        #     log.info("CC is %s version %s" % (env.whichCc, env.ccVersion))
++        # conf.Finish()
++
++        # just inject the outside world straight in..
++        env['CC'] = os.environ['CC']
++        env['CXX'] = os.environ['CXX']
++        if env['PLATFORM'] == 'darwin':
++            env.whichCc = 'clang'
++            env.ccVersion = '9.0.0'
++        else:
++            env.whichCc = 'gcc'
++            env.ccVersion = '7.3.0'
+
+         if not env.GetOption("no_progress"):
+-            log.info("CC is %s version %s" % (env.whichCc, env.ccVersion))
+-        conf.Finish()
++            log.info("CC is **CONDA** %s version %s" % (
++                env.whichCc, env.ccVersion))
++
++        # end of stackvana additions
++        ###########################################
++
+     #
+     # Compiler flags, including CCFLAGS for C and C++ and CXXFLAGS for C++ only
+     #

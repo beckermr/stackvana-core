@@ -17,8 +17,9 @@ conda create -c beckermr -n mystack stackvana-core
 The command above will create a `conda` environment with all of the dependencies
 and tools you need to actually build the DM stack. In general, you should consult
 the LSST DM
-[documentation](https://pipelines.lsst.io/v/v18_1_0/install/newinstall.html#install-science-pipelines-packages)
-for details on how to build the DM stack using ``eups``.
+[documentation](https://pipelines.lsst.io/install/newinstall.html#install-science-pipelines-packages)
+for details on how to build the DM stack using ``eups``. This package runs the `eups`
+installation up to installing `sconsUtils` in order to make downstream builds easier.
 
 
 ## Notes on the `conda` packaging of `eups` and the `conda` build tooling
@@ -55,10 +56,11 @@ for details on how to build the DM stack using ``eups``.
   Many thanks to Robert Lupton for pointing out how to do modify this configuration option
   elegantly!
 
-- I have removed the build of `doxygen` from `eups` in favor of installing it with
-  `conda`. I used the `manifest.remap` feature of `eups` to make sure this works with
-  the existing stack installation routine. Many thanks to Jim Bosch for pointing out
-  this feature of `eups`!
+- I have removed the builds of `doxygen`, `boost`, `fftw`, `gsl`, `apr`,
+  `apr_util`, `pybind11`, and `log4cxx` from `eups` in favor of
+  installing them with `conda`. I used the `manifest.remap` feature of `eups` to make
+  sure this works with the existing stack installation routine.
+  Many thanks to Jim Bosch for pointing out this feature of `eups`!
 
 - I changed the first line, `#!${PREFIX}/bin/python`, in the `eups` and `eups_setup`
   scripts to `#!/usr/bin/env python`. This doesn't seem to make a difference and
@@ -67,11 +69,15 @@ for details on how to build the DM stack using ``eups``.
 
 - I applied a patch to the `${EUPS_DIR}/lib/eupspkg.sh` script so that it uses
   old-style `distutils` installs. (I added `--single-version-externally-managed --record record.txt`
-  to `PYSETUP_INSTALL_OPTIONS`.) This change helps `setuptools` find dependencies installed by `conda`
+  to `PYSETUP_INSTALL_OPTIONS` with a fallback to the old way of doing things if these command
+  switches are not accepted.) This change appears to help `setuptools` find dependencies installed by `conda`
   and appears to help prevent the downloading of dependencies from `PyPi`. Instead,
   you must install the appropriate package using `conda`. `setuptools` should have been
   able to detect the dependencies in the `conda` environment in the first place, but sometimes
   this was failing for some reason unknown to me.
+
+- I applied patches to `sconsUtils` in order to ensure it finds the `conda` compilers
+  and uses the proper compiling/linking flags from the external environment.
 
 
 ## Known Build Issues
@@ -80,9 +86,15 @@ for details on how to build the DM stack using ``eups``.
    point to `${CONDA_PREFIX}/lib` when executing the `eups` installation,
 
    ```bash
-   $ LD_LIBRARY_PATH=${CONDA_PREFIX}/lib eups distrib install -t v18_1_0 log
+   $ LD_LIBRARY_PATH=${CONDA_PREFIX}/lib eups distrib install -t w_2018_50 log
    ```
 
-   Only the `log` package is known to require this at the moment.
+   Currently the `log`, `meas_algorithms`, and `afw`. There are probably more.
 
-2. Builds of some packages on OSX from source currently fail.
+2. Builds of some packages on OSX from source currently fail. These are currently
+   `doxygen` and `pex_exceptions`.
+
+2. When building `astrometry.net`, you need to remove the `-I{CONDA_PREFIX}/include`
+   options from `CPPFLAGS`, `CFLAGS`, `CXXFLAGS`, `DEBUG_CPPFLAGS`, `DEBUG_CFLAGS`,
+   and `DEBUG_CXXFLAGS`. These options cause the header file `tic.h` to be imported
+   from the wrong location.

@@ -1,0 +1,16 @@
+--- a/builders.py
++++ b/builders.py
+@@ -32,7 +32,12 @@
+     set some pybind11-specific flags.
+     """
+     myenv = self.Clone()
+-    myenv.Append(CCFLAGS=["-fvisibility=hidden"])
++    ########################################
++    # changed by stackvana
++    if myenv['PLATFORM'] != 'darwin':
++        myenv.Append(CCFLAGS=["-fvisibility=hidden"])
++    # end of changes by stackvana
++    ########################################
+     if myenv['PLATFORM'] == 'darwin':
+         myenv.Append(LDMODULEFLAGS=["-undefined", "suppress",
+                                     "-flat_namespace", "-headerpad_max_install_names"])
