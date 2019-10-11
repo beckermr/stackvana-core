@@ -225,8 +225,7 @@ else
     # we have to do this once - the rest of the stack uses sconsUtils which
     # is patched to find the conda stuff
     # in the linux CI, there are no system compilers so this is very safe
-    echo `which gcc`
-    echo `which g++`
+    echo `ls -1 ${PREFIX}/bin/g*`
     if [ ! -f "/usr/bin/gcc" ]; then
         sudo ln -s ${PREFIX}/bin/gcc /usr/bin/gcc
         made_gcc_link=1
