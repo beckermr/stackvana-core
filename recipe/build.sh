@@ -242,10 +242,10 @@ else
 
     eups distrib install -v -t ${LSST_TAG} sconsUtils
 
-    if [[ "${made_gcc_link}" == "1"]]; then
+    if [[ "${made_gcc_link}" == "1" ]]; then
         sudo rm /usr/bin/gcc
     fi
-    if [[ "${made_gpp_link}" == "1"]]; then
+    if [[ "${made_gpp_link}" == "1" ]]; then
         sudo rm /usr/bin/g++
     fi
 fi
