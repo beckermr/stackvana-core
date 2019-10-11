@@ -225,7 +225,15 @@ else
     # we have to do this once - the rest of the stack uses sconsUtils which
     # is patched to find the conda stuff
     # in the linux CI, there are no system compilers so this is very safe
-    CC=gcc eups distrib install -v -t ${LSST_TAG} sconsUtils
+    echo `which gcc`
+    echo `which g++`
+    if [ ! -f "/usr/bin/gcc" ]; then
+        ln -s ${PREFIX}/bin/gcc /usr/bin/gcc
+    fi
+    if [ ! -f "/usr/bin/g++" ]; then
+        ln -s ${PREFIX}/bin/g++ /usr/bin/g++
+    fi
+    eups distrib install -v -t ${LSST_TAG} sconsUtils
 fi
 
 # and then we then patch sconsUtils to work better with conda
