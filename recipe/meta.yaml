@@ -47,7 +47,7 @@ requirements:
     - libapr =1.6.5
     - libaprutil =1.6.1
     - log4cxx =0.10.0
-    - pybind11 =2.4.2
+    - pybind11 =2.2.4
 
     # and these are needed for the build of sconsUtils
     - setuptools_scm
@@ -107,7 +107,7 @@ requirements:
     - libapr =1.6.5
     - libaprutil =1.6.1
     - log4cxx =0.10.0
-    - pybind11 =2.4.2
+    - pybind11 =2.2.4
 
     # stuff added outside of the main LSST DM conda envs
     - xorg-libxt =1.2.0  # [linux]
