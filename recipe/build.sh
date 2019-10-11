@@ -1,14 +1,10 @@
 #!/bin/bash
 
-echo "==================================="
-ls -1 ${PREFIX}/bin/g*
-echo "==================================="
-
-echo "==================================="
+echo "========================================================================="
 env
-echo "==================================="
+echo "========================================================================="
 
-###########################
+###############################################################################
 # env control
 
 LSST_HOME="${PREFIX}/lsst_home"
@@ -38,7 +34,7 @@ else
     LSST_TAG="v"${PKG_VERSION//./_}
 fi
 
-##########################
+###############################################################################
 # functions
 
 n8l::print_error() {
@@ -76,8 +72,8 @@ n8l::ln_rel() {
 }
 
 
-##########################
-# actual build
+###############################################################################
+# actual eups build
 
 mkdir -p ${LSST_HOME}
 pushd ${LSST_HOME}
@@ -167,6 +163,8 @@ for CHANGE in "activate" "deactivate"; do
     cp "${RECIPE_DIR}/${CHANGE}.sh" "${PREFIX}/etc/conda/${CHANGE}.d/${PKG_NAME}_${CHANGE}.sh"
 done
 
+# configure and patch eups
+
 # turn off locking
 mkdir -p ${EUPS_DIR}/site
 echo "hooks.config.site.lockDirectoryBase = None" >> ${EUPS_DIR}/site/startup.py
@@ -194,7 +192,10 @@ if [[ "$?" != "0" ]]; then
 fi
 popd
 
-# now handle some remaps
+
+###############################################################################
+# now handle some remapping of eups products to conda libs
+# this makes the downstream build faster
 export EUPS_DIR=${EUPS_DIR}
 source ${EUPS_DIR}/bin/setups.sh
 export -f setup
@@ -223,80 +224,21 @@ source ${RECIPE_DIR}/log4cxx_remap.sh
 # ditto for pybind11
 source ${RECIPE_DIR}/pybind11_remap.sh
 
+###############################################################################
 # now install sconsUtils
-# this brings most of the basic build tools in the env
+# this brings most of the basic build tools into the env and lets us patch it
 echo "
 Building scons+sconsUtils..."
-if [[ `uname -s` == "Darwin" ]]; then
-    # scons utils is pure python
-    # we are feeding it the osx system compiler since it uses itself to build
-    # itself and so we need to make it happy
-    CC=clang eups distrib install -v -t ${LSST_TAG} sconsUtils
-else
-    # we have to do this once - the rest of the stack uses sconsUtils which
-    # is patched to find the conda stuff
-    # in the linux CI, there are no system compilers so this is very safe
-    # the checks ensure we don't kill another systems stuff
-    if [ ! -f "${PREFIX}/bin/gcc" ]; then
-        ln -s ${CC} ${PREFIX}/bin/gcc
-        made_prefix_gcc_link=1
-    else
-        made_prefix_gcc_link=0
-    fi
-    if [ ! -f "${PREFIX}/bin/g++" ]; then
-        ln -s ${CXX} ${PREFIX}/bin/g++
-        made_prefix_gpp_link=1
-    else
-        made_prefix_gpp_link=0
-    fi
-    if [ ! -f "/usr/bin/gcc" ]; then
-        sudo ln -s ${PREFIX}/bin/gcc /usr/bin/gcc
-        made_gcc_link=1
-    else
-        made_gcc_link=0
-    fi
-    if [ ! -f "/usr/bin/g++" ]; then
-        sudo ln -s ${PREFIX}/bin/g++ /usr/bin/g++
-        made_gpp_link=1
-    else
-        made_gpp_link=0
-    fi
+source ${RECIPE_DIR}/build_scons.sh
 
-    CC=gcc eups distrib install -v -t ${LSST_TAG} sconsUtils
-
-    if [[ "${made_gcc_link}" == "1" ]]; then
-        sudo rm /usr/bin/gcc
-    fi
-    if [[ "${made_gpp_link}" == "1" ]]; then
-        sudo rm /usr/bin/g++
-    fi
-    if [[ "${made_prefix_gcc_link}" == "1" ]]; then
-        sudo rm ${PREFIX}/bin/gcc
-    fi
-    if [[ "${made_prefix_gpp_link}" == "1" ]]; then
-        sudo rm ${PREFIX}/bin/g++
-    fi
-fi
-
-# and then we then patch sconsUtils to work better with conda
-# again I hate myself for doing this but moving on
-# this path is pretty explicit - helps the code fail when a version is bumped
-if [[ `uname -s` == "Darwin" ]]; then
-    sconsdir="${LSST_HOME}/stack/miniconda/DarwinX86/sconsUtils/18.1.0-2-ga35c153/python/lsst/sconsUtils"
-else
-    sconsdir="${LSST_HOME}/stack/miniconda/Linux64/sconsUtils/18.1.0-2-ga35c153/python/lsst/sconsUtils"
-fi
-echo "
-Patching sconsUtils for conda in '${sconsdir}'..."
-pushd ${sconsdir}
-patch state.py ${RECIPE_DIR}/00002-sconsUtils-conda-for-state.patch
-patch builders.py ${RECIPE_DIR}/00003-sconsUtils-conda-for-pybind11-builder.patch
-popd
+###############################################################################
+# now finalize the build
 
 # now fix up the python paths
 curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
 
-# clean out .pyc files not in the standard spots
+# clean out .pyc files made by eups
+# these cause problems later for a reason I don't understand
 pushd ${LSST_HOME}
 if [[ `uname -s` == "Darwin" ]]; then
     find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete

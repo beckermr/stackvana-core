@@ -61,7 +61,7 @@
 +            "-pipe"])
 +        env.Append(CXXFLAGS=[
 +            "-stdlib=libc++",
-+            # "-fvisibility-inlines-hidden",
++            "-fvisibility-inlines-hidden",
 +            "-fmessage-length=0"])
 +    else:
 +        env.Append(CCFLAGS=[
@@ -74,7 +74,7 @@
 +            "-ffunction-sections",
 +            "-pipe"])
 +        env.Append(CXXFLAGS=[
-+            # "-fvisibility-inlines-hidden",
++            "-fvisibility-inlines-hidden",
 +            "-fmessage-length=0"])
 +    # end of stackvana additions
 +    ###########################################
