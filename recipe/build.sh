@@ -233,45 +233,45 @@ else
     # is patched to find the conda stuff
     # in the linux CI, there are no system compilers so this is very safe
     # the checks ensure we don't kill another systems stuff
-    if [ ! -f "${PREFIX}/bin/gcc" ]; then
-        ln -s ${CC} ${PREFIX}/bin/gcc
-        made_prefix_gcc_link=1
-    else
-        made_prefix_gcc_link=0
-    fi
-    if [ ! -f "${PREFIX}/bin/g++" ]; then
-        ln -s ${CXX} ${PREFIX}/bin/g++
-        made_prefix_gpp_link=1
-    else
-        made_prefix_gpp_link=0
-    fi
-    if [ ! -f "/usr/bin/gcc" ]; then
-        sudo ln -s ${PREFIX}/bin/gcc /usr/bin/gcc
-        made_gcc_link=1
-    else
-        made_gcc_link=0
-    fi
-    if [ ! -f "/usr/bin/g++" ]; then
-        sudo ln -s ${PREFIX}/bin/g++ /usr/bin/g++
-        made_gpp_link=1
-    else
-        made_gpp_link=0
-    fi
+    # if [ ! -f "${PREFIX}/bin/gcc" ]; then
+    #     ln -s ${CC} ${PREFIX}/bin/gcc
+    #     made_prefix_gcc_link=1
+    # else
+    #     made_prefix_gcc_link=0
+    # fi
+    # if [ ! -f "${PREFIX}/bin/g++" ]; then
+    #     ln -s ${CXX} ${PREFIX}/bin/g++
+    #     made_prefix_gpp_link=1
+    # else
+    #     made_prefix_gpp_link=0
+    # fi
+    # if [ ! -f "/usr/bin/gcc" ]; then
+    #     sudo ln -s ${PREFIX}/bin/gcc /usr/bin/gcc
+    #     made_gcc_link=1
+    # else
+    #     made_gcc_link=0
+    # fi
+    # if [ ! -f "/usr/bin/g++" ]; then
+    #     sudo ln -s ${PREFIX}/bin/g++ /usr/bin/g++
+    #     made_gpp_link=1
+    # else
+    #     made_gpp_link=0
+    # fi
 
-    CC=gcc CXX=g++ eups distrib install -v -t ${LSST_TAG} sconsUtils
-
-    if [[ "${made_gcc_link}" == "1" ]]; then
-        sudo rm /usr/bin/gcc
-    fi
-    if [[ "${made_gpp_link}" == "1" ]]; then
-        sudo rm /usr/bin/g++
-    fi
-    if [[ "${made_prefix_gcc_link}" == "1" ]]; then
-        sudo rm ${PREFIX}/bin/gcc
-    fi
-    if [[ "${made_prefix_gpp_link}" == "1" ]]; then
-        sudo rm ${PREFIX}/bin/g++
-    fi
+    CC=gcc eups distrib install -v -t ${LSST_TAG} sconsUtils
+    #
+    # if [[ "${made_gcc_link}" == "1" ]]; then
+    #     sudo rm /usr/bin/gcc
+    # fi
+    # if [[ "${made_gpp_link}" == "1" ]]; then
+    #     sudo rm /usr/bin/g++
+    # fi
+    # if [[ "${made_prefix_gcc_link}" == "1" ]]; then
+    #     sudo rm ${PREFIX}/bin/gcc
+    # fi
+    # if [[ "${made_prefix_gpp_link}" == "1" ]]; then
+    #     sudo rm ${PREFIX}/bin/g++
+    # fi
 fi
 
 # and then we then patch sconsUtils to work better with conda
