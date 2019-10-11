@@ -219,7 +219,7 @@ source ${RECIPE_DIR}/pybind11_remap.sh
 # this brings most of the basic build tools in the env
 echo "
 Building scons+sconsUtils..."
-if [[ `uname -s` != "Darwin" ]]; then
+if [[ `uname -s` == "Darwin" ]]; then
     eups distrib install -v -t ${LSST_TAG} sconsUtils
 else
     # we have to do this once - the rest of the stack uses sconsUtils which
