@@ -77,21 +77,14 @@ installation up to installing `sconsUtils` in order to make downstream builds ea
   this was failing for some reason unknown to me.
 
 - I applied patches to `sconsUtils` in order to ensure it finds the `conda` compilers
-  and uses the proper compiling/linking flags from the external environment.
+  and uses the proper compiling/linking flags from the external environment. These
+  patches make sure that the `conda` library prefix is always added when linking,
+  that `-rpath` is always set, and that the `conda` compilers are always used.
 
 
 ## Known Build Issues
 
-1. For some packages in the DM stack, you will need to set `LD_LIBARY_PATH` to
-   point to `${CONDA_PREFIX}/lib` when executing the `eups` installation,
-
-   ```bash
-   $ LD_LIBRARY_PATH=${CONDA_PREFIX}/lib eups distrib install -t w_2018_50 log
-   ```
-
-   Currently the `log`, `meas_algorithms`, and `afw`. There are probably more.
-
-2. Builds of some packages on OSX from source currently fail. These are currently
+1. Builds of some packages on OSX from source currently fail. These are currently
    `doxygen` and `pex_exceptions`.
 
 2. When building `astrometry.net`, you need to remove the `-I{CONDA_PREFIX}/include`
