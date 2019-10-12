@@ -39,7 +39,7 @@ eups list:"
 echo "
 making sure packages can be setup:"
 {
-    for pkg in doxygen boost fftw gsl apr apr_util log4cxx; do
+    for pkg in doxygen boost fftw gsl apr apr_util log4cxx mpich; do
         echo -n "setting up '${pkg}' ... "
         setup ${pkg}
         echo "worked!"
@@ -51,7 +51,7 @@ making sure packages can be setup:"
 # and we need the right spot
 echo "
 making sure package locations are right:"
-for pkg in doxygen boost fftw gsl log4cxx pybind11; do
+for pkg in doxygen boost fftw gsl log4cxx pybind11 mpich; do
     if [[ ! `eups list -v ${pkg} | grep "lsst_home/stackvana_${pkg}"` ]]; then
         exit 1
     fi

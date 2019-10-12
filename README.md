@@ -54,7 +54,7 @@ installation up to installing `sconsUtils` in order to make downstream builds ea
   elegantly!
 
 - I have removed the builds of `doxygen`, `boost`, `fftw`, `gsl`, `apr`,
-  `apr_util`, `pybind11`, and `log4cxx` from `eups` in favor of
+  `apr_util`, `pybind11`, `mpich`, and `log4cxx` from `eups` in favor of
   installing them with `conda`. I used the `manifest.remap` feature of `eups` to make
   sure this works with the existing stack installation routine.
   Many thanks to Jim Bosch for pointing out this feature of `eups`!
@@ -76,7 +76,8 @@ installation up to installing `sconsUtils` in order to make downstream builds ea
 - I applied patches to `sconsUtils` in order to ensure it finds the `conda` compilers
   and uses the proper compiling/linking flags from the external environment. These
   patches make sure that the `conda` library prefix is always added when linking,
-  that `-rpath` is always set, and that the `conda` compilers are always used.
+  that `-rpath` is always set, the right set of flags is used for the `conda` compilers,
+  and that the `conda` compilers are always used over the system ones.
 
 
 ## Known Build Issues

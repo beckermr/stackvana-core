@@ -224,6 +224,9 @@ source ${RECIPE_DIR}/log4cxx_remap.sh
 # ditto for pybind11
 source ${RECIPE_DIR}/pybind11_remap.sh
 
+# ditto for mpich
+source ${RECIPE_DIR}/mpich_remap.sh
+
 ###############################################################################
 # now install sconsUtils
 # this brings most of the basic build tools into the env and lets us patch it
@@ -239,6 +242,7 @@ curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron 
 
 # clean out .pyc files made by eups
 # these cause problems later for a reason I don't understand
+# conda remakes them IIUIC
 pushd ${LSST_HOME}
 if [[ `uname -s` == "Darwin" ]]; then
     find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
@@ -246,6 +250,12 @@ else
     find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
 fi
 popd
+
+# clean out any documentation
+# this bloats the packages, is usually a ton of files, and is not needed
+rm -rf ${EUPS_PATH}/*/*/*/doc/*
+rm -rf ${EUPS_PATH}/*/*/*/share/doc/*
+rm -rf ${EUPS_PATH}/*/*/*/share/man/*
 
 unset EUPS_DIR
 unset EUPS_PKGROOT

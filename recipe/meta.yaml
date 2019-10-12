@@ -19,6 +19,7 @@ package:
 build:
   number: 0
   skip: True  # [win or py < 37]
+  merge_build_host: True
   run_exports:
     strong:
       - {{ pin_subpackage('stackvana-core', max_pin='x.x.x') }}
@@ -48,6 +49,7 @@ requirements:
     - libaprutil =1.6.1
     - log4cxx =0.10.0
     - pybind11 =2.2.4
+    - mpich =3.3
 
     # and these are needed for the build of sconsUtils
     - setuptools_scm
@@ -108,6 +110,7 @@ requirements:
     - libaprutil =1.6.1
     - log4cxx =0.10.0
     - pybind11 =2.2.4
+    - mpich =3.3
 
     # stuff added outside of the main LSST DM conda envs
     - xorg-libxt =1.2.0  # [linux]

@@ -41,4 +41,10 @@ for var in LSST_EUPS_VERSION EUPS_DIR LSST_HOME EUPS_PATH CPATH \
         $var
 done
 
+if [[ `uname -s` == "Darwin" ]]; then
+    stackvana_backup_and_append_envvar \
+        deactivate \
+        LDFLAGS_LD
+fi
+
 unset -f stackvana_backup_and_append_envvar

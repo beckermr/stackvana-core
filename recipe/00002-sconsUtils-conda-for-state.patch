@@ -1,7 +1,5 @@
 --- a/state.py
 +++ b/state.py
---- /Users/Matt/Desktop/state.py	2019-10-10 07:00:12.000000000 -0500
-+++ state.py	2019-10-10 14:03:24.000000000 -0500
 @@ -166,6 +166,14 @@
      global env
      sconsUtilsPath, thisFile = os.path.split(__file__)
@@ -29,8 +27,8 @@
 +    env.Append(SHLINKFLAGS=["-Wl,-rpath,%s/lib" % _conda_prefix])
 +    env.Append(LIBPATH=["%s/lib" % _conda_prefix])
 +    if env['PLATFORM'] == 'darwin':
-+        env.Append(LINKFLAGS=["-Wl,-pie", "-Wl,-dead_strip_dylibs"])
-+        env.Append(SHLINKFLAGS=["-Wl,-pie", "-Wl,-dead_strip_dylibs"])
++        env.Append(LINKFLAGS=["-Wl,-pie"])
++        env.Append(SHLINKFLAGS=["-Wl,-pie"])
 +    else:
 +        env.Append(LINKFLAGS=[
 +            "-Wl,--sort-common",
