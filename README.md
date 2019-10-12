@@ -41,10 +41,7 @@ installation up to installing `sconsUtils` in order to make downstream builds ea
   the outside world. Global `eups` configuration and caching done in your `~/.eups`
   directory is still visible to all environments.
 
-- The `$EUPS_PKGROOT` environment variable is set to enable only source builds on
-  Linux. On OSX systems, the build tooling is stable enough (and the OSX version used
-  by the project is old enough), that it is pretty safe to also allow `eups` to use
-  precompiled binaries.
+- The `$EUPS_PKGROOT` environment variable is set to enable only source builds.
 
 
 ## Things that I did that don't make me feel like a good person
