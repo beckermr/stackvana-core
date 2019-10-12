@@ -89,13 +89,13 @@ stackvana_backup_and_append_envvar \
     "${CONDA_PREFIX}/lib" \
     ":"
 
-# set rpaths to resolve links properly at run time
+# set rpaths to resolve links properly at run time and remove a problematic flag for osx
 if [[ `uname -s` == "Darwin" ]]; then
-    stackvana_backup_and_append_envvar \
-        activate \
-        LDFLAGS \
-        "-Wl,-rpath,${CONDA_PREFIX}/lib -L${CONDA_PREFIX}/lib" \
-        " "
+    export STACKVANA_BACKUP_LDFLAGS=${LDFLAGS}
+    export LDFLAGS="${LDFLAGS//-Wl,-dead_strip_dylibs} -Wl,-rpath,${CONDA_PREFIX}/lib -L${CONDA_PREFIX}/lib"
+
+    export STACKVANA_BACKUP_LDFLAGS_LD=${LDFLAGS_LD}
+    export LDFLAGS_LD=${LDFLAGS_LD//-dead_strip_dylibs}
 else
     stackvana_backup_and_append_envvar \
         activate \
