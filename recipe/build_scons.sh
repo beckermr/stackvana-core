@@ -73,4 +73,8 @@ fi
 # if [[ "$?" != "0" ]]; then
 #     exit 1
 # fi
+patch dependencies.py ${RECIPE_DIR}/00004-sconsUtils-conda-libs-always-deps.patch
+if [[ "$?" != "0" ]]; then
+    exit 1
+fi
 popd
