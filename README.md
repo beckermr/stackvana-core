@@ -18,11 +18,12 @@ The command above will create a `conda` environment with all of the dependencies
 and tools you need to actually build the DM stack. In general, you should consult
 the LSST DM
 [documentation](https://pipelines.lsst.io/install/newinstall.html#install-science-pipelines-packages)
-for details on how to build the DM stack using ``eups``. This package runs the `eups`
-installation up to installing `sconsUtils` in order to make downstream builds easier.
+for details on how to build the DM stack using ``eups``. This package has
+the `eups` installation already run up to installing `sconsUtils` in order to make
+downstream builds easier.
 
 
-## Notes on the `conda` packaging of `eups` and the `conda` build tooling
+## Notes on `conda` and `eups` Integration
 
 - The builds are configured to use the compilers provided by `conda`. On linux,
   these are the GNU compilers. On OSX, these are a combination of the LLVM `clang`
@@ -39,9 +40,13 @@ installation up to installing `sconsUtils` in order to make downstream builds ea
 
 - The `eups` installation in this environment is not completely isolated from
   the outside world. Global `eups` configuration and caching done in your `~/.eups`
-  directory is still visible to all environments.
+  directory is still visible to all environments. There also appears to be issues
+  with `eups` touching the cached `conda` package outside of the installed version
+  in your environment.
 
-- The `$EUPS_PKGROOT` environment variable is set to enable only source builds.
+- The `$EUPS_PKGROOT` environment variable is set to enable only source builds
+  for Linux. For OSX, I have enabled only the downloading of the project's precompiled
+  binaries, as source builds generally fail right now.
 
 
 ## Things that I did that don't make me feel like a good person
@@ -53,10 +58,10 @@ installation up to installing `sconsUtils` in order to make downstream builds ea
   Many thanks to Robert Lupton for pointing out how to do modify this configuration option
   elegantly!
 
-- I have removed the builds of `doxygen`, `boost`, `fftw`, `gsl`, `apr`,
-  `apr_util`, `pybind11`, `mpich`, and `log4cxx` from `eups` in favor of
-  installing them with `conda`. I used the `manifest.remap` feature of `eups` to make
-  sure this works with the existing stack installation routine.
+- On Linux and OSX, I have removed the build of `doxygen` from `eups` in favor of
+  installing it with `conda`. On Linux, I have done this for `boost`, `fftw`, `gsl`, `apr`,
+  `apr_util`, `pybind11`, `mpich`, and `log4cxx` as well. I used the `manifest.remap`
+  feature of `eups` to make sure this works with the existing stack installation routine.
   Many thanks to Jim Bosch for pointing out this feature of `eups`!
 
 - I changed the first line, `#!${PREFIX}/bin/python`, in the `eups` and `eups_setup`
@@ -82,8 +87,9 @@ installation up to installing `sconsUtils` in order to make downstream builds ea
 
 ## Known Build Issues
 
-1. Builds of some packages on OSX from source currently fail. These are currently
-   `doxygen` and `pex_exceptions`.
+1. Builds of some/most packages on OSX from source with `conda`'s compilers currently
+   fail. The currently known packages are `doxygen`, `pex_exceptions`, `starlink_ast` and `astshim`.
+   There are probably a lot more.
 
 2. When building `astrometry.net`, you need to remove the `-I{CONDA_PREFIX}/include`
    options from `CPPFLAGS`, `CFLAGS`, `CXXFLAGS`, `DEBUG_CPPFLAGS`, `DEBUG_CFLAGS`,

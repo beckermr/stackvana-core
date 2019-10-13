@@ -1,6 +1,11 @@
 # unsetup any products to keep env clean
-for val in `eups list -s 2> /dev/null | awk '{ print $1 }'`; do
-    unsetup -j $val
+pkgs=`eups list -s --topological -D 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
+while [[ $pkgs ]]; do
+    for pkg in ${pkgs}; do
+        unsetup $pkg >/dev/null 2>&1
+        break
+    done
+    pkgs=`eups list -s --topological -D 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
 done
 
 # clean out the path, removing EUPS_DIR/bin
