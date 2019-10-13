@@ -2,10 +2,16 @@
 pkgs=`eups list -s --topological -D 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
 while [[ $pkgs ]]; do
     for pkg in ${pkgs}; do
+        if [[ ${pkg} == "eups" ]]; then
+           break
+        fi
         unsetup $pkg >/dev/null 2>&1
         break
     done
     pkgs=`eups list -s --topological -D 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
+    if [[ ${pkgs} == "eups" ]]; then
+        break
+    fi
 done
 
 # clean out the path, removing EUPS_DIR/bin
@@ -14,10 +20,11 @@ done
 # own path manipulations
 WORK=:$PATH:
 REMOVE="${EUPS_DIR}/bin"
-WORK=${WORK/:$REMOVE:/:}
+WORK=${WORK//:$REMOVE:/:}
 WORK=${WORK%:}
 WORK=${WORK#:}
 export PATH=$WORK
+echo $PATH
 
 # clean out our stuff - no need to backup or restore
 unset STACKVANA_ACTIVATED
