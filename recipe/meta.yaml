@@ -17,7 +17,7 @@ package:
   version: {{ version }}
 
 build:
-  number: 0
+  number: 1
   skip: True  # [win or py < 37]
   merge_build_host: True
   run_exports:
@@ -41,15 +41,15 @@ requirements:
 
     # these are needed to make the symlinks for remapping
     - doxygen =1.8.13
-    - boost =1.69
-    - boost-cpp =1.69
-    - fftw =3.3.4
-    - gsl =2.6
-    - libapr =1.6.5
-    - libaprutil =1.6.1
-    - log4cxx =0.10.0
-    - pybind11 =2.2.4
-    - mpich =3.3
+    - boost =1.69  # [linux]
+    - boost-cpp =1.69  # [linux]
+    - fftw =3.3.4  # [linux]
+    - gsl =2.6  # [linux]
+    - libapr =1.6.5  # [linux]
+    - libaprutil =1.6.1  # [linux]
+    - log4cxx =0.10.0  # [linux]
+    - pybind11 =2.2.4  # [linux]
+    - mpich =3.3  # [linux]
 
     # and these are needed for the build of sconsUtils
     - setuptools_scm
@@ -102,15 +102,15 @@ requirements:
 
     # I am shipping these by hand from conda forge using remap
     - doxygen =1.8.13
-    - boost =1.69
-    - boost-cpp =1.69
-    - fftw =3.3.4
-    - gsl =2.6
-    - libapr =1.6.5
-    - libaprutil =1.6.1
-    - log4cxx =0.10.0
-    - pybind11 =2.2.4
-    - mpich =3.3
+    - boost =1.69  # [linux]
+    - boost-cpp =1.69  # [linux]
+    - fftw =3.3.4  # [linux]
+    - gsl =2.6  # [linux]
+    - libapr =1.6.5  # [linux]
+    - libaprutil =1.6.1  # [linux]
+    - log4cxx =0.10.0  # [linux]
+    - pybind11 =2.2.4  # [linux]
+    - mpich =3.3  # [linux]
 
     # stuff added outside of the main LSST DM conda envs
     - xorg-libxt =1.2.0  # [linux]

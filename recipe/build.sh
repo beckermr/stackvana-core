@@ -206,26 +206,29 @@ Remapping some stuff to conda..."
 # use doxygen from conda since the build is so hard and it is a binary
 source ${RECIPE_DIR}/doxygen_remap.sh
 
-# use boost from conda and live on the edge
-source ${RECIPE_DIR}/boost_remap.sh ${LSST_TAG}
+# the code below is used on linux to make source builds easier
+if [[ `uname -s` != "Darwin" ]]; then
+    # use boost from conda and live on the edge
+    source ${RECIPE_DIR}/boost_remap.sh ${LSST_TAG}
 
-# ditto for fftw
-source ${RECIPE_DIR}/fftw_remap.sh
+    # ditto for fftw
+    source ${RECIPE_DIR}/fftw_remap.sh
 
-# ditto for gsl
-source ${RECIPE_DIR}/gsl_remap.sh
+    # ditto for gsl
+    source ${RECIPE_DIR}/gsl_remap.sh
 
-# ditto for apr & apr_util
-source ${RECIPE_DIR}/apr_aprutil_remap.sh
+    # ditto for apr & apr_util
+    source ${RECIPE_DIR}/apr_aprutil_remap.sh
 
-# ditto for log4cxx
-source ${RECIPE_DIR}/log4cxx_remap.sh
+    # ditto for log4cxx
+    source ${RECIPE_DIR}/log4cxx_remap.sh
 
-# ditto for pybind11
-source ${RECIPE_DIR}/pybind11_remap.sh
+    # ditto for pybind11
+    source ${RECIPE_DIR}/pybind11_remap.sh
 
-# ditto for mpich
-source ${RECIPE_DIR}/mpich_remap.sh
+    # ditto for mpich
+    source ${RECIPE_DIR}/mpich_remap.sh
+fi
 
 ###############################################################################
 # now install sconsUtils
