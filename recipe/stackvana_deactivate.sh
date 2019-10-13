@@ -19,12 +19,11 @@ done
 # we are not using the function below because this seems to mess with conda's
 # own path manipulations
 WORK=:$PATH:
-REMOVE="${EUPS_DIR}/bin"
-WORK=${WORK//:$REMOVE:/:}
+REMOVE=":${EUPS_DIR}/bin:"
+WORK=${WORK//$REMOVE/:}
 WORK=${WORK%:}
 WORK=${WORK#:}
 export PATH=$WORK
-echo $PATH
 
 # clean out our stuff - no need to backup or restore
 unset STACKVANA_ACTIVATED
