@@ -2,10 +2,16 @@
 pkgs=`eups list -s --topological -D 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
 while [[ $pkgs ]]; do
     for pkg in ${pkgs}; do
+        if [[ ${pkg} == "eups" ]]; then
+           break
+        fi
         unsetup $pkg >/dev/null 2>&1
         break
     done
     pkgs=`eups list -s --topological -D 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
+    if [[ ${pkgs} == "eups" ]]; then
+        break
+    fi
 done
 
 # clean out the path, removing EUPS_DIR/bin
@@ -13,8 +19,8 @@ done
 # we are not using the function below because this seems to mess with conda's
 # own path manipulations
 WORK=:$PATH:
-REMOVE="${EUPS_DIR}/bin"
-WORK=${WORK/:$REMOVE:/:}
+REMOVE=":${EUPS_DIR}/bin:"
+WORK=${WORK//$REMOVE/:}
 WORK=${WORK%:}
 WORK=${WORK#:}
 export PATH=$WORK
