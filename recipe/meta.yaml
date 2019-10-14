@@ -22,7 +22,7 @@ build:
   merge_build_host: True
   run_exports:
     strong:
-      - {{ pin_subpackage('stackvana-core', exact=True) }}  
+      - {{ pin_subpackage('stackvana-core', exact=True) }}
 
 requirements:
   host:
@@ -30,7 +30,6 @@ requirements:
     - pip
     - curl
     - git
-    # - perl
     - make
     - cmake
 
@@ -73,7 +72,6 @@ requirements:
     - pip
     - curl
     - git
-    # - perl
     - make
     - cmake
 

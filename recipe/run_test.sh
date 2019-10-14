@@ -39,7 +39,7 @@ eups list:"
 if [[ `uname -s` == "Darwin" ]]; then
     pkgs="doxygen"
 else
-    pkgs="doxygen boost fftw gsl apr apr_util log4cxx mpich"
+    pkgs="doxygen boost fftw gsl apr apr_util log4cxx mpich sconsUtils"
 fi
 
 echo "
@@ -63,7 +63,7 @@ making sure packages can be setup:"
 if [[ `uname -s` == "Darwin" ]]; then
     pkgs="doxygen"
 else
-    pkgs="doxygen boost fftw gsl log4cxx mpich"
+    pkgs="doxygen boost fftw gsl log4cxx mpich sconsUtils"
 fi
 
 echo "
