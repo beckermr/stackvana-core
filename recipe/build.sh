@@ -254,12 +254,6 @@ else
 fi
 popd
 
-# clean out any documentation
-# this bloats the packages, is usually a ton of files, and is not needed
-rm -rf ${EUPS_PATH}/*/*/*/doc/*
-rm -rf ${EUPS_PATH}/*/*/*/share/doc/*
-rm -rf ${EUPS_PATH}/*/*/*/share/man/*
-
 unset EUPS_DIR
 unset EUPS_PKGROOT
 unset -f setup
