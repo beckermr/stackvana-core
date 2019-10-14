@@ -3,11 +3,11 @@ resources:
     - repository: templates
       type: github
       name: beckermr/conda-package-tools
-      ref: refs/tags/v2.3
+      ref: refs/tags/v2.5
       endpoint: azure-read-only
 
 variables:
-  buildtag: v2.3
+  buildtag: v2.5
 
 jobs:
   - template: linux_python3.7_azure_template.yml@templates
