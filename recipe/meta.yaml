@@ -20,6 +20,9 @@ build:
   number: 1
   skip: True  # [win or py < 37]
   merge_build_host: True
+  run_exports:
+    strong:
+      - {{ pin_subpackage('stackvana-core', exact=True) }}  
 
 requirements:
   host:

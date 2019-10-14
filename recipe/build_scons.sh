@@ -88,7 +88,7 @@ cp -r ${sconsdir}/* ${LSST_HOME}/stackvana_sconsUtils/.
 
 ###################################################
 # 3. Remove sconsUtils from eups
-eups remove -v -j -t ${LSST_TAG} sconsUtils
+eups remove -v -t ${LSST_TAG} sconsUtils
 
 
 ###################################################
