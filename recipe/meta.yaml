@@ -20,9 +20,6 @@ build:
   number: 1
   skip: True  # [win or py < 37]
   merge_build_host: True
-  run_exports:
-    strong:
-      - {{ pin_subpackage('stackvana-core', max_pin='x.x.x') }}
 
 requirements:
   host:
@@ -30,7 +27,7 @@ requirements:
     - pip
     - curl
     - git
-    - perl
+    # - perl
     - make
     - cmake
 
@@ -73,7 +70,7 @@ requirements:
     - pip
     - curl
     - git
-    - perl
+    # - perl
     - make
     - cmake
 
