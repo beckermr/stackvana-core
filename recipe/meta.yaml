@@ -35,9 +35,6 @@ outputs:
     version: {{ version }}
     script: build_impl.sh
     requirements:
-      build:
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
       host:
         - python
         - pip
@@ -45,6 +42,9 @@ outputs:
         - git
         - make
         - cmake
+
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
 
         # these are needed to make the symlinks for remapping
         - doxygen =1.8.13
