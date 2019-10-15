@@ -1,4 +1,4 @@
-{% set name = "stackvana-core" %}
+{% set name = "stackvana-core-recipe" %}
 # LSST DM versions are prefixed with letters
 #
 #  - a weekly build is 'w_2018_50'
@@ -17,122 +17,128 @@ package:
   version: {{ version }}
 
 build:
-  number: 0
   skip: True  # [win or py < 37]
-  merge_build_host: True
-  run_exports:
-    strong:
-      - {{ pin_subpackage('stackvana-core', exact=True) }}
+  number: 5
 
-requirements:
-  host:
-    - python
-    - pip
-    - curl
-    - git
-    - make
-    - cmake
+outputs:
+  - name: stackvana-core
+    version: {{ version }}
+    run_exports:
+      - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
+    requirements:
+      run:
+        - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
+    test:
+      script: run_test_impl.sh
 
-    # I should be putting these in the build section using jinja2, but
-    # I am very much hacking this recipe
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+  - name: stackvana-core-impl
+    version: {{ version }}
+    script: build_impl.sh
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+      host:
+        - python
+        - pip
+        - curl
+        - git
+        - make
+        - cmake
 
-    # these are needed to make the symlinks for remapping
-    - doxygen =1.8.13
-    - boost =1.69  # [linux]
-    - boost-cpp =1.69  # [linux]
-    - fftw =3.3.4  # [linux]
-    - gsl =2.6  # [linux]
-    - libapr =1.6.5  # [linux]
-    - libaprutil =1.6.1  # [linux]
-    - log4cxx =0.10.0  # [linux]
-    - pybind11 =2.2.4  # [linux]
-    - mpich =3.3  # [linux]
+        # these are needed to make the symlinks for remapping
+        - doxygen =1.8.13
+        - boost =1.69  # [linux]
+        - boost-cpp =1.69  # [linux]
+        - fftw =3.3.4  # [linux]
+        - gsl =2.6  # [linux]
+        - libapr =1.6.5  # [linux]
+        - libaprutil =1.6.1  # [linux]
+        - log4cxx =0.10.0  # [linux]
+        - pybind11 =2.2.4  # [linux]
+        - mpich =3.3  # [linux]
 
-    # and these are needed for the build of sconsUtils
-    - setuptools_scm
-    - apipkg >=1.4
-    - pytest-runner
-    - pytest-flake8
-    - flake8-polyfill
-    - pluggy =0.6
-    - expat =2.2.5
-    - more-itertools =6.0.0
-    - attrs =17.4.0
-    - atomicwrites =1.3.0
-    - six =1.12.0
-    - numpy =1.16.2
-    - expat =2.2.5
-    - zlib =1.2.11
-    - libiconv =1.15
+        # and these are needed for the build of sconsUtils
+        - setuptools_scm
+        - apipkg >=1.4
+        - pytest-runner
+        - pytest-flake8
+        - flake8-polyfill
+        - pluggy =0.6
+        - expat =2.2.5
+        - more-itertools =6.0.0
+        - attrs =17.4.0
+        - atomicwrites =1.3.0
+        - six =1.12.0
+        - numpy =1.16.2
+        - expat =2.2.5
+        - zlib =1.2.11
+        - libiconv =1.15
+      run:
+        - python
+        - pip
+        - curl
+        - git
+        - make
+        - cmake
 
-  run:
-    - python
-    - pip
-    - curl
-    - git
-    - make
-    - cmake
+        # "real" deps
+        - expat =2.2.5
+        - more-itertools =6.0.0
+        - attrs =17.4.0
+        - atomicwrites =1.3.0
+        - six =1.12.0
+        - pluggy =0.6
+        - astropy =3.1.2
+        - numpy =1.16.2
+        - scipy =1.2.1
+        - h5py =2.9.0
+        - hdf5 =1.10.4
+        - blosc =1.15.0
+        - matplotlib =3.0.3
+        - pandas =0.24.2
+        - scikit-learn =0.20.3
+        - snappy =1.1.7
+        - numexpr =2.6.9
+        - future =0.17.1
+        - deprecated =1.2.6
+        - zlib =1.2.11
+        - libiconv =1.15
 
-    # "real" deps
-    - expat =2.2.5
-    - more-itertools =6.0.0
-    - attrs =17.4.0
-    - atomicwrites =1.3.0
-    - six =1.12.0
-    - pluggy =0.6
-    - astropy =3.1.2
-    - numpy =1.16.2
-    - scipy =1.2.1
-    - h5py =2.9.0
-    - hdf5 =1.10.4
-    - blosc =1.15.0
-    - matplotlib =3.0.3
-    - pandas =0.24.2
-    - scikit-learn =0.20.3
-    - snappy =1.1.7
-    - numexpr =2.6.9
-    - future =0.17.1
-    - deprecated =1.2.6
-    - zlib =1.2.11
-    - libiconv =1.15
+        # I am shipping these by hand from conda forge using remap
+        - doxygen =1.8.13
+        - boost =1.69  # [linux]
+        - boost-cpp =1.69  # [linux]
+        - fftw =3.3.4  # [linux]
+        - gsl =2.6  # [linux]
+        - libapr =1.6.5  # [linux]
+        - libaprutil =1.6.1  # [linux]
+        - log4cxx =0.10.0  # [linux]
+        - pybind11 =2.2.4  # [linux]
+        - mpich =3.3  # [linux]
 
-    # I am shipping these by hand from conda forge using remap
-    - doxygen =1.8.13
-    - boost =1.69  # [linux]
-    - boost-cpp =1.69  # [linux]
-    - fftw =3.3.4  # [linux]
-    - gsl =2.6  # [linux]
-    - libapr =1.6.5  # [linux]
-    - libaprutil =1.6.1  # [linux]
-    - log4cxx =0.10.0  # [linux]
-    - pybind11 =2.2.4  # [linux]
-    - mpich =3.3  # [linux]
+        # stuff added outside of the main LSST DM conda envs
+        - xorg-libxt =1.2.0  # [linux]
+        - flex
+        - bison
+        - setuptools_scm
+        - apipkg >=1.4
+        - pytest-runner
+        - pytest-flake8
+        - flake8-polyfill
 
-    # stuff added outside of the main LSST DM conda envs
-    - xorg-libxt =1.2.0  # [linux]
-    - flex
-    - bison
-    - setuptools_scm
-    - apipkg >=1.4
-    - pytest-runner
-    - pytest-flake8
-    - flake8-polyfill
+        # these deps shadow those installed by eups
+        # this means two copies are in the final downstream envs
+        # this tends to help the build
+        - pytest =3.6.2
+        - lsstdesc.coord =1.1
 
-    # these deps shadow those installed by eups
-    # this means two copies are in the final downstream envs
-    # this tends to help the build
-    - pytest =3.6.2
-    - lsstdesc.coord =1.1
+        # compilers for compiling
+        - c-compiler
+        - cxx-compiler
 
-    # compilers for compiling
-    - c-compiler
-    - cxx-compiler
-
-test:
-  imports:
-    - eups
+    test:
+      script: run_test_impl.sh
 
 about:
   home: https://github.com/beckermr/stackvana-core
