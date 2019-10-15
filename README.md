@@ -11,7 +11,7 @@ core build tooling for stackvana
 It is best to create a brand new `conda` environment for the DM stack.
 
 ```bash
-conda create -c beckermr -n mystack stackvana-core
+conda create -c stackvana -n mystack stackvana-core
 ```
 
 The command above will create a `conda` environment with all of the dependencies
