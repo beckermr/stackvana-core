@@ -9,6 +9,8 @@
 # this sequence of steps allows people to update their local eups install
 # more easily while retaining the conda integrations in sconsUtils
 
+SCONSUTILS_VERSION="18.1.0-2-ga35c153"
+
 
 ###################################################
 # 1. Build up to sconsUtils
@@ -72,9 +74,9 @@ fi
 # 2. Copy the full build to a special directory, ${LSST_HOME}/stackvana_sconsUtils
 # this path is pretty explicit - helps the code fail when a version is bumped
 if [[ `uname -s` == "Darwin" ]]; then
-    sconsdir="${LSST_HOME}/stack/miniconda/DarwinX86/sconsUtils/18.1.0-2-ga35c153"
+    sconsdir="${LSST_HOME}/stack/miniconda/DarwinX86/sconsUtils/${SCONSUTILS_VERSION}"
 else
-    sconsdir="${LSST_HOME}/stack/miniconda/Linux64/sconsUtils/18.1.0-2-ga35c153"
+    sconsdir="${LSST_HOME}/stack/miniconda/Linux64/sconsUtils/${SCONSUTILS_VERSION}"
 fi
 
 if [ ! -d ${sconsdir} ]; then
@@ -124,11 +126,11 @@ popd
 # 5. Declare a new sconsUtils.
 eups declare \
     -m ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.table \
-    -r ${LSST_HOME}/stackvana_sconsUtils sconsUtils stackvana_sconsUtils \
-    -L ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.cfg
+    -L ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.cfg \
+    -r ${LSST_HOME}/stackvana_sconsUtils sconsUtils "${SCONSUTILS_VERSION}"
 
 
 ###################################################
 # 6. Remap sconsUtils to the new one
 mkdir -p ${EUPS_PATH}/site
-echo "sconsUtils stackvana_sconsUtils" >> ${EUPS_PATH}/site/manifest.remap
+echo "sconsUtils ${SCONSUTILS_VERSION}" >> ${EUPS_PATH}/site/manifest.remap
