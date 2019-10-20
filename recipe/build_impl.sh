@@ -204,35 +204,38 @@ export -f unsetup
 echo "
 Remapping some stuff to conda..."
 # use doxygen from conda since the build is so hard and it is a binary
-source ${RECIPE_DIR}/doxygen_remap.sh
+source ${RECIPE_DIR}/remaps/doxygen_remap.sh
 
 # use boost from conda and live on the edge
-source ${RECIPE_DIR}/boost_remap.sh ${LSST_TAG}
+source ${RECIPE_DIR}/remaps/boost_remap.sh ${LSST_TAG}
 
 # ditto for fftw
-source ${RECIPE_DIR}/fftw_remap.sh
+source ${RECIPE_DIR}/remaps/fftw_remap.sh
 
 # ditto for gsl
-source ${RECIPE_DIR}/gsl_remap.sh
+source ${RECIPE_DIR}/remaps/gsl_remap.sh
 
 # ditto for apr & apr_util
-source ${RECIPE_DIR}/apr_aprutil_remap.sh
+source ${RECIPE_DIR}/remaps/apr_aprutil_remap.sh
 
 # ditto for log4cxx
-source ${RECIPE_DIR}/log4cxx_remap.sh
+source ${RECIPE_DIR}/remaps/log4cxx_remap.sh
 
 # ditto for pybind11
-source ${RECIPE_DIR}/pybind11_remap.sh
+source ${RECIPE_DIR}/remaps/pybind11_remap.sh
 
 # ditto for mpich
-source ${RECIPE_DIR}/mpich_remap.sh
+source ${RECIPE_DIR}/remaps/mpich_remap.sh
+
+# ditto for eigen
+source ${RECIPE_DIR}/remaps/eigen_remap.sh
 
 ###############################################################################
 # now install sconsUtils
 # this brings most of the basic build tools into the env and lets us patch it
 echo "
 Building scons+sconsUtils..."
-source ${RECIPE_DIR}/build_scons.sh
+source ${RECIPE_DIR}/remaps/build_scons.sh
 
 ###############################################################################
 # now finalize the build
