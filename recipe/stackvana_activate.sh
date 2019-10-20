@@ -43,11 +43,7 @@ export CXXFLAGS=${CXXFLAGS//-fvisibility-inlines-hidden}
 source ${EUPS_DIR}/bin/setups.sh
 export -f setup
 export -f unsetup
-if [[ `uname -s` == "Darwin" ]]; then
-    export EUPS_PKGROOT="https://eups.lsst.codes/stack/osx/10.9/clang-1000.10.44.4/miniconda3-4.5.12-1172c30"
-else
-    export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
-fi
+export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
 
 # finally setup env so we can build packages
 function stackvana_backup_and_append_envvar() {

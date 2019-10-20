@@ -206,29 +206,26 @@ Remapping some stuff to conda..."
 # use doxygen from conda since the build is so hard and it is a binary
 source ${RECIPE_DIR}/doxygen_remap.sh
 
-# the code below is used on linux to make source builds easier
-if [[ `uname -s` != "Darwin" ]]; then
-    # use boost from conda and live on the edge
-    source ${RECIPE_DIR}/boost_remap.sh ${LSST_TAG}
+# use boost from conda and live on the edge
+source ${RECIPE_DIR}/boost_remap.sh ${LSST_TAG}
 
-    # ditto for fftw
-    source ${RECIPE_DIR}/fftw_remap.sh
+# ditto for fftw
+source ${RECIPE_DIR}/fftw_remap.sh
 
-    # ditto for gsl
-    source ${RECIPE_DIR}/gsl_remap.sh
+# ditto for gsl
+source ${RECIPE_DIR}/gsl_remap.sh
 
-    # ditto for apr & apr_util
-    source ${RECIPE_DIR}/apr_aprutil_remap.sh
+# ditto for apr & apr_util
+source ${RECIPE_DIR}/apr_aprutil_remap.sh
 
-    # ditto for log4cxx
-    source ${RECIPE_DIR}/log4cxx_remap.sh
+# ditto for log4cxx
+source ${RECIPE_DIR}/log4cxx_remap.sh
 
-    # ditto for pybind11
-    source ${RECIPE_DIR}/pybind11_remap.sh
+# ditto for pybind11
+source ${RECIPE_DIR}/pybind11_remap.sh
 
-    # ditto for mpich
-    source ${RECIPE_DIR}/mpich_remap.sh
-fi
+# ditto for mpich
+source ${RECIPE_DIR}/mpich_remap.sh
 
 ###############################################################################
 # now install sconsUtils
@@ -253,6 +250,13 @@ else
     find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
 fi
 popd
+
+# clean out any documentation
+# this bloats the packages, is usually a ton of files, and is not needed
+rm -rf ${EUPS_PATH}/*/*/*/doc/html/*
+rm -rf ${EUPS_PATH}/*/*/*/doc/xml/*
+rm -rf ${EUPS_PATH}/*/*/*/share/doc/*
+rm -rf ${EUPS_PATH}/*/*/*/share/man/*
 
 unset EUPS_DIR
 unset EUPS_PKGROOT
