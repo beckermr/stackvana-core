@@ -228,7 +228,8 @@ source ${RECIPE_DIR}/remaps/pybind11_remap.sh
 source ${RECIPE_DIR}/remaps/mpich_remap.sh
 
 # ditto for eigen
-source ${RECIPE_DIR}/remaps/eigen_remap.sh
+# breaks osx
+# source ${RECIPE_DIR}/remaps/eigen_remap.sh
 
 ###############################################################################
 # now install sconsUtils
