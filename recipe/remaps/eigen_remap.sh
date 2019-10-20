@@ -3,9 +3,9 @@ mkdir -p ${LSST_HOME}/stackvana_eigen/include
 pushd ${LSST_HOME}/stackvana_eigen/include
 ln -s ${PREFIX}/include/eigen3 eigen3
 # eups installs have these
-ln -s eigen3/Eigen Eigen
-ln -s eigen3/signature_of_eigen3_matrix_library signature_of_eigen3_matrix_library
-ln -s eigen3/unsupported unsupported
+ln -s ${PREFIX}/include/eigen3/Eigen Eigen
+ln -s ${PREFIX}/include/eigen3/signature_of_eigen3_matrix_library signature_of_eigen3_matrix_library
+ln -s ${PREFIX}/include/eigen3/unsupported unsupported
 popd
 
 mkdir -p ${LSST_HOME}/stackvana_eigen/share/pkgconfig
