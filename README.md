@@ -59,8 +59,8 @@ downstream builds easier.
   elegantly!
 
 - On Linux and OSX, I have removed the build of `doxygen` from `eups` in favor of
-  installing it with `conda`. On Linux, I have done this for `boost`, `fftw`, `gsl`, `apr`,
-  `apr_util`, `pybind11`, `mpich`, and `log4cxx` as well. I used the `manifest.remap`
+  installing it with `conda`. I have done this for `boost`, `fftw`, `gsl`, `apr`,
+  `apr_util`, `pybind11`, `mpich`, `eigen`, and `log4cxx` as well. I used the `manifest.remap`
   feature of `eups` to make sure this works with the existing stack installation routine.
   Many thanks to Jim Bosch for pointing out this feature of `eups`!
 
