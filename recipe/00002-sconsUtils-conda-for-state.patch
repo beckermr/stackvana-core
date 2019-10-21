@@ -27,8 +27,8 @@
 +    env.Append(SHLINKFLAGS=["-Wl,-rpath,%s/lib" % _conda_prefix])
 +    env.Append(LIBPATH=["%s/lib" % _conda_prefix])
 +    if env['PLATFORM'] == 'darwin':
-+        env.Append(LINKFLAGS=["-Wl,-pie"])
-+        env.Append(SHLINKFLAGS=["-Wl,-pie"])
++        env.Append(LINKFLAGS=["-Wl,-pie", "-Wl,-headerpad_max_install_names"])
++        env.Append(SHLINKFLAGS=["-Wl,-pie", "-Wl,-headerpad_max_install_names"])
 +    else:
 +        env.Append(LINKFLAGS=[
 +            "-Wl,--sort-common",

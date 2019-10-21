@@ -108,13 +108,6 @@ if [[ "$?" != "0" ]]; then
     exit 1
 fi
 
-# we are not using this patch right now
-# it was mode to solve a problem that it does not solve :(
-# patch builders.py ${RECIPE_DIR}/00003-sconsUtils-conda-for-pybind11-builder.patch
-# if [[ "$?" != "0" ]]; then
-#     exit 1
-# fi
-
 patch dependencies.py ${RECIPE_DIR}/00004-sconsUtils-conda-libs-always-deps.patch
 if [[ "$?" != "0" ]]; then
     exit 1
