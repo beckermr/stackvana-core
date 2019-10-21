@@ -1,9 +1,10 @@
 # unsetup any products to keep env clean
+# topological sort makes it faster since unsetup works on deps too
 pkgs=`eups list -s --topological -D 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
 while [[ $pkgs ]]; do
     for pkg in ${pkgs}; do
         if [[ ${pkg} == "eups" ]]; then
-           break
+           continue
         fi
         unsetup $pkg >/dev/null 2>&1
         break
@@ -12,6 +13,15 @@ while [[ $pkgs ]]; do
     if [[ ${pkgs} == "eups" ]]; then
         break
     fi
+done
+
+# it stops at eups so we get the rest in a list
+pkgs=`eups list -s 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
+for pkg in ${pkgs}; do
+    if [[ ${pkg} == "eups" ]]; then
+       continue
+    fi
+    unsetup $pkg >/dev/null 2>&1
 done
 
 # clean out the path, removing EUPS_DIR/bin

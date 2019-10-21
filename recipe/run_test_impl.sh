@@ -36,11 +36,7 @@ eups list:"
 
 
 # this should work
-if [[ `uname -s` == "Darwin" ]]; then
-    pkgs="doxygen"
-else
-    pkgs="doxygen boost fftw gsl apr apr_util log4cxx mpich sconsUtils"
-fi
+pkgs="doxygen boost fftw gsl apr apr_util log4cxx mpich sconsUtils starlink_ast"
 
 echo "
 making sure packages can be setup:"
@@ -60,11 +56,7 @@ making sure packages can be setup:"
 }
 
 # and we need the right spot
-if [[ `uname -s` == "Darwin" ]]; then
-    pkgs="doxygen"
-else
-    pkgs="doxygen boost fftw gsl log4cxx mpich sconsUtils"
-fi
+pkgs="doxygen boost fftw gsl log4cxx mpich sconsUtils starlink_ast"
 
 echo "
 making sure package locations are right:"
@@ -78,20 +70,18 @@ for pkg in ${pkgs}; do
     fi
 done
 
-if [[ `uname -s` != "Darwin" ]]; then
-    echo -n "testing 'apr' ... "
-    if [[ ! `eups list -v apr | grep "lsst_home/stackvana_apr_aprutil"` ]]; then
-        echo "failed!"
-        exit 1
-    else
-        echo "worked!"
-    fi
+echo -n "testing 'apr' ... "
+if [[ ! `eups list -v apr | grep "lsst_home/stackvana_apr_aprutil"` ]]; then
+    echo "failed!"
+    exit 1
+else
+    echo "worked!"
+fi
 
-    echo -n "testing 'apr_util' ... "
-    if [[ ! `eups list -v apr_util | grep "lsst_home/stackvana_apr_aprutil"` ]]; then
-        echo "failed!"
-        exit 1
-    else
-        echo "worked!"
-    fi
+echo -n "testing 'apr_util' ... "
+if [[ ! `eups list -v apr_util | grep "lsst_home/stackvana_apr_aprutil"` ]]; then
+    echo "failed!"
+    exit 1
+else
+    echo "worked!"
 fi
