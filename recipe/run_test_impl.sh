@@ -36,7 +36,7 @@ eups list:"
 
 
 # this should work
-pkgs="doxygen boost fftw gsl apr apr_util log4cxx mpich sconsUtils"
+pkgs="doxygen boost fftw gsl apr apr_util log4cxx mpich sconsUtils starlink_ast"
 
 echo "
 making sure packages can be setup:"
@@ -56,7 +56,7 @@ making sure packages can be setup:"
 }
 
 # and we need the right spot
-pkgs="doxygen boost fftw gsl log4cxx mpich sconsUtils"
+pkgs="doxygen boost fftw gsl log4cxx mpich sconsUtils starlink_ast"
 
 echo "
 making sure package locations are right:"

@@ -57,6 +57,7 @@ outputs:
         - log4cxx =0.10.0
         - pybind11 =2.2.4
         - mpich =3.3
+        - starlink_ast =8.7.2
         # - eigen =3.3.7
 
         # and these are needed for the build of sconsUtils
@@ -119,6 +120,7 @@ outputs:
         - log4cxx =0.10.0
         - pybind11 =2.2.4
         - mpich =3.3
+        - starlink_ast =8.7.2
         # - eigen =3.3.7
 
         # stuff added outside of the main LSST DM conda envs

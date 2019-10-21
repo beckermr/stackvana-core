@@ -231,6 +231,9 @@ source ${RECIPE_DIR}/remaps/mpich_remap.sh
 # breaks osx
 # source ${RECIPE_DIR}/remaps/eigen_remap.sh
 
+# ditto for starlink_ast
+source ${RECIPE_DIR}/remaps/starlink_ast_remap.sh
+
 ###############################################################################
 # now install sconsUtils
 # this brings most of the basic build tools into the env and lets us patch it
