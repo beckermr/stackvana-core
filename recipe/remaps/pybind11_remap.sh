@@ -7,14 +7,9 @@ popd
 # deal with ups and scons integrations
 mkdir -p ${LSST_HOME}/stackvana_pybind11/ups
 echo 'envPrepend(CMAKE_PREFIX_PATH, ${PRODUCT_DIR})
-if (type == exact) {
-   setupRequired(python          -j 3.7)
-   setupRequired(numpy           -j 1.16.2)
-   setupRequired(eigen           -j 3.3.7)
-} else {
-   setupRequired(python 3.7 [>= 3.7])
-   setupRequired(numpy 1.16.2 [>= 1.16.2])
-   setupRequired(eigen 3.3.7 [>= 3.3.7])
+setupRequired(python 3.7 [>= 3.7])
+setupRequired(numpy 1.16.2 [>= 1.16.2])
+setupRequired(eigen 3.3.7 [>= 3.3.7])
 }
 ' >> ${LSST_HOME}/stackvana_pybind11/ups/pybind11.table
 

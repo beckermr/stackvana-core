@@ -58,11 +58,28 @@ downstream builds easier.
   Many thanks to Robert Lupton for pointing out how to do modify this configuration option
   elegantly!
 
-- On Linux and OSX, I have removed the build of `doxygen` from `eups` in favor of
-  installing it with `conda`. I have done this for `boost`, `fftw`, `gsl`, `apr`,
-  `apr_util`, `pybind11`, `mpich`, `starlink_ast`, and `log4cxx` as well. I used the `manifest.remap`
-  feature of `eups` to make sure this works with the existing stack installation routine.
-  Many thanks to Jim Bosch for pointing out this feature of `eups`!
+- On Linux and OSX, I have removed the build of many packages from `eups` to `conda`.
+  The list of packages with this is
+
+    - `doxygen`
+    - `boost`
+    - `fftw`
+    - `gsl`
+    - `apr`,
+    - `apr_util`
+    - `pybind11`
+    - `mpich`
+    - `starlink_ast`
+    - `xpa`
+    - `log4cxx`
+    - `ndarray`
+    - `coord`
+    - `treecorr`
+    - `healpy`
+
+  I used the `manifest.remap` feature of `eups` to make sure this works with the
+  existing stack installation routine. Many thanks to Jim Bosch for pointing out this
+  feature of `eups`!
 
 - I changed the first line, `#!${PREFIX}/bin/python`, in the `eups` and `eups_setup`
   scripts to `#!/usr/bin/env python`. This doesn't seem to make a difference and
@@ -88,10 +105,4 @@ downstream builds easier.
 ## Known Build Issues
 
 1. Builds of some/most packages on OSX from source with `conda`'s compilers currently
-   fail. The currently known packages are `doxygen`, `pex_exceptions`, `starlink_ast` and `astshim`.
-   There are probably a lot more.
-
-2. When building `astrometry.net`, you need to remove the `-I{CONDA_PREFIX}/include`
-   options from `CPPFLAGS`, `CFLAGS`, `CXXFLAGS`, `DEBUG_CPPFLAGS`, `DEBUG_CFLAGS`,
-   and `DEBUG_CXXFLAGS`. These options cause the header file `tic.h` to be imported
-   from the wrong location.
+   fail. The currently known packages are `doxygen` and `xpa`.

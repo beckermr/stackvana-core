@@ -59,6 +59,11 @@ outputs:
         - mpich =3.3
         - starlink-ast =8.7.2
         # - eigen =3.3.7
+        - xpa =2.1.19
+        - ndarray =1.5.3
+        - lsstdesc.coord =1.2
+        - treecorr =3.3.11
+        - healpy =1.12.10
 
         # and these are needed for the build of sconsUtils
         - setuptools_scm
@@ -122,6 +127,11 @@ outputs:
         - mpich =3.3
         - starlink-ast =8.7.2
         # - eigen =3.3.7
+        - xpa =2.1.19
+        - ndarray =1.5.3
+        - lsstdesc.coord =1.2
+        - treecorr =3.3.11
+        - healpy =1.12.10
 
         # stuff added outside of the main LSST DM conda envs
         - xorg-libxt =1.2.0
@@ -137,7 +147,6 @@ outputs:
         # this means two copies are in the final downstream envs
         # this tends to help the build
         - pytest =3.6.2
-        - lsstdesc.coord =1.1
 
         # compilers for compiling
         - c-compiler

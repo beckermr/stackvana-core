@@ -234,6 +234,21 @@ source ${RECIPE_DIR}/remaps/mpich_remap.sh
 # ditto for starlink_ast
 source ${RECIPE_DIR}/remaps/starlink_ast_remap.sh
 
+# ditto for xpa
+source ${RECIPE_DIR}/remaps/xpa_remap.sh
+
+# ditto for ndarray
+source ${RECIPE_DIR}/remaps/ndarray_remap.sh
+
+# ditto for coord
+source ${RECIPE_DIR}/remaps/coord_remap.sh
+
+# ditto for treecorr
+source ${RECIPE_DIR}/remaps/treecorr_remap.sh
+
+# ditto for healpy
+source ${RECIPE_DIR}/remaps/healpy_remap.sh
+
 ###############################################################################
 # now install sconsUtils
 # this brings most of the basic build tools into the env and lets us patch it
