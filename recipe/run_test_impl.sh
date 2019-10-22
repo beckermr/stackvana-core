@@ -44,7 +44,7 @@ making sure packages can be setup:"
 {
     for pkg in ${allpkgs}; do
         echo -n "setting up '${pkg}' ... "
-        val=`setup ${pkg} 2>&1`
+        val=`setup -j ${pkg} 2>&1`
         if [[ ! ${val} ]]; then
             echo "worked!"
         else
