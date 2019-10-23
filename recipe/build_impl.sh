@@ -275,10 +275,10 @@ popd
 
 # clean out any documentation
 # this bloats the packages, is usually a ton of files, and is not needed
-rm -rf ${EUPS_PATH}/*/*/*/doc/html/*
-rm -rf ${EUPS_PATH}/*/*/*/doc/xml/*
-rm -rf ${EUPS_PATH}/*/*/*/share/doc/*
-rm -rf ${EUPS_PATH}/*/*/*/share/man/*
+compgen -G "${EUPS_PATH}/*/*/*/doc/html/*" | xargs rm -rf
+compgen -G "${EUPS_PATH}/*/*/*/doc/xml/*" | xargs rm -rf
+compgen -G "${EUPS_PATH}/*/*/*/share/doc/*" | xargs rm -rf
+compgen -G "${EUPS_PATH}/*/*/*/share/man/*" | xargs rm -rf
 
 unset EUPS_DIR
 unset EUPS_PKGROOT
