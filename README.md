@@ -44,9 +44,7 @@ downstream builds easier.
   with `eups` touching the cached `conda` package outside of the installed version
   in your environment.
 
-- The `$EUPS_PKGROOT` environment variable is set to enable only source builds
-  for Linux. For OSX, I have enabled only the downloading of the project's precompiled
-  binaries, as source builds generally fail right now.
+- The `$EUPS_PKGROOT` environment variable is set to enable only source builds.
 
 
 ## Things that I did that don't make me feel like a good person
@@ -65,7 +63,7 @@ downstream builds easier.
     - `boost`
     - `fftw`
     - `gsl`
-    - `apr`,
+    - `apr`
     - `apr_util`
     - `pybind11`
     - `mpich`
