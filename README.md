@@ -74,6 +74,26 @@ downstream builds easier.
     - `coord`
     - `treecorr`
     - `healpy`
+    - `python_psutil`
+    - `pep8_naming`
+    - `ws4py`
+    - `python_py`
+    - `python_execnet`
+    - `pytest`
+    - `pytest_forked`
+    - `pytest_xdist`
+    - `python_coverage`
+    - `pytest_cov`
+    - `pyflakes`
+    - `pycodestyle`
+    - `python_mccabe`
+    - `flake8`
+    - `pytest_flake8`
+    - `esutil`
+    - `requests`
+    - `mpi4py`
+    - `python_future`
+    - `sqlalchemy`
 
   I used the `manifest.remap` feature of `eups` to make sure this works with the
   existing stack installation routine. Many thanks to Jim Bosch for pointing out this
