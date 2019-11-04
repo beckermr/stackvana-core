@@ -10,7 +10,7 @@
 #  - for a major version 'v18_1', the conda version is '18.1.0'
 #
 # Note the exta micro version in order to match the tags in the DM eups system.
-{% set version = "2019.40w" %}
+{% set version = "2019.44w" %}
 
 package:
   name: {{ name|lower }}
@@ -67,9 +67,9 @@ outputs:
         - ws4py
         - py
         - execnet
-        - pytest >=3.6
+        - pytest >=4,<5.0.0a0
         - pytest-forked
-        - pytest-xdist
+        - pytest-xdist =1.20.1
         - coverage
         - pytest-cov
         - pyflakes
@@ -88,16 +88,7 @@ outputs:
         - apipkg >=1.4
         - pytest-runner
         - flake8-polyfill
-        - pluggy =0.6
-        - expat =2.2.5
-        - more-itertools =6.0.0
-        - attrs =17.4.0
-        - atomicwrites =1.3.0
-        - six =1.12.0
         - numpy =1.16.2
-        - expat =2.2.5
-        - zlib =1.2.11
-        - libiconv =1.15
       run:
         - python
         - pip
@@ -107,28 +98,20 @@ outputs:
         - cmake
 
         # "real" deps
-        - expat =2.2.5
-        - more-itertools =6.0.0
-        - attrs =17.4.0
-        - atomicwrites =1.3.0
-        - six =1.12.0
-        - pluggy =0.6
-        - astropy =3.1.2
-        - numpy =1.16.2
-        - scipy =1.2.1
+        - astropy =3.2.3
+        - blosc =1.15.0
         - h5py =2.9.0
         - hdf5 =1.10.4
-        - blosc =1.15.0
         - matplotlib =3.0.3
-        - pandas =0.24.2
-        - scikit-learn =0.20.3
-        - snappy =1.1.7
         - numexpr =2.6.9
-        - deprecated =1.2.6
-        - zlib =1.2.11
-        - libiconv =1.15
+        - numpy =1.16.2
+        - pandas =0.24.2
         - pyqt
         - qt
+        - scikit-learn =0.20.3
+        - scipy =1.2.1
+        - snappy =1.1.7
+        - deprecated =1.2.6
 
         # I am shipping these by hand from conda forge using remap
         - doxygen =1.8.13
@@ -153,9 +136,9 @@ outputs:
         - ws4py
         - py
         - execnet
-        - pytest >=3.6
+        - pytest >=4,<5.0.0a0
         - pytest-forked
-        - pytest-xdist
+        - pytest-xdist =1.20.1
         - coverage
         - pytest-cov
         - pyflakes

@@ -9,7 +9,7 @@
 # this sequence of steps allows people to update their local eups install
 # more easily while retaining the conda integrations in sconsUtils
 
-SCONSUTILS_VERSION="18.1.0-2-ga35c153"
+SCONSUTILS_VERSION="18.1.0-3-g946de54"
 
 
 ###################################################
