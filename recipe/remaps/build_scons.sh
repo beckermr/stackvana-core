@@ -101,17 +101,13 @@ eups remove -v -t ${LSST_TAG} sconsUtils
 
 echo "
 Patching sconsUtils for conda in '${sconsdir}'..."
-pushd ${LSST_HOME}/stackvana_sconsUtils/python/lsst/sconsUtils
+pushd ${LSST_HOME}/stackvana_sconsUtils
 
-patch state.py ${RECIPE_DIR}/00002-sconsUtils-conda-for-state.patch
+patch -p1 < ${RECIPE_DIR}/00002-sconsUtils-conda-build.patch
 if [[ "$?" != "0" ]]; then
     exit 1
 fi
 
-patch dependencies.py ${RECIPE_DIR}/00004-sconsUtils-conda-libs-always-deps.patch
-if [[ "$?" != "0" ]]; then
-    exit 1
-fi
 popd
 
 

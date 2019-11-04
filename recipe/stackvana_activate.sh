@@ -35,9 +35,9 @@ export STACKVANA_BACKUP_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 export STACKVANA_BACKUP_DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}
 export STACKVANA_BACKUP_LSST_LIBRARY_PATH=${LSST_LIBRARY_PATH}
 
-# removing this flag since it is suspect
-export STACKVANA_BACKUP_CXXFLAGS=${CXXFLAGS}
-export CXXFLAGS=${CXXFLAGS//-fvisibility-inlines-hidden}
+# instruct sconsUtils to use the conda compilers
+export STACKVANA_BACKUP_SCONSUTILS_USE_CONDA_COMPILERS=${SCONSUTILS_USE_CONDA_COMPILERS}
+export SCONSUTILS_USE_CONDA_COMPILERS=1
 
 # now setup eups
 source ${EUPS_DIR}/bin/setups.sh

@@ -1,0 +1,232 @@
+diff --git a/doc/lsst.sconsUtils/index.rst b/doc/lsst.sconsUtils/index.rst
+index 97c52b4..a3cba8e 100644
+--- a/doc/lsst.sconsUtils/index.rst
++++ b/doc/lsst.sconsUtils/index.rst
+@@ -45,3 +45,11 @@ Python API reference
+ .. automodapi:: lsst.sconsUtils.utils
+    :no-main-docstr:
+    :no-inheritance-diagram:
++
++Using sconsUtils with conda compilers
++=====================================
++
++If you would like to use sconsUtils with conda compilers, then put
++``SCONSUTILS_USE_CONDA_COMPILERS`` in your environment with a non-None value.
++This will instruct sconsUtils to use the compiler flags and compilers from
++the encolsing conda environment.
+diff --git a/python/lsst/sconsUtils/dependencies.py b/python/lsst/sconsUtils/dependencies.py
+index 8b3bfbd..14cf3f1 100644
+--- a/python/lsst/sconsUtils/dependencies.py
++++ b/python/lsst/sconsUtils/dependencies.py
+@@ -3,6 +3,7 @@
+
+ __all__ = ("Configuration", "ExternalConfiguration", "PackageTree", "configure")
+
++import os
+ import os.path
+ import collections
+ import imp
+@@ -12,6 +13,7 @@ from SCons.Script.SConscript import SConsEnvironment
+
+ from . import installation
+ from . import state
++from .utils import get_conda_prefix
+
+
+ def configure(packageName, versionString=None, eupsProduct=None, eupsProductPath=None, noCfgFile=False):
+@@ -76,13 +78,22 @@ def configure(packageName, versionString=None, eupsProduct=None, eupsProductPath
+     state.env.libs = {"main": [], "python": [], "test": []}
+     state.env.doxygen = {"tags": [], "includes": []}
+     state.env['CPPPATH'] = []
+-    state.env['LIBPATH'] = []
++
++    if 'SCONSUTILS_USE_CONDA_COMPILERS' in os.environ:
++        _conda_prefix = get_conda_prefix()
++        state.env['LIBPATH'] = ["%s/lib" % _conda_prefix]
++    else:
++        state.env['LIBPATH'] = []
+
+     # XCPPPATH is a new variable defined by sconsUtils - it's like CPPPATH,
+     # but the headers found there aren't treated as dependencies.  This can
+     # make scons a lot faster.
+     state.env['XCPPPATH'] = []
+
++    if 'SCONSUTILS_USE_CONDA_COMPILERS' in os.environ:
++        _conda_prefix = get_conda_prefix()
++        state.env.Append(XCPPPATH=["%s/include" % _conda_prefix])
++
+     # XCPPPPREFIX is a replacement for SCons' built-in INCPREFIX. It is used
+     # when compiling headers in XCPPPATH directories. Here, we set it to
+     # `-isystem`, so that those are regarded as "system headers" and warnings
+diff --git a/python/lsst/sconsUtils/state.py b/python/lsst/sconsUtils/state.py
+index d60b380..4047e3c 100644
+--- a/python/lsst/sconsUtils/state.py
++++ b/python/lsst/sconsUtils/state.py
+@@ -15,10 +15,12 @@ by other code (particularly `lsst.sconsUtils.dependencies.configure`).
+
+ import os
+ import re
++import shlex
+
+ import SCons.Script
+ import SCons.Conftest
+ from . import eupsForScons
++from .utils import get_conda_prefix
+
+ SCons.Script.EnsureSConsVersion(2, 1, 0)
+
+@@ -196,6 +198,25 @@ def _initEnvironment():
+         #
+         env['LIBDIRSUFFIX'] = '/'
+
++    if 'SCONSUTILS_USE_CONDA_COMPILERS' in os.environ:
++        _conda_prefix = get_conda_prefix()
++        LDFLAGS = shlex.split(os.environ['LDFLAGS'])  # respects quoting!
++        LDFLAGS = [v for v in LDFLAGS if v[0:2] != '-L']
++        # this one breaks some linking in the eups build
++        LDFLAGS = [v for v in LDFLAGS if v != '-Wl,-dead_strip_dylibs']
++        env.Append(LIBPATH=["%s/lib" % _conda_prefix])
++        env.Append(LINKFLAGS=LDFLAGS)
++        env.Append(SHLINKFLAGS=LDFLAGS)
++
++        CFLAGS = shlex.split(os.environ['CFLAGS'])  # respects quoting!
++        CFLAGS = [v for v in CFLAGS if v[0:2] != '-I']
++        env.Append(CCFLAGS=CFLAGS)
++        CXXFLAGS = shlex.split(os.environ['CXXFLAGS'])  # respects quoting!
++        CXXFLAGS = [v for v in CXXFLAGS if v[0:2] != '-I']
++        CXXFLAGS = [v for v in CXXFLAGS if v[0:5] != '-std=']  # we let LSST set this
++        CXXFLAGS = [v for v in CXXFLAGS if v not in CFLAGS]  # conda puts in duplicates
++        env.Append(CXXFLAGS=CXXFLAGS)
++
+     #
+     # Remove valid options from the arguments
+     #
+@@ -306,11 +327,12 @@ def _configureCommon():
+         """
+         versionNameList = (
+             (r"gcc(?:\-.+)? +\(.+\) +([0-9.a-zA-Z]+)", "gcc"),
++            (r"gnu-cc(?:\-.+)? +\(.+\) +([0-9.a-zA-Z]+)", "gcc"),  # catch the conda-build compiler on linux
+             (r"\(GCC\) +([0-9.a-zA-Z]+) ", "gcc"),
+             (r"LLVM +version +([0-9.a-zA-Z]+) ", "clang"),  # clang on Mac
+-            (r"clang +version +([0-9.a-zA-Z]+) ", "clang"),  # clang on linux
++            (r"clang +version +([0-9.a-zA-Z]+) ", "clang"),  # clang on linux or clang w/ conda on Mac
+             (r"\(ICC\) +([0-9.a-zA-Z]+) ", "icc"),
+-            (r"cc \(Ubuntu +([0-9\~\-.a-zA-Z]+)\)", "gcc"),  # gcc on Ubuntu (not always caught by #2 above)
++            (r"cc \(Ubuntu +([0-9\~\-.a-zA-Z]+)\)", "gcc"),  # gcc on Ubuntu (not always caught by #3 above)
+         )
+
+         context.Message("Checking who built the CC compiler...")
+@@ -329,40 +351,52 @@ def _configureCommon():
+     if env.GetOption("clean") or env.GetOption("no_exec") or env.GetOption("help"):
+         env.whichCc = "unknown"         # who cares? We're cleaning/not execing, not building
+     else:
+-        if env['cc'] != '':
+-            CC = CXX = None
+-            if re.search(r"^gcc(-\d+(\.\d+)*)?( |$)", env['cc']):
+-                CC = env['cc']
+-                CXX = re.sub(r"^gcc", "g++", CC)
+-            elif re.search(r"^icc( |$)", env['cc']):
+-                CC = env['cc']
+-                CXX = re.sub(r"^icc", "icpc", CC)
+-            elif re.search(r"^clang( |$)", env['cc']):
+-                CC = env['cc']
+-                CXX = re.sub(r"^clang", "clang++", CC)
+-            elif re.search(r"^cc( |$)", env['cc']):
+-                CC = env['cc']
+-                CXX = re.sub(r"^cc", "c++", CC)
+-            else:
+-                log.fail("Unrecognised compiler:%s" % env['cc'])
+-            env0 = SCons.Script.Environment()
+-            if CC and env['CC'] == env0['CC']:
+-                env['CC'] = CC
+-            if CC and env['CXX'] == env0['CXX']:
+-                env['CXX'] = CXX
+-        conf = env.Configure(custom_tests={'ClassifyCc': ClassifyCc})
+-        env.whichCc, env.ccVersion = conf.ClassifyCc()
+-
+-        # If we have picked up a default compiler called gcc that is really
+-        # clang, we call it clang to avoid confusion (gcc on macOS has subtly
+-        # different options)
+-        if not env['cc'] and env.whichCc == "clang" and env['CC'] == "gcc":
+-            env['CC'] = "clang"
+-            env['CXX'] = "clang++"
++        if 'SCONSUTILS_USE_CONDA_COMPILERS' in os.environ:
++            # conda-build expects you to use the compilers as-is
++            env['CC'] = os.environ['CC']
++            env['CXX'] = os.environ['CXX']
++
++            conf = env.Configure(custom_tests={'ClassifyCc': ClassifyCc})
++            env.whichCc, env.ccVersion = conf.ClassifyCc()
++            if not env.GetOption("no_progress"):
++                log.info("CC is **CONDA** %s version %s" % (env.whichCc, env.ccVersion))
++            conf.Finish()
++        else:
++            if env['cc'] != '':
++                CC = CXX = None
++                if re.search(r"^gcc(-\d+(\.\d+)*)?( |$)", env['cc']):
++                    CC = env['cc']
++                    CXX = re.sub(r"^gcc", "g++", CC)
++                elif re.search(r"^icc( |$)", env['cc']):
++                    CC = env['cc']
++                    CXX = re.sub(r"^icc", "icpc", CC)
++                elif re.search(r"^clang( |$)", env['cc']):
++                    CC = env['cc']
++                    CXX = re.sub(r"^clang", "clang++", CC)
++                elif re.search(r"^cc( |$)", env['cc']):
++                    CC = env['cc']
++                    CXX = re.sub(r"^cc", "c++", CC)
++                else:
++                    log.fail("Unrecognised compiler: %s" % env['cc'])
++                env0 = SCons.Script.Environment()
++                if CC and env['CC'] == env0['CC']:
++                    env['CC'] = CC
++                if CC and env['CXX'] == env0['CXX']:
++                    env['CXX'] = CXX
++            conf = env.Configure(custom_tests={'ClassifyCc': ClassifyCc})
++            env.whichCc, env.ccVersion = conf.ClassifyCc()
++
++            # If we have picked up a default compiler called gcc that is really
++            # clang, we call it clang to avoid confusion (gcc on macOS has
++            # subtly different options)
++            if not env['cc'] and env.whichCc == "clang" and env['CC'] == "gcc":
++                env['CC'] = "clang"
++                env['CXX'] = "clang++"
++
++            if not env.GetOption("no_progress"):
++                log.info("CC is %s version %s" % (env.whichCc, env.ccVersion))
++            conf.Finish()
+
+-        if not env.GetOption("no_progress"):
+-            log.info("CC is %s version %s" % (env.whichCc, env.ccVersion))
+-        conf.Finish()
+     #
+     # Compiler flags, including CCFLAGS for C and C++ and CXXFLAGS for C++ only
+     #
+diff --git a/python/lsst/sconsUtils/utils.py b/python/lsst/sconsUtils/utils.py
+index 329d349..a0a82de 100644
+--- a/python/lsst/sconsUtils/utils.py
++++ b/python/lsst/sconsUtils/utils.py
+@@ -2,7 +2,7 @@
+
+ __all__ = ("Log", "_has_OSX_SIP", "libraryPathPassThrough", "whichPython",
+            "needShebangRewrite", "libraryLoaderEnvironment", "runExternal",
+-           "memberOf")
++           "memberOf", "get_conda_prefix")
+
+ import os
+ import sys
+@@ -241,3 +241,14 @@ def memberOf(cls, name=None):
+             setattr(scope, kw["name"], member)
+         return member
+     return nested
++
++
++def get_conda_prefix():
++    """Returns a copy of the current conda prefix."""
++    if os.environ.get('CONDA_BUILD', "0") == "1":
++        # when running conda-build, the right prefix to use is PREFIX
++        _conda_prefix = os.environ['PREFIX']
++    else:
++        # outside of conda-build, it is CONDA_PREFIX
++        _conda_prefix = os.environ['CONDA_PREFIX']
++    return _conda_prefix
