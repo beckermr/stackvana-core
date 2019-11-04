@@ -28,8 +28,6 @@ outputs:
     requirements:
       run:
         - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
-    test:
-      script: run_test_impl.sh
 
   - name: stackvana-core-impl
     version: {{ version }}
@@ -64,12 +62,31 @@ outputs:
         - lsstdesc.coord =1.2
         - treecorr =3.3.11
         - healpy =1.12.10
+        - psutil
+        - pep8-naming
+        - ws4py
+        - py
+        - execnet
+        - pytest >=3.6
+        - pytest-forked
+        - pytest-xdist
+        - coverage
+        - pytest-cov
+        - pyflakes
+        - pycodestyle
+        - mccabe
+        - flake8
+        - pytest-flake8
+        - esutil >=0.6.4
+        - requests
+        - mpi4py
+        - sqlalchemy
+        - future =0.17.1
 
         # and these are needed for the build of sconsUtils
         - setuptools_scm
         - apipkg >=1.4
         - pytest-runner
-        - pytest-flake8
         - flake8-polyfill
         - pluggy =0.6
         - expat =2.2.5
@@ -107,7 +124,6 @@ outputs:
         - scikit-learn =0.20.3
         - snappy =1.1.7
         - numexpr =2.6.9
-        - future =0.17.1
         - deprecated =1.2.6
         - zlib =1.2.11
         - libiconv =1.15
@@ -132,21 +148,34 @@ outputs:
         - lsstdesc.coord =1.2
         - treecorr =3.3.11
         - healpy =1.12.10
+        - psutil
+        - pep8-naming
+        - ws4py
+        - py
+        - execnet
+        - pytest >=3.6
+        - pytest-forked
+        - pytest-xdist
+        - coverage
+        - pytest-cov
+        - pyflakes
+        - pycodestyle
+        - mccabe
+        - flake8
+        - pytest-flake8
+        - esutil >=0.6.4
+        - requests
+        - mpi4py
+        - sqlalchemy
+        - future =0.17.1
 
         # stuff added outside of the main LSST DM conda envs
-        - xorg-libxt =1.2.0
         - flex
         - bison
         - setuptools_scm
         - apipkg >=1.4
         - pytest-runner
-        - pytest-flake8
         - flake8-polyfill
-
-        # these deps shadow those installed by eups
-        # this means two copies are in the final downstream envs
-        # this tends to help the build
-        - pytest =3.6.2
 
         # compilers for compiling
         - c-compiler

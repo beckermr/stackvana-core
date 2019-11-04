@@ -36,7 +36,11 @@ eups list:"
 
 
 # this should work
-pkgs="doxygen boost fftw gsl log4cxx mpich sconsUtils starlink_ast coord xpa ndarray treecorr healpy"
+pkgs="doxygen boost fftw gsl log4cxx mpich sconsUtils starlink_ast coord xpa \
+ndarray treecorr healpy python_psutil pep8_naming ws4py python_py python_execnet \
+pytest pytest_forked pytest_xdist python_coverage pytest_cov \
+pyflakes pycodestyle python_mccabe flake8 pytest_flake8 esutil requests mpi4py \
+python_future sqlalchemy"
 allpkgs="${pkgs} apr apr_util"
 
 echo "
