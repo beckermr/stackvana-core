@@ -65,8 +65,8 @@ outputs:
         - psutil
         - pep8-naming
         - ws4py
-        - py
-        - execnet
+        - py =1.7
+        - execnet =1.4.1
         - pytest >=4,<5.0.0a0
         - pytest-forked =0.2
         - pytest-xdist =1.20.1
@@ -135,8 +135,8 @@ outputs:
         - psutil
         - pep8-naming
         - ws4py
-        - py
-        - execnet
+        - py =1.7
+        - execnet =1.4.1
         - pytest >=4,<5.0.0a0
         - pytest-forked =0.2
         - pytest-xdist =1.20.1
