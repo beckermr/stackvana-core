@@ -68,7 +68,7 @@ outputs:
         - py
         - execnet
         - pytest >=4,<5.0.0a0
-        - pytest-forked
+        - pytest-forked =0.2
         - pytest-xdist =1.20.1
         - coverage
         - pytest-cov
@@ -138,7 +138,7 @@ outputs:
         - py
         - execnet
         - pytest >=4,<5.0.0a0
-        - pytest-forked
+        - pytest-forked =0.2
         - pytest-xdist =1.20.1
         - coverage
         - pytest-cov
