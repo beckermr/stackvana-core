@@ -46,21 +46,21 @@ outputs:
 
         # these are needed to make the symlinks for remapping
         - doxygen =1.8.13
-        - boost =1.69
-        - boost-cpp =1.69
-        - fftw =3.3.4
-        - gsl =2.6
-        - libapr =1.6.5
-        - libaprutil =1.6.1
-        - log4cxx =0.10.0
-        - pybind11 =2.2.4
+        - boost ==1.69.0
+        - boost-cpp ==1.69.0
+        - fftw ==3.3.4
+        - gsl ==2.6
+        - libapr ==1.6.5
+        - libaprutil ==1.6.1
+        - log4cxx ==0.10.0
+        - pybind11 ==2.2.4
         - mpich =3.3
-        - starlink-ast =8.7.2
+        - starlink-ast ==8.7.2
         # - eigen =3.3.7
-        - xpa =2.1.19
-        - ndarray =1.5.3
-        - lsstdesc.coord =1.2
-        - treecorr =3.3.11
+        - xpa ==2.1.19
+        - ndarray ==1.5.3
+        - lsstdesc.coord
+        - treecorr >=3.3.11,<4.0.0a0
         - healpy =1.12.10
         - psutil
         - pep8-naming
@@ -82,14 +82,15 @@ outputs:
         - mpi4py
         - sqlalchemy
         - future
-        - galsim >=2.2.1
+        - galsim ==2.2.2
 
         # and these are needed for the build of sconsUtils
         - setuptools_scm
-        - apipkg >=1.4
+        - apipkg
         - pytest-runner
         - flake8-polyfill
-        - numpy =1.16.2
+
+        - numpy ==1.16.2
       run:
         - python
         - pip
@@ -102,7 +103,7 @@ outputs:
         - astropy =3.2.3
         - blosc =1.15.0
         - h5py =2.9.0
-        - hdf5 =1.10.4
+        - hdf5 ==1.10.5
         - matplotlib =3.0.3
         - numexpr =2.6.9
         - numpy =1.16.2
@@ -116,22 +117,22 @@ outputs:
 
         # I am shipping these by hand from conda forge using remap
         - doxygen =1.8.13
-        - boost =1.69
-        - boost-cpp =1.69
-        - fftw =3.3.4
-        - gsl =2.6
-        - libapr =1.6.5
-        - libaprutil =1.6.1
-        - log4cxx =0.10.0
-        - pybind11 =2.2.4
-        - mpich =3.3
-        - starlink-ast =8.7.2
-        # - eigen =3.3.7
-        - xpa =2.1.19
-        - ndarray =1.5.3
-        - lsstdesc.coord =1.2
-        - treecorr =3.3.11
-        - healpy =1.12.10
+        - {{ pin_compatible('boost', max_pin='x.x.x') }}
+        - {{ pin_compatible('boost-cpp', max_pin='x.x.x') }}
+        - {{ pin_compatible('fftw', max_pin='x.x.x') }}
+        - {{ pin_compatible('gsl', max_pin='x.x') }}
+        - {{ pin_compatible('libapr', max_pin='x.x.x') }}
+        - {{ pin_compatible('libaprutil', max_pin='x.x.x') }}
+        - {{ pin_compatible('log4cxx', max_pin='x.x.x') }}
+        - {{ pin_compatible('pybind11', max_pin='x.x.x') }}
+        - {{ pin_compatible('mpich', max_pin='x.x.x') }}
+        - {{ pin_compatible('starlink-ast', max_pin='x.x.x') }}
+        # - {{ pin_compatible('eigen', max_pin='x.x.x') }}
+        - {{ pin_compatible('xpa', max_pin='x.x.x') }}
+        - {{ pin_compatible('ndarray', max_pin='x.x.x') }}
+        - lsstdesc.coord
+        - {{ pin_compatible('treecorr', max_pin='x.x.x') }}
+        - {{ pin_compatible('healpy', max_pin='x.x.x') }}
         - psutil
         - pep8-naming
         - ws4py
@@ -152,13 +153,11 @@ outputs:
         - mpi4py
         - sqlalchemy
         - future
-        - galsim >=2.2.1
+        - {{ pin_compatible('galsim', max_pin='x.x.x') }}
 
         # stuff added outside of the main LSST DM conda envs
-        - flex
-        - bison
         - setuptools_scm
-        - apipkg >=1.4
+        - apipkg
         - pytest-runner
         - flake8-polyfill
 
