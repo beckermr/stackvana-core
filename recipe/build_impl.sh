@@ -278,20 +278,15 @@ curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron 
 # clean out .pyc files made by eups installs
 # these cause problems later for a reason I don't understand
 # conda remakes them IIUIC
-pushd ${LSST_HOME}
-if [[ `uname -s` == "Darwin" ]]; then
-    find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
-else
-    find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
-fi
-popd
-pushd ${PREFIX}/lib/python3.7/site-packages
-if [[ `uname -s` == "Darwin" ]]; then
-    find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
-else
-    find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
-fi
-popd
+for dr in ${LSST_HOME} ${PREFIX}/lib/python3.7/site-packages; do
+    pushd $dr
+    if [[ `uname -s` == "Darwin" ]]; then
+        find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
+    else
+        find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
+    fi
+    popd
+done
 
 # clean out any documentation
 # this bloats the packages, is usually a ton of files, and is not needed

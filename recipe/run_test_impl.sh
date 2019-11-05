@@ -89,3 +89,16 @@ else
     echo "worked!"
 fi
 echo " "
+
+echo "attempting to build 'pex_exceptions' ..."
+eups distrib install -v -t ${LSST_DM_TAG} pex_exceptions
+echo " "
+
+echo -n "setting up 'pex_exceptions' ... "
+val=`setup -j pex_exceptions 2>&1`
+if [[ ! ${val} ]]; then
+    echo "worked!"
+else
+    echo "failed!"
+    exit 1
+fi
