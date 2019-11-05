@@ -275,10 +275,17 @@ source ${RECIPE_DIR}/remaps/build_scons.sh
 export SHTRON_PYTHON=${PYTHON}
 curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
 
-# clean out .pyc files made by eups
+# clean out .pyc files made by eups installs
 # these cause problems later for a reason I don't understand
 # conda remakes them IIUIC
 pushd ${LSST_HOME}
+if [[ `uname -s` == "Darwin" ]]; then
+    find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
+else
+    find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
+fi
+popd
+pushd ${PREFIX}/lib/python3.7/site-packages
 if [[ `uname -s` == "Darwin" ]]; then
     find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
 else
