@@ -99,7 +99,7 @@ outputs:
         - mpi4py
         - sqlalchemy
         - future
-        - galsim ==2.2
+        - galsim ==2.2.2
 
         # and these are needed for the build of sconsUtils
         - setuptools_scm
