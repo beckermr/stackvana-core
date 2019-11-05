@@ -111,6 +111,7 @@ if [[ `uname -s` == "Darwin" ]]; then
         python3.7.bak \"\$@\"
     fi
 " > ${PREFIX}/bin/python3.7
+    chmod u+x ${PREFIX}/bin/python3.7
     echo " "
 fi
 
