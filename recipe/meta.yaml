@@ -41,27 +41,44 @@ outputs:
         - make
         - cmake
 
+        # compilers for compiling
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
 
+        # "real" deps
+        - astropy ==3.2.3
+        - blosc ==1.15.0
+        - h5py ==2.9.0
+        - hdf5 ==1.10.4
+        - matplotlib ==3.0.3
+        - numexpr ==2.6.9
+        - numpy ==1.16.2
+        - pandas ==0.24.2
+        - pyqt
+        - qt
+        - scikit-learn ==0.20.3
+        - scipy ==1.2.1
+        - snappy ==1.1.7
+        - deprecated
+
         # these are needed to make the symlinks for remapping
-        - doxygen =1.8.13
-        - boost =1.69
-        - boost-cpp =1.69
-        - fftw =3.3.4
-        - gsl =2.6
-        - libapr =1.6.5
-        - libaprutil =1.6.1
-        - log4cxx =0.10.0
-        - pybind11 =2.2.4
+        - doxygen ==1.8.13
+        - boost ==1.69
+        - boost-cpp ==1.69
+        - fftw ==3.3.4
+        - gsl ==2.6
+        - libapr ==1.6.5
+        - libaprutil ==1.6.1
+        - log4cxx ==0.10.0
+        - pybind11 ==2.2.4
         - mpich =3.3
-        - starlink-ast =8.7.2
+        - starlink-ast ==8.7.2
         # - eigen =3.3.7
-        - xpa =2.1.19
-        - ndarray =1.5.3
+        - xpa ==2.1.19
+        - ndarray ==1.5.3
         - lsstdesc.coord =1.2
-        - treecorr =3.3.11
-        - healpy =1.12.10
+        - treecorr ==3.3.11
+        - healpy ==1.12.10
         - psutil
         - pep8-naming
         - ws4py
@@ -82,14 +99,14 @@ outputs:
         - mpi4py
         - sqlalchemy
         - future
-        - galsim >=2.2.1
+        - galsim ==2.2.1
 
         # and these are needed for the build of sconsUtils
         - setuptools_scm
         - apipkg >=1.4
         - pytest-runner
         - flake8-polyfill
-        - numpy =1.16.2
+
       run:
         - python
         - pip
@@ -98,45 +115,49 @@ outputs:
         - make
         - cmake
 
+        # compilers for compiling
+        - c-compiler
+        - cxx-compiler
+
         # "real" deps
-        - astropy =3.2.3
-        - blosc =1.15.0
-        - h5py =2.9.0
-        - hdf5 =1.10.4
-        - matplotlib =3.0.3
-        - numexpr =2.6.9
-        - numpy =1.16.2
-        - pandas =0.24.2
+        - {{ pin_compatible('astropy', max_pin='x.x.x') }}
+        - {{ pin_compatible('blosc', max_pin='x.x.x') }}
+        - {{ pin_compatible('h5py', max_pin='x.x.x') }}
+        - {{ pin_compatible('hdf5', max_pin='x.x.x') }}
+        - {{ pin_compatible('matplotlib', max_pin='x.x.x') }}
+        - {{ pin_compatible('numexpr', max_pin='x.x.x') }}
+        - {{ pin_compatible('numpy', max_pin='x.x.x') }}
+        - {{ pin_compatible('pandas', max_pin='x.x.x') }}
         - pyqt
         - qt
-        - scikit-learn =0.20.3
-        - scipy =1.2.1
-        - snappy =1.1.7
-        - deprecated =1.2.6
+        - {{ pin_compatible('scikit-learn', max_pin='x.x.x') }}
+        - {{ pin_compatible('scipy', max_pin='x.x.x') }}
+        - {{ pin_compatible('snappy', max_pin='x.x.x') }}
+        - deprecated
 
         # I am shipping these by hand from conda forge using remap
-        - doxygen =1.8.13
-        - boost =1.69
-        - boost-cpp =1.69
-        - fftw =3.3.4
-        - gsl =2.6
-        - libapr =1.6.5
-        - libaprutil =1.6.1
-        - log4cxx =0.10.0
-        - pybind11 =2.2.4
-        - mpich =3.3
-        - starlink-ast =8.7.2
-        # - eigen =3.3.7
-        - xpa =2.1.19
-        - ndarray =1.5.3
-        - lsstdesc.coord =1.2
-        - treecorr =3.3.11
-        - healpy =1.12.10
+        - {{ pin_compatible('doxygen', max_pin='x.x.x') }}
+        - {{ pin_compatible('boost', max_pin='x.x') }}
+        - {{ pin_compatible('boost-cpp', max_pin='x.x') }}
+        - {{ pin_compatible('fftw', max_pin='x.x.x') }}
+        - {{ pin_compatible('gsl', max_pin='x.x') }}
+        - {{ pin_compatible('libapr', max_pin='x.x.x') }}
+        - {{ pin_compatible('libaprutil', max_pin='x.x.x') }}
+        - {{ pin_compatible('log4cxx', max_pin='x.x.x') }}
+        - {{ pin_compatible('pybind11', max_pin='x.x.x') }}
+        - {{ pin_compatible('mpich', max_pin='x.x.x') }}
+        - {{ pin_compatible('starlink_ast', max_pin='x.x.x') }}
+        # - {{ pin_compatible('eigen', max_pin='x.x.x') }}
+        - {{ pin_compatible('xpa', max_pin='x.x.x') }}
+        - {{ pin_compatible('ndarray', max_pin='x.x.x') }}
+        - {{ pin_compatible('lsstdesc.coord', max_pin='x.x.x') }}
+        - {{ pin_compatible('treecorr', max_pin='x.x.x') }}
+        - {{ pin_compatible('healpy', max_pin='x.x.x') }}
         - psutil
         - pep8-naming
         - ws4py
         - py
-        - pytest >=4,<5.0.0a0
+        - {{ pin_compatible('pytest', max_pin='x.x.x') }}
         - execnet
         - pytest-forked
         - pytest-xdist
@@ -147,24 +168,18 @@ outputs:
         - mccabe
         - flake8
         - pytest-flake8
-        - esutil >=0.6.4
+        - {{ pin_compatible('esutil', max_pin='x.x.x') }}
         - requests
         - mpi4py
         - sqlalchemy
         - future
-        - galsim >=2.2.1
+        - {{ pin_compatible('galsim', max_pin='x.x.x') }}
 
         # stuff added outside of the main LSST DM conda envs
-        - flex
-        - bison
         - setuptools_scm
-        - apipkg >=1.4
+        - {{ pin_compatible('apipkg', max_pin='x.x.x') }}
         - pytest-runner
         - flake8-polyfill
-
-        # compilers for compiling
-        - c-compiler
-        - cxx-compiler
 
     test:
       script: run_test_impl.sh
