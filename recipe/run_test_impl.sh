@@ -40,7 +40,7 @@ pkgs="doxygen boost fftw gsl log4cxx mpich sconsUtils starlink_ast coord xpa \
 ndarray treecorr healpy python_psutil pep8_naming ws4py python_py python_execnet \
 pytest pytest_forked pytest_xdist python_coverage pytest_cov \
 pyflakes pycodestyle python_mccabe flake8 pytest_flake8 esutil requests mpi4py \
-python_future sqlalchemy"
+python_future sqlalchemy galsim"
 allpkgs="${pkgs} apr apr_util"
 
 echo "
@@ -87,4 +87,17 @@ if [[ ! `eups list -v apr_util | grep "lsst_home/stackvana_apr_aprutil"` ]]; the
     exit 1
 else
     echo "worked!"
+fi
+
+echo "trying to build astshim..."
+eups distrib install -t ${LSST_DM_TAG} -v astshim
+echo " "
+
+echo -n "setting up 'astshim' ... "
+val=`setup -j astshim 2>&1`
+if [[ ! ${val} ]]; then
+    echo "worked!"
+else
+    echo "failed!"
+    exit 1
 fi

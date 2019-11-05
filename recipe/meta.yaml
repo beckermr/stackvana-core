@@ -18,7 +18,7 @@ package:
 
 build:
   skip: True  # [win or py < 37]
-  number: 1
+  number: 2
 
 outputs:
   - name: stackvana-core
@@ -81,7 +81,8 @@ outputs:
         - requests
         - mpi4py
         - sqlalchemy
-        - future =0.17.1
+        - future
+        - galsim >=2.2.1
 
         # and these are needed for the build of sconsUtils
         - setuptools_scm
@@ -150,7 +151,8 @@ outputs:
         - requests
         - mpi4py
         - sqlalchemy
-        - future =0.17.1
+        - future
+        - galsim >=2.2.1
 
         # stuff added outside of the main LSST DM conda envs
         - flex

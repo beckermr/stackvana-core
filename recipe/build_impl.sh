@@ -249,6 +249,9 @@ source ${RECIPE_DIR}/remaps/treecorr_remap.sh
 # ditto for healpy
 source ${RECIPE_DIR}/remaps/healpy_remap.sh
 
+# ditto for galsim
+source ${RECIPE_DIR}/remaps/galsim_remap.sh
+
 # ditto for a bunch of python stuff
 for pynm in python_psutil pep8_naming ws4py python_py python_execnet pytest pytest_forked \
             pytest_xdist python_coverage pytest_cov pyflakes pycodestyle python_mccabe flake8 \
