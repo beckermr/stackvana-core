@@ -54,7 +54,7 @@ outputs:
         - libaprutil ==1.6.1
         - log4cxx ==0.10.0
         - pybind11 ==2.2.4
-        - mpich =3.3
+        - mpich ==3.3.1
         - starlink-ast ==8.7.2
         # - eigen =3.3.7
         - xpa ==2.1.19
@@ -106,14 +106,14 @@ outputs:
         - hdf5 ==1.10.5
         - matplotlib =3.0.3
         - numexpr =2.6.9
-        - numpy =1.16.2
+        - {{ pin_compatible('numpy', max_pin='x.x.x') }}
         - pandas =0.24.2
         - pyqt
         - qt
         - scikit-learn =0.20.3
         - scipy =1.2.1
         - snappy =1.1.7
-        - deprecated =1.2.6
+        - deprecated
 
         # I am shipping these by hand from conda forge using remap
         - doxygen =1.8.13
