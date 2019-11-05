@@ -249,6 +249,9 @@ source ${RECIPE_DIR}/remaps/treecorr_remap.sh
 # ditto for healpy
 source ${RECIPE_DIR}/remaps/healpy_remap.sh
 
+# ditto for galsim
+source ${RECIPE_DIR}/remaps/galsim_remap.sh
+
 # ditto for a bunch of python stuff
 for pynm in python_psutil pep8_naming ws4py python_py python_execnet pytest pytest_forked \
             pytest_xdist python_coverage pytest_cov pyflakes pycodestyle python_mccabe flake8 \
@@ -267,18 +270,23 @@ source ${RECIPE_DIR}/remaps/build_scons.sh
 # now finalize the build
 
 # now fix up the python paths
+# we set the python #! line by hand so that we get the right thing coming out
+# in conda build for large prefixes this always has /usr/bin/env python
+export SHTRON_PYTHON=${PYTHON}
 curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
 
-# clean out .pyc files made by eups
+# clean out .pyc files made by eups installs
 # these cause problems later for a reason I don't understand
 # conda remakes them IIUIC
-pushd ${LSST_HOME}
-if [[ `uname -s` == "Darwin" ]]; then
-    find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
-else
-    find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
-fi
-popd
+for dr in ${LSST_HOME} ${PREFIX}/lib/python3.7/site-packages; do
+    pushd $dr
+    if [[ `uname -s` == "Darwin" ]]; then
+        find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
+    else
+        find . -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
+    fi
+    popd
+done
 
 # clean out any documentation
 # this bloats the packages, is usually a ton of files, and is not needed

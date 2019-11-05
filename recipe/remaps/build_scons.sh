@@ -40,32 +40,14 @@ else
     else
         made_prefix_gpp_link=0
     fi
-    if [ ! -f "/usr/bin/gcc" ]; then
-        sudo ln -s ${PREFIX}/bin/gcc /usr/bin/gcc
-        made_gcc_link=1
-    else
-        made_gcc_link=0
-    fi
-    if [ ! -f "/usr/bin/g++" ]; then
-        sudo ln -s ${PREFIX}/bin/g++ /usr/bin/g++
-        made_gpp_link=1
-    else
-        made_gpp_link=0
-    fi
 
     CC=gcc eups distrib install -v -t ${LSST_TAG} sconsUtils
 
-    if [[ "${made_gcc_link}" == "1" ]]; then
-        sudo rm /usr/bin/gcc
-    fi
-    if [[ "${made_gpp_link}" == "1" ]]; then
-        sudo rm /usr/bin/g++
-    fi
     if [[ "${made_prefix_gcc_link}" == "1" ]]; then
-        sudo rm ${PREFIX}/bin/gcc
+        rm ${PREFIX}/bin/gcc
     fi
     if [[ "${made_prefix_gpp_link}" == "1" ]]; then
-        sudo rm ${PREFIX}/bin/g++
+        rm ${PREFIX}/bin/g++
     fi
 fi
 

@@ -224,8 +224,8 @@ index 329d349..a0a82de 100644
 +def get_conda_prefix():
 +    """Returns a copy of the current conda prefix."""
 +    if os.environ.get('CONDA_BUILD', "0") == "1":
-+        # when running conda-build, the right prefix to use is PREFIX
-+        _conda_prefix = os.environ['PREFIX']
++        # when running conda-build, the right prefix to use is PREFIX but that is buggy here for w/e reason
++        _conda_prefix = os.environ['PREFIX'] if 'PREFIX' in os.environ else os.environ['CONDA_PREFIX']
 +    else:
 +        # outside of conda-build, it is CONDA_PREFIX
 +        _conda_prefix = os.environ['CONDA_PREFIX']

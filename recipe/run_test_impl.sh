@@ -40,7 +40,7 @@ pkgs="doxygen boost fftw gsl log4cxx mpich sconsUtils starlink_ast coord xpa \
 ndarray treecorr healpy python_psutil pep8_naming ws4py python_py python_execnet \
 pytest pytest_forked pytest_xdist python_coverage pytest_cov \
 pyflakes pycodestyle python_mccabe flake8 pytest_flake8 esutil requests mpi4py \
-python_future sqlalchemy"
+python_future sqlalchemy galsim"
 allpkgs="${pkgs} apr apr_util"
 
 echo "
@@ -87,4 +87,37 @@ if [[ ! `eups list -v apr_util | grep "lsst_home/stackvana_apr_aprutil"` ]]; the
     exit 1
 else
     echo "worked!"
+fi
+echo " "
+
+echo "attempting to build 'pex_exceptions' ..."
+echo " "
+
+if [[ `uname -s` == "Darwin" ]]; then
+    echo "Making the python shim for OSX..."
+    mv ${PREFIX}/bin/python3.7 ${PREFIX}/bin/python3.7.bak
+    echo "#!/bin/bash
+    if [[ \${LSST_LIBRARY_PATH} ]]; then
+        DYLD_LIBRARY_PATH=\${LSST_LIBRARY_PATH} \\
+        DYLD_FALLBACK_LIBRARY_PATH=\${LSST_LIBRARY_PATH} \\
+        python3.7.bak \"\$@\"
+    else
+        python3.7.bak \"\$@\"
+    fi
+" > ${PREFIX}/bin/python3.7
+    chmod u+x ${PREFIX}/bin/python3.7
+    echo " "
+fi
+
+echo "building 'pex_exceptions' ..."
+eups distrib install -v -t ${LSST_DM_TAG} pex_exceptions
+echo " "
+
+echo -n "setting up 'pex_exceptions' ... "
+val=`setup -j pex_exceptions 2>&1`
+if [[ ! ${val} ]]; then
+    echo "worked!"
+else
+    echo "failed!"
+    exit 1
 fi

@@ -18,7 +18,7 @@ package:
 
 build:
   skip: True  # [win or py < 37]
-  number: 1
+  number: 0
 
 outputs:
   - name: stackvana-core
@@ -66,10 +66,10 @@ outputs:
         - pep8-naming
         - ws4py
         - py
-        - execnet
         - pytest >=4,<5.0.0a0
+        - execnet
         - pytest-forked
-        - pytest-xdist =1.20.1
+        - pytest-xdist
         - coverage
         - pytest-cov
         - pyflakes
@@ -81,7 +81,8 @@ outputs:
         - requests
         - mpi4py
         - sqlalchemy
-        - future =0.17.1
+        - future
+        - galsim >=2.2.1
 
         # and these are needed for the build of sconsUtils
         - setuptools_scm
@@ -135,10 +136,10 @@ outputs:
         - pep8-naming
         - ws4py
         - py
-        - execnet
         - pytest >=4,<5.0.0a0
+        - execnet
         - pytest-forked
-        - pytest-xdist =1.20.1
+        - pytest-xdist
         - coverage
         - pytest-cov
         - pyflakes
@@ -150,7 +151,8 @@ outputs:
         - requests
         - mpi4py
         - sqlalchemy
-        - future =0.17.1
+        - future
+        - galsim >=2.2.1
 
         # stuff added outside of the main LSST DM conda envs
         - flex
