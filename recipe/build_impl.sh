@@ -270,6 +270,9 @@ source ${RECIPE_DIR}/remaps/build_scons.sh
 # now finalize the build
 
 # now fix up the python paths
+# we set the python #! line by hand so that we get the right thing coming out
+# in conda build for large prefixes this always has /usr/bin/env python
+export SHTRON_PYTHON=${PYTHON}
 curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
 
 # clean out .pyc files made by eups
