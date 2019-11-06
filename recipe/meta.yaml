@@ -48,7 +48,7 @@ outputs:
         - doxygen =1.8.13
         - boost ==1.69.0
         - boost-cpp ==1.69.0
-        - fftw ==3.3.4
+        - fftw ==3.3.8
         - gsl ==2.6
         - libapr ==1.6.5
         - libaprutil ==1.6.1
