@@ -173,7 +173,7 @@ about:
   license: GPL-3.0-or-later
   license_family: GPL
   license_file: LICENSE
-  summary: 'core build tooling for stackvana '
+  summary: 'core build tooling for stackvana'
 
 extra:
   recipe-maintainers:

@@ -19,7 +19,8 @@ if [[ `uname -s` == "Darwin" ]]; then
     # scons utils is pure python
     # we are feeding it the osx system compiler since it uses itself to build
     # itself and so we need to make it happy when it finds a compiler
-    CC=clang eups distrib install -v -t ${LSST_TAG} sconsUtils
+    CC=clang eups distrib install -v -t ${LSST_TAG} -o sconsUtils
+    CC=clang eups distrib install -v -t w_2019_44 -j sconsUtils
 else
     # scons utils is pure python
     # we are feeding it a compiler in the right spot on linux
@@ -41,7 +42,8 @@ else
         made_prefix_gpp_link=0
     fi
 
-    CC=gcc eups distrib install -v -t ${LSST_TAG} sconsUtils
+    CC=gcc eups distrib install -v -t ${LSST_TAG} -o sconsUtils
+    CC=gcc eups distrib install -v -t w_2019_44 -j sconsUtils
 
     if [[ "${made_prefix_gcc_link}" == "1" ]]; then
         rm ${PREFIX}/bin/gcc
@@ -62,7 +64,9 @@ else
 fi
 
 if [ ! -d ${sconsdir} ]; then
+    globbed_sconsdir=`compgen -G "${LSST_HOME}/stack/miniconda/*/sconsUtils*"`
     echo "sconsUtils version has changed! patches may need to be redone!"
+    echo "found directory: ${globbed_sconsdir}"
     exit 1
 fi
 
@@ -72,7 +76,7 @@ cp -r ${sconsdir}/* ${LSST_HOME}/stackvana_sconsUtils/.
 
 ###################################################
 # 3. Remove sconsUtils from eups
-eups remove -v -t ${LSST_TAG} sconsUtils
+eups remove -v -t w_2019_44 sconsUtils
 
 
 ###################################################
