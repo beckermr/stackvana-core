@@ -10,7 +10,7 @@
 #  - for a major version 'v18_1', the conda version is '18.1.0'
 #
 # Note the exta micro version in order to match the tags in the DM eups system.
-{% set version = "2019.44w" %}
+{% set version = "18.1.0" %}
 
 package:
   name: {{ name|lower }}
