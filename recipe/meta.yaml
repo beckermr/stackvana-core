@@ -19,6 +19,7 @@ package:
 build:
   skip: True  # [win or py < 37]
   number: 1
+  merge_build_host: True
 
 outputs:
   - name: stackvana-core
@@ -163,7 +164,7 @@ outputs:
         - pytest-runner
         - flake8-polyfill
 
-        # extra dep needed for the sims build
+        # needed for build of sims_* tags
         - cython
 
         # compilers for compiling
