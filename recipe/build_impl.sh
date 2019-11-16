@@ -255,7 +255,7 @@ source ${RECIPE_DIR}/remaps/galsim_remap.sh
 # ditto for a bunch of python stuff
 for pynm in python_psutil pep8_naming ws4py python_py python_execnet pytest pytest_forked \
             pytest_xdist python_coverage pytest_cov pyflakes pycodestyle python_mccabe flake8 \
-            pytest_flake8 esutil requests mpi4py python_future sqlalchemy; do
+            pytest_flake8 esutil requests mpi4py python_future sqlalchemy pytest_session2file; do
     source ${RECIPE_DIR}/remaps/generic_python_remap.sh $pynm
 done
 

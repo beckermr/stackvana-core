@@ -83,6 +83,7 @@ outputs:
         - sqlalchemy
         - future
         - galsim ==2.2.2
+        - pytest-session2file
 
         # and these are needed for the build of sconsUtils
         - setuptools_scm
@@ -154,12 +155,16 @@ outputs:
         - sqlalchemy
         - future
         - {{ pin_compatible('galsim', max_pin='x.x.x') }}
+        - pytest-session2file
 
         # stuff added outside of the main LSST DM conda envs
         - setuptools_scm
         - apipkg
         - pytest-runner
         - flake8-polyfill
+
+        # extra dep needed for the sims build
+        - cython
 
         # compilers for compiling
         - c-compiler
