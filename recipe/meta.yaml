@@ -18,7 +18,8 @@ package:
 
 build:
   skip: True  # [win or py < 37]
-  number: 0
+  number: 1
+  merge_build_host: True
 
 outputs:
   - name: stackvana-core
@@ -66,7 +67,7 @@ outputs:
         - pep8-naming
         - ws4py
         - py
-        - pytest >=4,<5.0.0a0
+        - pytest >=4,<5.0.0a0|==3.6.4
         - execnet
         - pytest-forked
         - pytest-xdist
@@ -83,6 +84,7 @@ outputs:
         - sqlalchemy
         - future
         - galsim ==2.2.2
+        - pytest-session2file
 
         # and these are needed for the build of sconsUtils
         - setuptools_scm
@@ -137,7 +139,7 @@ outputs:
         - pep8-naming
         - ws4py
         - py
-        - pytest >=4,<5.0.0a0
+        - pytest >=4,<5.0.0a0|==3.6.4
         - execnet
         - pytest-forked
         - pytest-xdist
@@ -154,12 +156,16 @@ outputs:
         - sqlalchemy
         - future
         - {{ pin_compatible('galsim', max_pin='x.x.x') }}
+        - pytest-session2file
 
         # stuff added outside of the main LSST DM conda envs
         - setuptools_scm
         - apipkg
         - pytest-runner
         - flake8-polyfill
+
+        # needed for build of sims_* tags
+        - cython
 
         # compilers for compiling
         - c-compiler

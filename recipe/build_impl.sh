@@ -255,7 +255,7 @@ source ${RECIPE_DIR}/remaps/galsim_remap.sh
 # ditto for a bunch of python stuff
 for pynm in python_psutil pep8_naming ws4py python_py python_execnet pytest pytest_forked \
             pytest_xdist python_coverage pytest_cov pyflakes pycodestyle python_mccabe flake8 \
-            pytest_flake8 esutil requests mpi4py python_future sqlalchemy; do
+            pytest_flake8 esutil requests mpi4py python_future sqlalchemy pytest_session2file; do
     source ${RECIPE_DIR}/remaps/generic_python_remap.sh $pynm
 done
 
@@ -294,6 +294,9 @@ compgen -G "${EUPS_PATH}/*/*/*/doc/html/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/doc/xml/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/share/doc/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/share/man/*" | xargs rm -rf
+
+# remove the global tags file since it tends to leak across envs
+rm -f ${LSST_HOME}/stack/miniconda/ups_db/global.tags
 
 unset EUPS_DIR
 unset EUPS_PKGROOT

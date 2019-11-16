@@ -95,6 +95,7 @@ downstream builds easier.
     - `python_future`
     - `sqlalchemy`
     - `galsim`
+    - `pytest-session2file`
 
   I used the `manifest.remap` feature of `eups` to make sure this works with the
   existing stack installation routine. Many thanks to Jim Bosch for pointing out this
