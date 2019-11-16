@@ -110,18 +110,43 @@ popd
 
 ###################################################
 # 5. Declare a new scons(Utils).
-eups declare \
-    -m ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.table \
-    -L ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.cfg \
-    -r ${LSST_HOME}/stackvana_sconsUtils sconsUtils "${SCONSUTILS_VERSION}"
+echo "
+setupRequired(python)
+envPrepend(PATH, ${PRODUCT_DIR}/bin)
+" > ${LSST_HOME}/stackvana_scons/ups/scons.table
 
 eups declare \
     -m ${LSST_HOME}/stackvana_scons/ups/scons.table \
-    -r ${LSST_HOME}/stackvana_scons scons "${SCONS_VERSION}"
+    -r ${LSST_HOME}/stackvana_scons scons "stackvana_scons_${LSST_DM_TAG}"
+
+echo "
+# -*- python -*-
+
+from lsst.sconsUtils import Configuration
+
+dependencies = {}
+
+config = Configuration(__file__, libs=[], hasSwigFiles=False)
+" > ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.cfg
+
+echo "
+setupRequired(scons)
+setupRequired(pytest_flake8)
+setupRequired(pep8_naming)
+setupRequired(pytest_session2file)
+setupOptional(doxygen)
+envPrepend(PYTHONPATH, ${PRODUCT_DIR}/python)
+envPrepend(PATH, ${PRODUCT_DIR}/bin)
+" > ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.table
+
+eups declare \
+    -m ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.table \
+    -L ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.cfg \
+    -r ${LSST_HOME}/stackvana_sconsUtils sconsUtils "stackvana_sconsUtils_${LSST_DM_TAG}"
 
 
 ###################################################
 # 6. Remap scons(Utils) to the new one
 mkdir -p ${EUPS_PATH}/site
-echo "sconsUtils stackvana_sconsUtils" >> ${EUPS_PATH}/site/manifest.remap
-echo "scons stackvana_scons" >> ${EUPS_PATH}/site/manifest.remap
+echo "scons stackvana_scons_${LSST_DM_TAG}" >> ${EUPS_PATH}/site/manifest.remap
+echo "sconsUtils stackvana_sconsUtils_${LSST_DM_TAG}" >> ${EUPS_PATH}/site/manifest.remap
