@@ -121,3 +121,7 @@ else
     echo "failed!"
     exit 1
 fi
+
+# try an import
+setup pex_exceptions
+python -c "import lsst.pex.exceptions"

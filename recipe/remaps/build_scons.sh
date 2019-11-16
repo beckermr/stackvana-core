@@ -1,15 +1,16 @@
 # this script does the following
 # 1. Build up to sconsUtils
-# 2. Copy the full build to a special directory, ${LSST_HOME}/stackvana_sconsUtils
-# 3. Remove sconsUtils from eups
+# 2. Copy the full build to a special directory, ${LSST_HOME}/stackvana_scons(Utils)
+# 3. Remove scons(Utils) from eups
 # 4. Patch the copied version of sconsUtils
-# 5. Declare a new sconsUtils.
-# 6. Remap sconsUtils to the new one
+# 5. Declare a new scons(Utils).
+# 6. Remap scons(Utils) to the new one
 
 # this sequence of steps allows people to update their local eups install
 # more easily while retaining the conda integrations in sconsUtils
 
 SCONSUTILS_VERSION="18.1.0-3-g946de54"
+SCONS_VERSION="3.0.0.lsst1+5"
 
 
 ###################################################
@@ -69,11 +70,25 @@ fi
 mkdir -p ${LSST_HOME}/stackvana_sconsUtils
 cp -r ${sconsdir}/* ${LSST_HOME}/stackvana_sconsUtils/.
 
+if [[ `uname -s` == "Darwin" ]]; then
+    sconsdir="${LSST_HOME}/stack/miniconda/DarwinX86/scons/${SCONS_VERSION}"
+else
+    sconsdir="${LSST_HOME}/stack/miniconda/Linux64/scons/${SCONS_VERSION}"
+fi
+
+if [ ! -d ${sconsdir} ]; then
+    echo "scons version has changed! patches may need to be redone!"
+    exit 1
+fi
+
+mkdir -p ${LSST_HOME}/stackvana_scons
+cp -r ${sconsdir}/* ${LSST_HOME}/stackvana_scons/.
+
 
 ###################################################
 # 3. Remove sconsUtils from eups
 eups remove -v -t ${LSST_TAG} sconsUtils
-
+eups remove -v -t ${LSST_TAG} scons
 
 ###################################################
 # 4. Patch the copied version of sconsUtils
@@ -94,14 +109,19 @@ popd
 
 
 ###################################################
-# 5. Declare a new sconsUtils.
+# 5. Declare a new scons(Utils).
 eups declare \
     -m ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.table \
     -L ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.cfg \
     -r ${LSST_HOME}/stackvana_sconsUtils sconsUtils "${SCONSUTILS_VERSION}"
 
+eups declare \
+    -m ${LSST_HOME}/stackvana_scons/ups/scons.table \
+    -r ${LSST_HOME}/stackvana_scons scons "${SCONS_VERSION}"
+
 
 ###################################################
-# 6. Remap sconsUtils to the new one
+# 6. Remap scons(Utils) to the new one
 mkdir -p ${EUPS_PATH}/site
 echo "sconsUtils ${SCONSUTILS_VERSION}" >> ${EUPS_PATH}/site/manifest.remap
+echo "scons ${SCONS_VERSION}" >> ${EUPS_PATH}/site/manifest.remap
