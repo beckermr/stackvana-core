@@ -123,5 +123,5 @@ eups declare \
 ###################################################
 # 6. Remap scons(Utils) to the new one
 mkdir -p ${EUPS_PATH}/site
-echo "sconsUtils stackvana_${LSST_DM_TAG}" >> ${EUPS_PATH}/site/manifest.remap
-echo "scons stackvana_${LSST_DM_TAG}" >> ${EUPS_PATH}/site/manifest.remap
+echo "sconsUtils ${SCONSUTILS_VERSION}" >> ${EUPS_PATH}/site/manifest.remap
+echo "scons ${SCONS_VERSION}" >> ${EUPS_PATH}/site/manifest.remap
