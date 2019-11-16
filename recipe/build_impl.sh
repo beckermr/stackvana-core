@@ -295,6 +295,9 @@ compgen -G "${EUPS_PATH}/*/*/*/doc/xml/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/share/doc/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/share/man/*" | xargs rm -rf
 
+# remove the global tags file since it tends to leak across envs
+rm -f ${LSST_HOME}/stack/miniconda/ups_db/global.tags
+
 unset EUPS_DIR
 unset EUPS_PKGROOT
 unset -f setup

@@ -117,7 +117,7 @@ envPrepend(PATH, ${PRODUCT_DIR}/bin)
 
 eups declare \
     -m ${LSST_HOME}/stackvana_scons/ups/scons.table \
-    -r ${LSST_HOME}/stackvana_scons scons "stackvana_scons_${LSST_DM_TAG}"
+    -r ${LSST_HOME}/stackvana_scons scons "stackvana_scons_${LSST_TAG}"
 
 echo "
 # -*- python -*-
@@ -142,11 +142,11 @@ envPrepend(PATH, ${PRODUCT_DIR}/bin)
 eups declare \
     -m ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.table \
     -L ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.cfg \
-    -r ${LSST_HOME}/stackvana_sconsUtils sconsUtils "stackvana_sconsUtils_${LSST_DM_TAG}"
+    -r ${LSST_HOME}/stackvana_sconsUtils sconsUtils "stackvana_sconsUtils_${LSST_TAG}"
 
 
 ###################################################
 # 6. Remap scons(Utils) to the new one
 mkdir -p ${EUPS_PATH}/site
-echo "scons stackvana_scons_${LSST_DM_TAG}" >> ${EUPS_PATH}/site/manifest.remap
-echo "sconsUtils stackvana_sconsUtils_${LSST_DM_TAG}" >> ${EUPS_PATH}/site/manifest.remap
+echo "scons stackvana_scons_${LSST_TAG}" >> ${EUPS_PATH}/site/manifest.remap
+echo "sconsUtils stackvana_sconsUtils_${LSST_TAG}" >> ${EUPS_PATH}/site/manifest.remap
