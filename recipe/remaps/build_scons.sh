@@ -110,16 +110,16 @@ popd
 
 ###################################################
 # 5. Declare a new scons(Utils).
-echo "
+echo '
 setupRequired(python)
 envPrepend(PATH, ${PRODUCT_DIR}/bin)
-" > ${LSST_HOME}/stackvana_scons/ups/scons.table
+' > ${LSST_HOME}/stackvana_scons/ups/scons.table
 
 eups declare \
     -m ${LSST_HOME}/stackvana_scons/ups/scons.table \
     -r ${LSST_HOME}/stackvana_scons scons "stackvana_scons_${LSST_TAG}"
 
-echo "
+echo '
 # -*- python -*-
 
 from lsst.sconsUtils import Configuration
@@ -127,9 +127,9 @@ from lsst.sconsUtils import Configuration
 dependencies = {}
 
 config = Configuration(__file__, libs=[], hasSwigFiles=False)
-" > ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.cfg
+' > ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.cfg
 
-echo "
+echo '
 setupRequired(scons)
 setupRequired(pytest_flake8)
 setupRequired(pep8_naming)
@@ -137,7 +137,7 @@ setupRequired(pytest_session2file)
 setupOptional(doxygen)
 envPrepend(PYTHONPATH, ${PRODUCT_DIR}/python)
 envPrepend(PATH, ${PRODUCT_DIR}/bin)
-" > ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.table
+' > ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.table
 
 eups declare \
     -m ${LSST_HOME}/stackvana_sconsUtils/ups/sconsUtils.table \
