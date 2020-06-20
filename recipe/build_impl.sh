@@ -262,6 +262,12 @@ popd
 ###############################################################################
 # now install sconsUtils
 # this brings most of the basic build tools into the env and lets us patch it
+
+export EUPS_DIR=${EUPS_DIR}
+source ${EUPS_DIR}/bin/setups.sh
+export -f setup
+export -f unsetup
+
 echo "
 Building scons+sconsUtils..."
 eups distrib install -v -t ${LSST_TAG} sconsUtils
@@ -291,6 +297,8 @@ done
 
 # clean out any documentation
 # this bloats the packages, is usually a ton of files, and is not needed
+compgen -G "${EUPS_PATH}/*/*/*/tests/.tests/*" | xargs rm -rf
+compgen -G "${EUPS_PATH}/*/*/*/tests/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/doc/html/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/doc/xml/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/share/doc/*" | xargs rm -rf
