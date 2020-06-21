@@ -120,12 +120,9 @@ outputs:
         - gsl
         - hdf5
         - hdf5 * mpi_mpich_*
-        - libblas
-        - libcblas
-        - liblapack
-        - liblapacke
         - mpich
         - numpy
+        - openblas
       run:
         - {{ pin_subpackage('stackvana-env', exact=True) }}
         - python =3.7
@@ -136,8 +133,13 @@ outputs:
         - gsl
         - hdf5
         - hdf5 * mpi_mpich_*
+        - libblas * *openblas
+        - libcblas * *openblas
+        - liblapack * *openblas
+        - liblapacke * *openblas
         - mpich
         - {{ pin_compatible('numpy') }}
+        - openblas
     test:
       script: run_test_impl.sh
 
@@ -155,12 +157,9 @@ outputs:
         - gsl
         - hdf5
         - hdf5 * mpi_mpich_*
-        - libblas
-        - libcblas
-        - liblapack
-        - liblapacke
         - mpich
         - numpy
+        - openblas
       run:
         - {{ pin_subpackage('stackvana-core', exact=True) }}
         - python =3.7
@@ -171,8 +170,13 @@ outputs:
         - gsl
         - hdf5
         - hdf5 * mpi_mpich_*
+        - libblas * *openblas
+        - libcblas * *openblas
+        - liblapack * *openblas
+        - liblapacke * *openblas
         - mpich
         - {{ pin_compatible('numpy') }}
+        - openblas
     test:
       script: run_test_afw.sh
 
