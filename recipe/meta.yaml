@@ -32,8 +32,6 @@ outputs:
     requirements:
       run:
         # build dependencies
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
         - cmake
         - doxygen
         - flake8 <3.8
@@ -111,6 +109,8 @@ outputs:
     script: build_impl.sh
     requirements:
       host:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
         - {{ pin_subpackage('stackvana-env', exact=True) }}
         - python =3.7
         - boost
@@ -124,6 +124,7 @@ outputs:
         - numpy
         - openblas
       run:
+        - compilers
         - {{ pin_subpackage('stackvana-env', exact=True) }}
         - python =3.7
         - boost
