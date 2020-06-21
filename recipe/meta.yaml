@@ -71,6 +71,8 @@ outputs:
         - galsim
         - gsl
         - h5py
+        - hdf5
+        - hdf5 * mpi_mpich_*
         - healpy
         - libaprutil
         - blas-devel
@@ -126,9 +128,13 @@ outputs:
         - fftw
         - gsl
         - hdf5
+        - hdf5 * mpi_mpich_*
+        - libblas
+        - libcblas
+        - liblapack
+        - liblapacke
         - mpich
         - numpy
-        - openblas
       run:
         - {{ pin_subpackage('stackvana-env', exact=True) }}
         - python =3.7
