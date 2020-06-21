@@ -111,7 +111,7 @@ outputs:
       host:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ pin_subpackage('stackvana-core', exact=True) }}
+        - {{ pin_subpackage('stackvana-env', exact=True) }}
 
         # host dependencies
         - apr
