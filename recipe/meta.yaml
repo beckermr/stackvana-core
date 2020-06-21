@@ -21,11 +21,11 @@ build:
   number: 1
   merge_build_host: True
 
-# requirements:
-#   host:
-#   run:
-#     - python =3.7
-#
+requirements:
+  host:
+  run:
+    - python =3.7
+
 outputs:
   - name: stackvana-env
     version: {{ version }}
@@ -136,10 +136,6 @@ outputs:
         - gsl
         - hdf5
         - hdf5 * mpi_mpich_*
-        - libblas
-        - libcblas
-        - liblapack
-        - liblapacke
         - mpich
         - {{ pin_compatible('numpy') }}
     test:
@@ -175,10 +171,6 @@ outputs:
         - gsl
         - hdf5
         - hdf5 * mpi_mpich_*
-        - libblas
-        - libcblas
-        - liblapack
-        - liblapacke
         - mpich
         - {{ pin_compatible('numpy') }}
     test:
