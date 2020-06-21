@@ -35,7 +35,6 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - cmake
-        - curl
         - doxygen
         - flake8 <3.8
         - git
@@ -57,11 +56,9 @@ outputs:
         - apr
         - autograd
         - astropy
-        - boost
         - boto3
         - bottleneck
         - cffi
-        - cfitsio
         - click <7.1
         - cython
         - deprecated
@@ -70,27 +67,18 @@ outputs:
         - fastavro
         - future
         - galsim
-        - gsl
         - h5py
-        - hdf5
-        - hdf5 * mpi_mpich_*
         - healpy
         - libaprutil
-        - libblas
-        - libcblas
-        - liblapack
-        - liblapacke
         - log4cxx
         - lmfit
         - lsstdesc.coord
         - matplotlib =3.0
         - minuit2
         - moto
-        - mpich
         - mpi4py
         - ndarray
         - numexpr
-        - numpy
         - pandas
         - pip
         - pyarrow
@@ -141,9 +129,61 @@ outputs:
       run:
         - {{ pin_subpackage('stackvana-env', exact=True) }}
         - python =3.7
+        - boost
+        - cfitsio
+        - curl
+        - fftw
+        - gsl
+        - hdf5
+        - hdf5 * mpi_mpich_*
+        - libblas
+        - libcblas
+        - liblapack
+        - liblapacke
+        - mpich
         - {{ pin_compatible('numpy') }}
     test:
       script: run_test_impl.sh
+
+  - name: stackvana-afw
+    version: {{ version }}
+    script: build_afw.sh
+    requirements:
+      host:
+        - {{ pin_subpackage('stackvana-core', exact=True) }}
+        - python =3.7
+        - boost
+        - cfitsio
+        - curl
+        - fftw
+        - gsl
+        - hdf5
+        - hdf5 * mpi_mpich_*
+        - libblas
+        - libcblas
+        - liblapack
+        - liblapacke
+        - mpich
+        - numpy
+      run:
+        - {{ pin_subpackage('stackvana-core', exact=True) }}
+        - python =3.7
+        - boost
+        - cfitsio
+        - curl
+        - fftw
+        - gsl
+        - hdf5
+        - hdf5 * mpi_mpich_*
+        - libblas
+        - libcblas
+        - liblapack
+        - liblapacke
+        - mpich
+        - {{ pin_compatible('numpy') }}
+    test:
+      script: run_test_afw.sh
+
 
 about:
   home: https://github.com/beckermr/stackvana-core
