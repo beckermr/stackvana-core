@@ -192,73 +192,6 @@ if [[ "$?" != "0" ]]; then
 fi
 popd
 
-
-# ###############################################################################
-# # now handle some remapping of eups products to conda libs
-# # this makes the downstream build faster
-# export EUPS_DIR=${EUPS_DIR}
-# source ${EUPS_DIR}/bin/setups.sh
-# export -f setup
-# export -f unsetup
-#
-# echo "
-# Remapping some stuff to conda..."
-# # use doxygen from conda since the build is so hard and it is a binary
-# source ${RECIPE_DIR}/remaps/doxygen_remap.sh
-#
-# # use boost from conda and live on the edge
-# source ${RECIPE_DIR}/remaps/boost_remap.sh ${LSST_TAG}
-#
-# # ditto for fftw
-# source ${RECIPE_DIR}/remaps/fftw_remap.sh
-#
-# # ditto for gsl
-# source ${RECIPE_DIR}/remaps/gsl_remap.sh
-#
-# # ditto for apr & apr_util
-# source ${RECIPE_DIR}/remaps/apr_aprutil_remap.sh
-#
-# # ditto for log4cxx
-# source ${RECIPE_DIR}/remaps/log4cxx_remap.sh
-#
-# # ditto for pybind11
-# source ${RECIPE_DIR}/remaps/pybind11_remap.sh
-#
-# # ditto for mpich
-# source ${RECIPE_DIR}/remaps/mpich_remap.sh
-#
-# # ditto for eigen
-# # breaks osx
-# # source ${RECIPE_DIR}/remaps/eigen_remap.sh
-#
-# # ditto for starlink_ast
-# source ${RECIPE_DIR}/remaps/starlink_ast_remap.sh
-#
-# # ditto for xpa
-# source ${RECIPE_DIR}/remaps/xpa_remap.sh
-#
-# # ditto for ndarray
-# source ${RECIPE_DIR}/remaps/ndarray_remap.sh
-#
-# # ditto for coord
-# source ${RECIPE_DIR}/remaps/coord_remap.sh
-#
-# # ditto for treecorr
-# source ${RECIPE_DIR}/remaps/treecorr_remap.sh
-#
-# # ditto for healpy
-# source ${RECIPE_DIR}/remaps/healpy_remap.sh
-#
-# # ditto for galsim
-# source ${RECIPE_DIR}/remaps/galsim_remap.sh
-#
-# # ditto for a bunch of python stuff
-# for pynm in python_psutil pep8_naming ws4py python_py python_execnet pytest pytest_forked \
-#             pytest_xdist python_coverage pytest_cov pyflakes pycodestyle python_mccabe flake8 \
-#             pytest_flake8 esutil requests mpi4py python_future sqlalchemy pytest_session2file; do
-#     source ${RECIPE_DIR}/remaps/generic_python_remap.sh $pynm
-# done
-
 ###############################################################################
 # now install sconsUtils
 # this brings most of the basic build tools into the env and lets us patch it
@@ -271,7 +204,6 @@ export -f unsetup
 echo "
 Building scons+sconsUtils..."
 eups distrib install -v -t ${LSST_TAG} sconsUtils
-# source ${RECIPE_DIR}/remaps/build_scons.sh
 
 ###############################################################################
 # now finalize the build

@@ -21,49 +21,20 @@ build:
   number: 1
   merge_build_host: True
 
+requirements:
+  run:
+    - python =3.7
+
 outputs:
-  - name: stackvana-core
+  - name: stackvana-env
     version: {{ version }}
-    run_exports:
-      - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
     requirements:
       run:
-        - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
-
-  - name: stackvana-core-impl
-    version: {{ version }}
-    script: build_impl.sh
-    requirements:
-      host:
         # build dependencies
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - cmake
-        - doxygen
-        - flake8 <3.8
-        - git
-        - git-lfs
-        - make
-        - pep8-naming
-        - psutil
-        - pytest
-        - pytest-cov
-        - pytest-doctestplus
-        - pytest-flake8
-        - pytest-runner
-        - pytest-session2file ==0.1.9
-        - pytest-subtests
-        - pytest-xdist
-        - scons
-        - python =3.7
-
-        # this is extra
         - curl
-      run:
-        # build dependencies
-        - c-compiler
-        - cxx-compiler
-        - cmake
         - doxygen
         - flake8 <3.8
         - git
@@ -133,8 +104,35 @@ outputs:
         - ws4py
         - xpa
 
-        # this is extra
+  - name: stackvana-core
+    version: {{ version }}
+    run_exports:
+      - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
+    requirements:
+      run:
+        - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
+
+  - name: stackvana-core-impl
+    version: {{ version }}
+    script: build_impl.sh
+    requirements:
+      host:
+        - {{ pin_subpackage('stackvana-env', exact=True) }}
+        - python =3.7
+        - boost
+        - boost-cpp
+        - cfitsio
         - curl
+        - fftw
+        - gsl
+        - hdf5
+        - mpich
+        - numpy
+        - openblas
+      run:
+        - {{ pin_subpackage('stackvana-env', exact=True) }}
+        - python =3.7
+        - {{ pin_compatible('numpy') }}
     test:
       script: run_test_impl.sh
 
