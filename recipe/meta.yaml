@@ -56,7 +56,7 @@ outputs:
         - apr
         - autograd
         - astropy
-        - boost
+        - boost =1.70
         - boto3
         - bottleneck
         - cffi
