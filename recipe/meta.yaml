@@ -21,10 +21,6 @@ build:
   number: 1
   merge_build_host: True
 
-requirements:
-  run:
-    - python =3.7
-
 outputs:
   - name: stackvana-env
     version: {{ version }}
