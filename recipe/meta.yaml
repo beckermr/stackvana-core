@@ -21,6 +21,11 @@ build:
   number: 1
   merge_build_host: True
 
+requirements:
+  host:
+  run:
+    - python =3.7
+
 outputs:
   - name: stackvana-env
     version: {{ version }}
@@ -71,7 +76,10 @@ outputs:
         - hdf5 * mpi_mpich_*
         - healpy
         - libaprutil
-        - blas-devel
+        - libblas
+        - libcblas
+        - liblapack
+        - liblapacke
         - log4cxx
         - lmfit
         - lsstdesc.coord
