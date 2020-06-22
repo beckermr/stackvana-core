@@ -56,12 +56,12 @@ outputs:
         - astropy
         - boto3
         - bottleneck
-        - cffi
-        - click <7.1
-        - cython
-        - deprecated
-        - eigen
-        - esutil
+        # - cffi
+        # - click <7.1
+        # - cython
+        # - deprecated
+        # - eigen
+        # - esutil
         # - fastavro
         # - future
         # - galsim
@@ -119,12 +119,12 @@ outputs:
         # - astropy
         # - boto3
         # - bottleneck
-        # - cffi
-        # - click <7.1
-        # - cython
-        # - deprecated
-        # - eigen
-        # - esutil
+        - cffi
+        - click <7.1
+        - cython
+        - deprecated
+        - eigen
+        - esutil
         - fastavro
         - future
         - galsim
@@ -180,12 +180,12 @@ outputs:
         # - astropy
         # - boto3
         # - bottleneck
-        # - cffi
-        # - click <7.1
-        # - cython
-        # - deprecated
-        # - eigen
-        # - esutil
+        - cffi
+        - click <7.1
+        - cython
+        - deprecated
+        - eigen
+        - esutil
         - fastavro
         - future
         - galsim
