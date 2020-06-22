@@ -78,9 +78,9 @@ outputs:
         - lmfit
         - lsstdesc.coord
         - matplotlib =3.0
-        - minuit2
-        - moto
-        - mpi4py
+        # - minuit2
+        # - moto
+        # - mpi4py
         # - ndarray
         # - numexpr
         # - pandas
@@ -142,9 +142,9 @@ outputs:
         # - lmfit
         # - lsstdesc.coord
         # - matplotlib =3.0
-        # - minuit2
-        # - moto
-        # - mpi4py
+        - minuit2
+        - moto
+        - mpi4py
         - ndarray
         - numexpr
         - pandas
@@ -204,9 +204,9 @@ outputs:
         # - lmfit
         # - lsstdesc.coord
         # - matplotlib =3.0
-        # - minuit2
-        # - moto
-        # - mpi4py
+        - minuit2
+        - moto
+        - mpi4py
         - ndarray
         - numexpr
         - pandas
