@@ -202,7 +202,7 @@ export -f setup
 export -f unsetup
 
 echo "
-Building scons+sconsUtils..."
+Building sconsUtils..."
 eups distrib install -v -t ${LSST_TAG} sconsUtils
 
 ###############################################################################
@@ -235,6 +235,11 @@ compgen -G "${EUPS_PATH}/*/*/*/doc/html/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/doc/xml/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/share/doc/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/share/man/*" | xargs rm -rf
+
+# maybe this?
+echo "=================== eups list ==================="
+eups list -s --topological -D --raw 2>/dev/null
+echo "================================================="
 
 # remove the global tags file since it tends to leak across envs
 rm -f ${LSST_HOME}/stack/miniconda/ups_db/global.tags

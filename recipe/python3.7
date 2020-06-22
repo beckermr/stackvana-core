@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ ${LSST_LIBRARY_PATH} ]]; then
+    DYLD_LIBRARY_PATH=${LSST_LIBRARY_PATH} \
+    DYLD_FALLBACK_LIBRARY_PATH=${LSST_LIBRARY_PATH} \
+    python3.7.bak "$@"
+else
+    python3.7.bak "$@"
+fi
