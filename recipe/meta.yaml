@@ -56,9 +56,9 @@ outputs:
         - astropy
         - boto3
         - bottleneck
-        # - cffi
-        - click <7.1
-        - cython
+        - cffi
+        # - click <7.1
+        # - cython
         - deprecated
         - eigen
         - esutil
@@ -120,9 +120,9 @@ outputs:
         # - astropy
         # - boto3
         # - bottleneck
-        - cffi
-        # - click <7.1
-        # - cython
+        # - cffi
+        - click <7.1
+        - cython
         # - deprecated
         # - eigen
         # - esutil
@@ -182,9 +182,9 @@ outputs:
         # - astropy
         # - boto3
         # - bottleneck
-        - cffi
-        # - click <7.1
-        # - cython
+        # - cffi
+        - click <7.1
+        - cython
         # - deprecated
         # - eigen
         # - esutil
