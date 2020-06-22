@@ -23,14 +23,19 @@ build:
 
 requirements:
   host:
+    - python
   run:
-    - python =3.7
+    - python
 
 outputs:
   - name: stackvana-env
     version: {{ version }}
     requirements:
+      host:
+        - python
       run:
+        - python
+
         # build dependencies
         - cmake
         - doxygen
@@ -71,11 +76,11 @@ outputs:
         - libaprutil
         - log4cxx
         - lmfit
-        # - lsstdesc.coord
-        # - matplotlib =3.0
-        # - minuit2
-        # - moto
-        # - mpi4py
+        - lsstdesc.coord
+        - matplotlib =3.0
+        - minuit2
+        - moto
+        - mpi4py
         # - ndarray
         # - numexpr
         # - pandas
@@ -84,7 +89,7 @@ outputs:
         # - pybind11 <2.3
         # - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         # - pytables
-        # - python =3.7
+        # - python
         # - pyyaml
         # - requests
         # - scikit-image
@@ -135,11 +140,11 @@ outputs:
         # - libaprutil
         # - log4cxx
         # - lmfit
-        - lsstdesc.coord
-        - matplotlib =3.0
-        - minuit2
-        - moto
-        - mpi4py
+        # - lsstdesc.coord
+        # - matplotlib =3.0
+        # - minuit2
+        # - moto
+        # - mpi4py
         - ndarray
         - numexpr
         - pandas
@@ -160,7 +165,7 @@ outputs:
         - ws4py
         - xpa
 
-        - python =3.7
+        - python
         - boost
         - cfitsio
         - curl
@@ -197,11 +202,11 @@ outputs:
         # - libaprutil
         # - log4cxx
         # - lmfit
-        - lsstdesc.coord
-        - matplotlib =3.0
-        - minuit2
-        - moto
-        - mpi4py
+        # - lsstdesc.coord
+        # - matplotlib =3.0
+        # - minuit2
+        # - moto
+        # - mpi4py
         - ndarray
         - numexpr
         - pandas
@@ -222,7 +227,7 @@ outputs:
         - ws4py
         - xpa
 
-        - python =3.7
+        - python
         - boost
         - cfitsio
         - curl
@@ -246,7 +251,7 @@ outputs:
     requirements:
       host:
         - {{ pin_subpackage('stackvana-core', exact=True) }}
-        - python =3.7
+        - python
         - boost
         - cfitsio
         - curl
@@ -259,7 +264,7 @@ outputs:
         - openblas
       run:
         - {{ pin_subpackage('stackvana-core', exact=True) }}
-        - python =3.7
+        - python
         - boost
         - cfitsio
         - curl
