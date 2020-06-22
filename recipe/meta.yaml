@@ -78,18 +78,17 @@ outputs:
         - lmfit
         - lsstdesc.coord
         # - matplotlib =3.0
-        - minuit2
-        - moto
-        - mpi4py
-        - ndarray
-        # - numexpr
-        # - pandas
-        # - pip
-        # - pyarrow
+        # - minuit2
+        # - moto
+        # - mpi4py
+        # - ndarray
+        - numexpr
+        - pandas
+        - pip
+        - pyarrow
         # - pybind11 <2.3
         # - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         # - pytables
-        # - python
         # - pyyaml
         # - requests
         # - scikit-image
@@ -142,14 +141,14 @@ outputs:
         # - lmfit
         # - lsstdesc.coord
         - matplotlib =3.0
-        # - minuit2
-        # - moto
-        # - mpi4py
-        # - ndarray
-        - numexpr
-        - pandas
-        - pip
-        - pyarrow
+        - minuit2
+        - moto
+        - mpi4py
+        - ndarray
+        # - numexpr
+        # - pandas
+        # - pip
+        # - pyarrow
         - pybind11 <2.3
         - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         - pytables
@@ -204,14 +203,14 @@ outputs:
         # - lmfit
         # - lsstdesc.coord
         - matplotlib =3.0
-        # - minuit2
-        # - moto
-        # - mpi4py
-        # - ndarray
-        - numexpr
-        - pandas
-        - pip
-        - pyarrow
+        - minuit2
+        - moto
+        - mpi4py
+        - ndarray
+        # - numexpr
+        # - pandas
+        # - pip
+        # - pyarrow
         - pybind11 <2.3
         - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         - pytables
