@@ -51,28 +51,28 @@ outputs:
         - scons
 
         # host dependencies
-        # - apr
-        # - autograd
-        # - astropy
-        # - boto3
-        # - bottleneck
-        # - cffi
-        # - click <7.1
-        # - cython
-        # - deprecated
-        # - eigen
-        # - esutil
-        # - fastavro
-        # - future
-        # - galsim
-        # - h5py
-        # - healpy
-        # - libaprutil
-        # - log4cxx
-        # - lmfit
-        # - lsstdesc.coord
-        # - matplotlib =3.0
-        # - minuit2
+        - apr
+        - autograd
+        - astropy
+        - boto3
+        - bottleneck
+        - cffi
+        - click <7.1
+        - cython
+        - deprecated
+        - eigen
+        - esutil
+        - fastavro
+        - future
+        - galsim
+        - h5py
+        - healpy
+        - libaprutil
+        - log4cxx
+        - lmfit
+        - lsstdesc.coord
+        - matplotlib =3.0
+        - minuit2
         # - moto
         # - mpi4py
         # - ndarray
@@ -114,28 +114,28 @@ outputs:
         - {{ pin_subpackage('stackvana-env', exact=True) }}
 
         # host dependencies
-        - apr
-        - autograd
-        - astropy
-        - boto3
-        - bottleneck
-        - cffi
-        - click <7.1
-        - cython
-        - deprecated
-        - eigen
-        - esutil
-        - fastavro
-        - future
-        - galsim
-        - h5py
-        - healpy
-        - libaprutil
-        - log4cxx
-        - lmfit
-        - lsstdesc.coord
-        - matplotlib =3.0
-        - minuit2
+        # - apr
+        # - autograd
+        # - astropy
+        # - boto3
+        # - bottleneck
+        # - cffi
+        # - click <7.1
+        # - cython
+        # - deprecated
+        # - eigen
+        # - esutil
+        # - fastavro
+        # - future
+        # - galsim
+        # - h5py
+        # - healpy
+        # - libaprutil
+        # - log4cxx
+        # - lmfit
+        # - lsstdesc.coord
+        # - matplotlib =3.0
+        # - minuit2
         - moto
         - mpi4py
         - ndarray
@@ -175,28 +175,28 @@ outputs:
         - {{ pin_subpackage('stackvana-env', exact=True) }}
 
         # host dependencies
-        - apr
-        - autograd
-        - astropy
-        - boto3
-        - bottleneck
-        - cffi
-        - click <7.1
-        - cython
-        - deprecated
-        - eigen
-        - esutil
-        - fastavro
-        - future
-        - galsim
-        - h5py
-        - healpy
-        - libaprutil
-        - log4cxx
-        - lmfit
-        - lsstdesc.coord
-        - matplotlib =3.0
-        - minuit2
+        # - apr
+        # - autograd
+        # - astropy
+        # - boto3
+        # - bottleneck
+        # - cffi
+        # - click <7.1
+        # - cython
+        # - deprecated
+        # - eigen
+        # - esutil
+        # - fastavro
+        # - future
+        # - galsim
+        # - h5py
+        # - healpy
+        # - libaprutil
+        # - log4cxx
+        # - lmfit
+        # - lsstdesc.coord
+        # - matplotlib =3.0
+        # - minuit2
         - moto
         - mpi4py
         - ndarray
