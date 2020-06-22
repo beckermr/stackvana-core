@@ -57,7 +57,7 @@ outputs:
         - boto3
         - bottleneck
         - cffi
-        # - click <7.1
+        - click <7.1
         # - cython
         - deprecated
         - eigen
@@ -121,7 +121,7 @@ outputs:
         # - boto3
         # - bottleneck
         # - cffi
-        - click <7.1
+        # - click <7.1
         - cython
         # - deprecated
         # - eigen
@@ -183,7 +183,7 @@ outputs:
         # - boto3
         # - bottleneck
         # - cffi
-        - click <7.1
+        # - click <7.1
         - cython
         # - deprecated
         # - eigen
