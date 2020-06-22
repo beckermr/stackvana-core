@@ -82,10 +82,10 @@ outputs:
         - moto
         - mpi4py
         - ndarray
-        - numexpr
-        - pandas
-        - pip
-        - pyarrow
+        # - numexpr
+        # - pandas
+        # - pip
+        # - pyarrow
         # - pybind11 <2.3
         # - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         # - pytables
@@ -146,10 +146,10 @@ outputs:
         # - moto
         # - mpi4py
         # - ndarray
-        # - numexpr
-        # - pandas
-        # - pip
-        # - pyarrow
+        - numexpr
+        - pandas
+        - pip
+        - pyarrow
         - pybind11 <2.3
         - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         - pytables
@@ -208,10 +208,10 @@ outputs:
         # - moto
         # - mpi4py
         # - ndarray
-        # - numexpr
-        # - pandas
-        # - pip
-        # - pyarrow
+        - numexpr
+        - pandas
+        - pip
+        - pyarrow
         - pybind11 <2.3
         - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         - pytables
@@ -245,42 +245,42 @@ outputs:
     test:
       script: run_test_impl.sh
 
-  - name: stackvana-afw
-    version: {{ version }}
-    script: build_afw.sh
-    requirements:
-      host:
-        - {{ pin_subpackage('stackvana-core', exact=True) }}
-        - python
-        - boost
-        - cfitsio
-        - curl
-        - fftw
-        - gsl
-        - hdf5
-        - hdf5 * mpi_mpich_*
-        - mpich
-        - numpy
-        - openblas
-      run:
-        - {{ pin_subpackage('stackvana-core', exact=True) }}
-        - python
-        - boost
-        - cfitsio
-        - curl
-        - fftw
-        - gsl
-        - hdf5
-        - hdf5 * mpi_mpich_*
-        - libblas * *openblas
-        - libcblas * *openblas
-        - liblapack * *openblas
-        - liblapacke * *openblas
-        - mpich
-        - {{ pin_compatible('numpy') }}
-        - openblas
-    test:
-      script: run_test_afw.sh
+  # - name: stackvana-afw
+  #   version: {{ version }}
+  #   script: build_afw.sh
+  #   requirements:
+  #     host:
+  #       - {{ pin_subpackage('stackvana-core', exact=True) }}
+  #       - python
+  #       - boost
+  #       - cfitsio
+  #       - curl
+  #       - fftw
+  #       - gsl
+  #       - hdf5
+  #       - hdf5 * mpi_mpich_*
+  #       - mpich
+  #       - numpy
+  #       - openblas
+  #     run:
+  #       - {{ pin_subpackage('stackvana-core', exact=True) }}
+  #       - python
+  #       - boost
+  #       - cfitsio
+  #       - curl
+  #       - fftw
+  #       - gsl
+  #       - hdf5
+  #       - hdf5 * mpi_mpich_*
+  #       - libblas * *openblas
+  #       - libcblas * *openblas
+  #       - liblapack * *openblas
+  #       - liblapacke * *openblas
+  #       - mpich
+  #       - {{ pin_compatible('numpy') }}
+  #       - openblas
+  #   test:
+  #     script: run_test_afw.sh
 
 
 about:
