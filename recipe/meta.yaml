@@ -62,17 +62,17 @@ outputs:
         - deprecated
         - eigen
         - esutil
-        - fastavro
-        - future
-        - galsim
-        - h5py
-        - healpy
-        - libaprutil
-        - log4cxx
-        - lmfit
-        - lsstdesc.coord
-        - matplotlib =3.0
-        - minuit2
+        # - fastavro
+        # - future
+        # - galsim
+        # - h5py
+        # - healpy
+        # - libaprutil
+        # - log4cxx
+        # - lmfit
+        # - lsstdesc.coord
+        # - matplotlib =3.0
+        # - minuit2
         # - moto
         # - mpi4py
         # - ndarray
@@ -125,17 +125,17 @@ outputs:
         # - deprecated
         # - eigen
         # - esutil
-        # - fastavro
-        # - future
-        # - galsim
-        # - h5py
-        # - healpy
-        # - libaprutil
-        # - log4cxx
-        # - lmfit
-        # - lsstdesc.coord
-        # - matplotlib =3.0
-        # - minuit2
+        - fastavro
+        - future
+        - galsim
+        - h5py
+        - healpy
+        - libaprutil
+        - log4cxx
+        - lmfit
+        - lsstdesc.coord
+        - matplotlib =3.0
+        - minuit2
         - moto
         - mpi4py
         - ndarray
@@ -186,17 +186,17 @@ outputs:
         # - deprecated
         # - eigen
         # - esutil
-        # - fastavro
-        # - future
-        # - galsim
-        # - h5py
-        # - healpy
-        # - libaprutil
-        # - log4cxx
-        # - lmfit
-        # - lsstdesc.coord
-        # - matplotlib =3.0
-        # - minuit2
+        - fastavro
+        - future
+        - galsim
+        - h5py
+        - healpy
+        - libaprutil
+        - log4cxx
+        - lmfit
+        - lsstdesc.coord
+        - matplotlib =3.0
+        - minuit2
         - moto
         - mpi4py
         - ndarray
