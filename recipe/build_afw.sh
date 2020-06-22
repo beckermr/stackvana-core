@@ -74,26 +74,26 @@ function _report_errors_and_exit {
     exit 1
 }
 
-echo "Patching sconsUtils for debugging..."
-pushd ${LSST_HOME}/stackvana_sconsUtils/python/lsst/sconsUtils
-patch tests.py ${RECIPE_DIR}/0001-print-test-env-sconsUtils.patch
-if [[ "$?" != "0" ]]; then
-    exit 1
-fi
-popd
-echo " "
-
-# this shim is here to bypass SIP for running the OSX tests.
-# the conda-build prefixes are very long and so the pytest
-# command line tool gets /usr/bin/env put in for the prefix.
-# invoking env causes SIP to be invoked and all of the DYLD_LIBRARY_PATHs
-# get swallowed. Here we reinsert them right before the python executable.
-if [[ `uname -s` == "Darwin" ]]; then
-    echo "Making the python shim for OSX..."
-    mv ${PREFIX}/bin/python3.7 ${PREFIX}/bin/python3.7.bak
-    cp ${RECIPE_DIR}/python3.7 ${PREFIX}/bin/python3.7
-    echo " "
-fi
+# echo "Patching sconsUtils for debugging..."
+# pushd ${LSST_HOME}/stackvana_sconsUtils/python/lsst/sconsUtils
+# patch tests.py ${RECIPE_DIR}/0001-print-test-env-sconsUtils.patch
+# if [[ "$?" != "0" ]]; then
+#     exit 1
+# fi
+# popd
+# echo " "
+#
+# # this shim is here to bypass SIP for running the OSX tests.
+# # the conda-build prefixes are very long and so the pytest
+# # command line tool gets /usr/bin/env put in for the prefix.
+# # invoking env causes SIP to be invoked and all of the DYLD_LIBRARY_PATHs
+# # get swallowed. Here we reinsert them right before the python executable.
+# if [[ `uname -s` == "Darwin" ]]; then
+#     echo "Making the python shim for OSX..."
+#     mv ${PREFIX}/bin/python3.7 ${PREFIX}/bin/python3.7.bak
+#     cp ${RECIPE_DIR}/python3.7 ${PREFIX}/bin/python3.7
+#     echo " "
+# fi
 
 echo "Running eups install..."
 {

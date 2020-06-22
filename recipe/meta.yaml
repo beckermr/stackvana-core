@@ -28,78 +28,78 @@ requirements:
     - python
 
 outputs:
-  - name: stackvana-env
-    version: {{ version }}
-    requirements:
-      host:
-        - python
-      run:
-        - python
-
-        # build dependencies
-        - cmake
-        - doxygen
-        - flake8 <3.8
-        - git
-        - git-lfs
-        - make
-        - pep8-naming
-        - psutil
-        - pytest
-        - pytest-cov
-        - pytest-doctestplus
-        - pytest-flake8
-        - pytest-runner
-        - pytest-session2file ==0.1.9
-        - pytest-subtests
-        - pytest-xdist
-        - scons
-
-        # host dependencies
-        - apr
-        - autograd
-        - astropy
-        - boto3
-        - bottleneck
-        - cffi
-        # - click <7.1
-        - cython
-        - deprecated
-        - eigen
-        - esutil
-
-        - fastavro
-        - future
-        - galsim
-        - h5py
-        - healpy
-        - libaprutil
-        - log4cxx
-        - lmfit
-        - lsstdesc.coord
-        # - matplotlib =3.0
-        # - minuit2
-        # - moto
-        # - mpi4py
-        # - ndarray
-        - numexpr
-        - pandas
-        - pip
-        - pyarrow
-        # - pybind11 <2.3
-        # - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
-        # - pytables
-        # - pyyaml
-        # - requests
-        # - scikit-image
-        # - scikit-learn
-        # - scipy
-        # - starlink-ast
-        # - sqlalchemy
-        # - treecorr <4
-        # - wcslib
-        # - ws4py
-        # - xpa
+  # - name: stackvana-env
+  #   version: {{ version }}
+  #   requirements:
+  #     host:
+  #       - python
+  #     run:
+  #       - python
+  #
+  #       # build dependencies
+  #       - cmake
+  #       - doxygen
+  #       - flake8 <3.8
+  #       - git
+  #       - git-lfs
+  #       - make
+  #       - pep8-naming
+  #       - psutil
+  #       - pytest
+  #       - pytest-cov
+  #       - pytest-doctestplus
+  #       - pytest-flake8
+  #       - pytest-runner
+  #       - pytest-session2file ==0.1.9
+  #       - pytest-subtests
+  #       - pytest-xdist
+  #       - scons
+  #
+  #       # host dependencies
+  #       - apr
+  #       - autograd
+  #       - astropy
+  #       - boto3
+  #       - bottleneck
+  #       - cffi
+  #       # - click <7.1
+  #       - cython
+  #       - deprecated
+  #       - eigen
+  #       - esutil
+  #
+  #       - fastavro
+  #       - future
+  #       - galsim
+  #       - h5py
+  #       - healpy
+  #       - libaprutil
+  #       - log4cxx
+  #       - lmfit
+  #       - lsstdesc.coord
+  #       # - matplotlib =3.0
+  #       # - minuit2
+  #       # - moto
+  #       # - mpi4py
+  #       # - ndarray
+  #       - numexpr
+  #       - pandas
+  #       - pip
+  #       - pyarrow
+  #       # - pybind11 <2.3
+  #       # - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
+  #       # - pytables
+  #       # - pyyaml
+  #       # - requests
+  #       # - scikit-image
+  #       # - scikit-learn
+  #       # - scipy
+  #       # - starlink-ast
+  #       # - sqlalchemy
+  #       # - treecorr <4
+  #       # - wcslib
+  #       # - ws4py
+  #       # - xpa
 
   - name: stackvana-core
     version: {{ version }}
@@ -114,41 +114,40 @@ outputs:
     script: build_impl.sh
     requirements:
       host:
+        - python
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ pin_subpackage('stackvana-env', exact=True) }}
 
         # host dependencies
-        # - apr
-        # - autograd
-        # - astropy
-        # - boto3
-        # - bottleneck
-        # - cffi
+        - apr
+        - autograd
+        - astropy
+        - boto3
+        - bottleneck
+        - cffi
         - click <7.1
-        # - cython
-        # - deprecated
+        - cython
+        - deprecated
         # - eigen
-        # - esutil
-
-        # - fastavro
-        # - future
-        # - galsim
-        # - h5py
-        # - healpy
-        # - libaprutil
-        # - log4cxx
-        # - lmfit
-        # - lsstdesc.coord
+        - esutil
+        - fastavro
+        - future
+        - galsim
+        - h5py
+        - healpy
+        - libaprutil
+        - log4cxx
+        - lmfit
+        - lsstdesc.coord
         - matplotlib =3.0
         - minuit2
         - moto
         - mpi4py
         - ndarray
-        # - numexpr
-        # - pandas
-        # - pip
-        # - pyarrow
+        - numexpr
+        - pandas
+        - pip
+        - pyarrow
         - pybind11 <2.3
         - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         - pytables
@@ -164,7 +163,6 @@ outputs:
         - ws4py
         - xpa
 
-        - python
         - boost
         - cfitsio
         - curl
@@ -174,43 +172,41 @@ outputs:
         - hdf5 * mpi_mpich_*
         - mpich
         - numpy
-        - openblas
 
       run:
+        - python
         - compilers
-        - {{ pin_subpackage('stackvana-env', exact=True) }}
 
         # host dependencies
-        # - apr
-        # - autograd
-        # - astropy
-        # - boto3
-        # - bottleneck
-        # - cffi
+        - apr
+        - autograd
+        - astropy
+        - boto3
+        - bottleneck
+        - cffi
         - click <7.1
-        # - cython
-        # - deprecated
+        - cython
+        - deprecated
         # - eigen
-        # - esutil
-
-        # - fastavro
-        # - future
-        # - galsim
-        # - h5py
-        # - healpy
-        # - libaprutil
-        # - log4cxx
-        # - lmfit
-        # - lsstdesc.coord
+        - esutil
+        - fastavro
+        - future
+        - galsim
+        - h5py
+        - healpy
+        - libaprutil
+        - log4cxx
+        - lmfit
+        - lsstdesc.coord
         - matplotlib =3.0
         - minuit2
         - moto
         - mpi4py
         - ndarray
-        # - numexpr
-        # - pandas
-        # - pip
-        # - pyarrow
+        - numexpr
+        - pandas
+        - pip
+        - pyarrow
         - pybind11 <2.3
         - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         - pytables
@@ -226,7 +222,6 @@ outputs:
         - ws4py
         - xpa
 
-        - python
         - boost
         - cfitsio
         - curl
@@ -234,52 +229,55 @@ outputs:
         - gsl
         - hdf5
         - hdf5 * mpi_mpich_*
-        - libblas * *openblas
-        - libcblas * *openblas
-        - liblapack * *openblas
-        - liblapacke * *openblas
+        - libblas
+        - libcblas
+        - liblapack
+        - liblapacke
         - mpich
         - {{ pin_compatible('numpy') }}
-        - openblas
     test:
       script: run_test_impl.sh
 
-  # - name: stackvana-afw
-  #   version: {{ version }}
-  #   script: build_afw.sh
-  #   requirements:
-  #     host:
-  #       - {{ pin_subpackage('stackvana-core', exact=True) }}
-  #       - python
-  #       - boost
-  #       - cfitsio
-  #       - curl
-  #       - fftw
-  #       - gsl
-  #       - hdf5
-  #       - hdf5 * mpi_mpich_*
-  #       - mpich
-  #       - numpy
-  #       - openblas
-  #     run:
-  #       - {{ pin_subpackage('stackvana-core', exact=True) }}
-  #       - python
-  #       - boost
-  #       - cfitsio
-  #       - curl
-  #       - fftw
-  #       - gsl
-  #       - hdf5
-  #       - hdf5 * mpi_mpich_*
-  #       - libblas * *openblas
-  #       - libcblas * *openblas
-  #       - liblapack * *openblas
-  #       - liblapacke * *openblas
-  #       - mpich
-  #       - {{ pin_compatible('numpy') }}
-  #       - openblas
-  #   test:
-  #     script: run_test_afw.sh
+  - name: stackvana-afw
+    version: {{ version }}
+    script: build_afw.sh
+    requirements:
+      host:
+        - python
+        - {{ pin_subpackage('stackvana-core', exact=True) }}
+
+        - boost
+        - cfitsio
+        - curl
+        - fftw
+        - gsl
+        - hdf5
+        - hdf5 * mpi_mpich_*
+        - libblas
+        - libcblas
+        - liblapack
+        - liblapacke
+        - mpich
+        - numpy
+      run:
+        - python
+        - {{ pin_subpackage('stackvana-core', exact=True) }}
+
+        - boost
+        - cfitsio
+        - curl
+        - fftw
+        - gsl
+        - hdf5
+        - hdf5 * mpi_mpich_*
+        - libblas
+        - libcblas
+        - liblapack
+        - liblapacke
+        - mpich
+        - {{ pin_compatible('numpy') }}
+    test:
+      script: run_test_afw.sh
 
 
 about:
