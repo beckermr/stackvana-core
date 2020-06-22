@@ -71,14 +71,14 @@ outputs:
         - libaprutil
         - log4cxx
         - lmfit
-        - lsstdesc.coord
-        - matplotlib =3.0
-        - minuit2
-        - moto
-        - mpi4py
-        - ndarray
-        - numexpr
-        - pandas
+        # - lsstdesc.coord
+        # - matplotlib =3.0
+        # - minuit2
+        # - moto
+        # - mpi4py
+        # - ndarray
+        # - numexpr
+        # - pandas
         # - pip
         # - pyarrow
         # - pybind11 <2.3
@@ -135,14 +135,14 @@ outputs:
         # - libaprutil
         # - log4cxx
         # - lmfit
-        # - lsstdesc.coord
-        # - matplotlib =3.0
-        # - minuit2
-        # - moto
-        # - mpi4py
-        # - ndarray
-        # - numexpr
-        # - pandas
+        - lsstdesc.coord
+        - matplotlib =3.0
+        - minuit2
+        - moto
+        - mpi4py
+        - ndarray
+        - numexpr
+        - pandas
         - pip
         - pyarrow
         - pybind11 <2.3
@@ -197,13 +197,13 @@ outputs:
         # - libaprutil
         # - log4cxx
         # - lmfit
-        # - lsstdesc.coord
-        # - matplotlib =3.0
-        # - minuit2
-        # - moto
-        # - mpi4py
-        # - ndarray
-        # - numexpr
+        - lsstdesc.coord
+        - matplotlib =3.0
+        - minuit2
+        - moto
+        - mpi4py
+        - ndarray
+        - numexpr
         - pandas
         - pip
         - pyarrow
