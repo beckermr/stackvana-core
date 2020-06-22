@@ -59,9 +59,10 @@ outputs:
         # - cffi
         # - click <7.1
         # - cython
-        # - deprecated
-        # - eigen
-        # - esutil
+        - deprecated
+        - eigen
+        - esutil
+
         # - fastavro
         # - future
         # - galsim
@@ -122,9 +123,10 @@ outputs:
         - cffi
         - click <7.1
         - cython
-        - deprecated
-        - eigen
-        - esutil
+        # - deprecated
+        # - eigen
+        # - esutil
+
         - fastavro
         - future
         - galsim
@@ -183,9 +185,10 @@ outputs:
         - cffi
         - click <7.1
         - cython
-        - deprecated
-        - eigen
-        - esutil
+        # - deprecated
+        # - eigen
+        # - esutil
+        
         - fastavro
         - future
         - galsim
