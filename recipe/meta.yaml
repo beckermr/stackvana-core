@@ -166,8 +166,8 @@ outputs:
         # - boost
         # - cfitsio
         # - curl
-        # - fftw
-        # - gsl
+        - fftw
+        - gsl
         - hdf5
         - hdf5 * mpi_mpich_*
         - libblas
@@ -182,12 +182,12 @@ outputs:
         # - boost
         # - cfitsio
         # - curl
-        # - fftw
-        # - gsl
-        # - hdf5
-        # - hdf5 * mpi_mpich_*
-        # - mpich
-        # - {{ pin_compatible('numpy') }}
+        - fftw
+        - gsl
+        - hdf5
+        - hdf5 * mpi_mpich_*
+        - mpich
+        - {{ pin_compatible('numpy') }}
     test:
       script: run_test_afw.sh
 
