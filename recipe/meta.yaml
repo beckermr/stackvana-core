@@ -10,16 +10,22 @@
 #  - for a major version 'v18_1', the conda version is '18.1.0'
 #
 # Note the exta micro version in order to match the tags in the DM eups system.
-{% set version = "2019.44w" %}
+{% set version = "2020.24w" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 build:
-  skip: True  # [win or py < 37]
+  skip: true  # [win or py != 37]
   number: 1
   merge_build_host: True
+
+requirements:
+  host:
+    - python
+  run:
+    - python
 
 outputs:
   - name: stackvana-core
@@ -37,142 +43,152 @@ outputs:
       host:
         - python
         - pip
-        - curl
-        - git
-        - make
-        - cmake
-
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
 
-        # these are needed to make the symlinks for remapping
-        - doxygen =1.8.13
-        - boost ==1.69.0
-        - boost-cpp ==1.69.0
-        - fftw ==3.3.8
-        - gsl ==2.6
-        - libapr ==1.6.5
-        - libaprutil ==1.6.1
-        - log4cxx ==0.10.0
-        - pybind11 ==2.2.4
-        - mpich ==3.3.1
-        - starlink-ast ==8.7.2
-        # - eigen =3.3.7
-        - xpa ==2.1.19
-        - ndarray ==1.5.3
-        - lsstdesc.coord
-        - treecorr >=3.3.11,<4.0.0a0
-        - healpy =1.12.10
-        - psutil
+        # build dependencies
+        - cmake
+        - doxygen
+        - flake8 <3.8
+        - git
+        - git-lfs
+        - make
+        - patch
         - pep8-naming
-        - ws4py
-        - py
-        - pytest >=4,<5.0.0a0|==3.6.4
-        - execnet
-        - pytest-forked
-        - pytest-xdist
-        - coverage
+        - psutil
+        - pytest
         - pytest-cov
-        - pyflakes
-        - pycodestyle
-        - mccabe
-        - flake8
+        - pytest-doctestplus
         - pytest-flake8
-        - esutil >=0.6.4
-        - requests
-        - mpi4py
-        - sqlalchemy
-        - future
-        - galsim ==2.2.2
-        - pytest-session2file
-
-        # and these are needed for the build of sconsUtils
-        - setuptools_scm
-        - apipkg
         - pytest-runner
-        - flake8-polyfill
+        - pytest-session2file ==0.1.9
+        - pytest-subtests
+        - pytest-xdist
+        - scons
 
-        - numpy ==1.16.2
+        - curl
       run:
         - python
         - pip
-        - curl
-        - git
-        - make
+
+        # build dependencies
         - cmake
-
-        # "real" deps
-        - astropy =3.2.3
-        - blosc =1.15.0
-        - h5py =2.9.0
-        - hdf5 ==1.10.5
-        - matplotlib =3.0.3
-        - numexpr =2.6.9
-        - {{ pin_compatible('numpy', max_pin='x.x.x') }}
-        - pandas =0.24.2
-        - pyqt
-        - qt
-        - scikit-learn =0.20.3
-        - scipy =1.2.1
-        - snappy =1.1.7
-        - deprecated
-
-        # I am shipping these by hand from conda forge using remap
-        - doxygen =1.8.13
-        - {{ pin_compatible('boost', max_pin='x.x.x') }}
-        - {{ pin_compatible('boost-cpp', max_pin='x.x.x') }}
-        - {{ pin_compatible('fftw', max_pin='x.x.x') }}
-        - {{ pin_compatible('gsl', max_pin='x.x') }}
-        - {{ pin_compatible('libapr', max_pin='x.x.x') }}
-        - {{ pin_compatible('libaprutil', max_pin='x.x.x') }}
-        - {{ pin_compatible('log4cxx', max_pin='x.x.x') }}
-        - {{ pin_compatible('pybind11', max_pin='x.x.x') }}
-        - {{ pin_compatible('mpich', max_pin='x.x.x') }}
-        - {{ pin_compatible('starlink-ast', max_pin='x.x.x') }}
-        # - {{ pin_compatible('eigen', max_pin='x.x.x') }}
-        - {{ pin_compatible('xpa', max_pin='x.x.x') }}
-        - {{ pin_compatible('ndarray', max_pin='x.x.x') }}
-        - lsstdesc.coord
-        - {{ pin_compatible('treecorr', max_pin='x.x.x') }}
-        - {{ pin_compatible('healpy', max_pin='x.x.x') }}
-        - psutil
+        - doxygen
+        - flake8 <3.8
+        - git
+        - git-lfs
+        - make
+        - patch
         - pep8-naming
-        - ws4py
-        - py
-        - pytest >=4,<5.0.0a0|==3.6.4
-        - execnet
-        - pytest-forked
-        - pytest-xdist
-        - coverage
+        - psutil
+        - pytest
         - pytest-cov
-        - pyflakes
-        - pycodestyle
-        - mccabe
-        - flake8
+        - pytest-doctestplus
         - pytest-flake8
-        - esutil >=0.6.4
-        - requests
-        - mpi4py
-        - sqlalchemy
-        - future
-        - {{ pin_compatible('galsim', max_pin='x.x.x') }}
-        - pytest-session2file
-
-        # stuff added outside of the main LSST DM conda envs
-        - setuptools_scm
-        - apipkg
         - pytest-runner
-        - flake8-polyfill
+        - pytest-session2file ==0.1.9
+        - pytest-subtests
+        - pytest-xdist
+        - scons
 
-        # needed for build of sims_* tags
+        # host dependencies
+        - apr
+        - autograd
+        - astropy
+        - boost-cpp =1.70
+        - boto3
+        - bottleneck
+        - cffi
+        - click <7.1
         - cython
-
-        # compilers for compiling
-        - c-compiler
-        - cxx-compiler
-
+        - deprecated
+        # - eigen
+        - esutil
+        - fastavro
+        - future
+        - galsim
+        - h5py
+        - healpy
+        - libaprutil
+        - log4cxx
+        - lmfit
+        - lsstdesc.coord
+        - matplotlib =3.0
+        - minuit2
+        - moto
+        - mpi4py
+        - ndarray
+        - numexpr
+        - pandas
+        - pyarrow
+        - pybind11 <2.3
+        - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
+        - pytables
+        - pyyaml
+        - requests
+        - scikit-image
+        - scikit-learn
+        - scipy
+        - starlink-ast
+        - sqlalchemy
+        - treecorr <4
+        - wcslib
+        - ws4py
+        - xpa
     test:
       script: run_test_impl.sh
+      requires:
+        - python
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - cfitsio
+        - curl
+        - fftw
+        - gsl
+        - hdf5
+        - hdf5 * mpi_mpich_*
+        - libblas
+        - libcblas
+        - liblapack
+        - liblapacke
+        - mpich
+        - numpy
+
+  - name: stackvana-afw
+    version: {{ version }}
+    script: build_afw.sh
+    requirements:
+      host:
+        - python
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ pin_subpackage('stackvana-core', exact=True) }}
+        - cfitsio
+        - curl
+        - fftw
+        - gsl
+        - hdf5
+        - hdf5 * mpi_mpich_*
+        - libblas
+        - libcblas
+        - liblapack
+        - liblapacke
+        - mpich
+        - numpy
+      run:
+        - python
+        - {{ pin_subpackage('stackvana-core', exact=True) }}
+        - cfitsio
+        - curl
+        - fftw
+        - gsl
+        - hdf5
+        - hdf5 * mpi_mpich_*
+        - mpich
+        - {{ pin_compatible('numpy') }}
+    test:
+      script: run_test_afw.sh
+
 
 about:
   home: https://github.com/beckermr/stackvana-core

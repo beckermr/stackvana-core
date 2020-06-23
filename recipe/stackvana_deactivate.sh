@@ -1,28 +1,22 @@
-# unsetup any products to keep env clean
-# topological sort makes it faster since unsetup works on deps too
-pkgs=`eups list -s --topological -D 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
-while [[ $pkgs ]]; do
-    for pkg in ${pkgs}; do
-        if [[ ${pkg} == "eups" ]]; then
-           continue
-        fi
-        unsetup $pkg >/dev/null 2>&1
-        break
-    done
-    pkgs=`eups list -s --topological -D 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
-    if [[ ${pkgs} == "eups" ]]; then
-        break
-    fi
-done
+# # unsetup any products to keep env clean
+# # topological sort makes it faster since unsetup works on deps too
 
-# it stops at eups so we get the rest in a list
-pkgs=`eups list -s 2>/dev/null | sed 's/|//g' | awk '{ print $1 }'`
-for pkg in ${pkgs}; do
-    if [[ ${pkg} == "eups" ]]; then
-       continue
+# I lifted this snippet from the conda-forge eups-feedstock
+# https://github.com/conda-forge/eups-feedstock/blob/master/recipe/deactivate.sh
+# written by @gcomoretto @brianv0 @ktlim
+# I also removed the infinite loop
+
+pkg=`eups list -s --topological -D --raw 2>/dev/null | head -1 | cut -d'|' -f1`
+while [[ -n "$pkg" && "$pkg" != "eups" ]]; do
+    unsetup $pkg  > /dev/null 2>&1
+    new_pkg=`eups list -s --topological -D --raw 2>/dev/null | head -1 | cut -d'|' -f1`
+    if [[ ${new_pkg} == ${pkg} ]]; then
+        break
+    else
+      pkg=${new_pkg}
     fi
-    unsetup $pkg >/dev/null 2>&1
 done
+unset pkg
 
 # clean out the path, removing EUPS_DIR/bin
 # https://stackoverflow.com/questions/370047/what-is-the-most-elegant-way-to-remove-a-path-from-the-path-variable-in-bash
