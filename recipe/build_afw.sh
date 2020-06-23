@@ -75,7 +75,12 @@ function _report_errors_and_exit {
 }
 
 echo "Patching sconsUtils for debugging..."
-pushd ${LSST_HOME}/stackvana_sconsUtils/python/lsst/sconsUtils
+if [[ `uname -s` == "Darwin" ]]; then
+    sconsdir="${LSST_HOME}/stack/miniconda/DarwinX86/sconsUtils/19.0.0-3-g1276964/python/lsst/sconsUtils"
+else
+    sconsdir="${LSST_HOME}/stack/miniconda/Linux64/sconsUtils/19.0.0-3-g1276964/python/lsst/sconsUtils"
+fi
+pushd ${sconsdir}
 patch tests.py ${RECIPE_DIR}/0001-print-test-env-sconsUtils.patch
 if [[ "$?" != "0" ]]; then
     exit 1
