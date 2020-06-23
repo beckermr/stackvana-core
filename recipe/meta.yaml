@@ -95,6 +95,7 @@ outputs:
         - apr
         - autograd
         - astropy
+        - boost-cpp =1.70
         - boto3
         - bottleneck
         - cffi
@@ -140,7 +141,6 @@ outputs:
         - python
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - boost-cpp
         - cfitsio
         - curl
         - fftw
@@ -163,7 +163,6 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - {{ pin_subpackage('stackvana-core', exact=True) }}
-        - boost-cpp
         - cfitsio
         - curl
         - fftw
@@ -179,7 +178,6 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('stackvana-core', exact=True) }}
-        - boost-cpp
         - cfitsio
         - curl
         - fftw
