@@ -64,6 +64,8 @@ outputs:
         - pytest-subtests
         - pytest-xdist
         - scons
+        - patch
+        - curl
       run:
         - python
         - pip
@@ -86,6 +88,7 @@ outputs:
         - pytest-subtests
         - pytest-xdist
         - scons
+        - patch
 
         # host dependencies
         - apr
