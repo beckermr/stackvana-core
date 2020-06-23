@@ -136,16 +136,10 @@ outputs:
         - xpa
     test:
       script: run_test_impl.sh
-
-  - name: stackvana-afw
-    version: {{ version }}
-    script: build_afw.sh
-    requirements:
-      host:
+      requires:
         - python
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ pin_subpackage('stackvana-core', exact=True) }}
         - boost
         - cfitsio
         - curl
@@ -158,21 +152,44 @@ outputs:
         - liblapack
         - liblapacke
         - mpich
-        - numpy 1.16.*
-      run:
-        - python
-        - {{ pin_subpackage('stackvana-core', exact=True) }}
-        - boost
-        - cfitsio
-        - curl
-        - fftw
-        - gsl
-        - hdf5
-        - hdf5 * mpi_mpich_*
-        - mpich
-        - {{ pin_compatible('numpy') }}
-    test:
-      script: run_test_afw.sh
+        - numpy
+
+  # - name: stackvana-afw
+  #   version: {{ version }}
+  #   script: build_afw.sh
+  #   requirements:
+  #     host:
+  #       - python
+  #       - {{ compiler('c') }}
+  #       - {{ compiler('cxx') }}
+  #       - {{ pin_subpackage('stackvana-core', exact=True) }}
+  #       - boost
+  #       - cfitsio
+  #       - curl
+  #       - fftw
+  #       - gsl
+  #       - hdf5
+  #       - hdf5 * mpi_mpich_*
+  #       - libblas
+  #       - libcblas
+  #       - liblapack
+  #       - liblapacke
+  #       - mpich
+  #       - numpy 1.16.*
+  #     run:
+  #       - python
+  #       - {{ pin_subpackage('stackvana-core', exact=True) }}
+  #       - boost
+  #       - cfitsio
+  #       - curl
+  #       - fftw
+  #       - gsl
+  #       - hdf5
+  #       - hdf5 * mpi_mpich_*
+  #       - mpich
+  #       - {{ pin_compatible('numpy') }}
+  #   test:
+  #     script: run_test_afw.sh
 
 
 about:
