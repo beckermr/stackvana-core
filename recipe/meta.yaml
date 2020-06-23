@@ -53,6 +53,7 @@ outputs:
         - git
         - git-lfs
         - make
+        - patch
         - pep8-naming
         - psutil
         - pytest
@@ -64,7 +65,7 @@ outputs:
         - pytest-subtests
         - pytest-xdist
         - scons
-        - patch
+
         - curl
       run:
         - python
@@ -77,6 +78,7 @@ outputs:
         - git
         - git-lfs
         - make
+        - patch
         - pep8-naming
         - psutil
         - pytest
@@ -88,7 +90,6 @@ outputs:
         - pytest-subtests
         - pytest-xdist
         - scons
-        - patch
 
         # host dependencies
         - apr
@@ -157,7 +158,7 @@ outputs:
         - liblapack
         - liblapacke
         - mpich
-        - numpy
+        - numpy 1.16.*
       run:
         - python
         - {{ pin_subpackage('stackvana-core', exact=True) }}
