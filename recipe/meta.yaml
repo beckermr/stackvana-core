@@ -164,8 +164,8 @@ outputs:
         - {{ compiler('cxx') }}
         - {{ pin_subpackage('stackvana-core', exact=True) }}
         # - boost
-        # - cfitsio
-        # - curl
+        - cfitsio
+        - curl
         - fftw
         - gsl
         - hdf5
@@ -180,8 +180,8 @@ outputs:
         - python
         - {{ pin_subpackage('stackvana-core', exact=True) }}
         # - boost
-        # - cfitsio
-        # - curl
+        - cfitsio
+        - curl
         - fftw
         - gsl
         - hdf5
