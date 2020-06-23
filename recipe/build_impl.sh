@@ -203,7 +203,7 @@ export -f unsetup
 
 echo "
 Building sconsUtils..."
-# eups distrib install -v -t ${LSST_TAG} sconsUtils
+eups distrib install -v -t ${LSST_TAG} sconsUtils
 
 ###############################################################################
 # now finalize the build

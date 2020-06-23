@@ -96,7 +96,16 @@ echo " "
 if [[ `uname -s` == "Darwin" ]]; then
     echo "Making the python shim for OSX..."
     mv ${PREFIX}/bin/python3.7 ${PREFIX}/bin/python3.7.bak
-    cp ${RECIPE_DIR}/python3.7 ${PREFIX}/bin/python3.7
+    echo "#!/bin/bash
+    if [[ \${LSST_LIBRARY_PATH} ]]; then
+        DYLD_LIBRARY_PATH=\${LSST_LIBRARY_PATH} \\
+        DYLD_FALLBACK_LIBRARY_PATH=\${LSST_LIBRARY_PATH} \\
+        python3.7.bak \"\$@\"
+    else
+        python3.7.bak \"\$@\"
+    fi
+" > ${PREFIX}/bin/python3.7
+    chmod u+x ${PREFIX}/bin/python3.7
     echo " "
 fi
 
