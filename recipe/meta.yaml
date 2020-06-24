@@ -18,7 +18,7 @@ package:
 
 build:
   skip: true  # [win or py != 37]
-  number: 1
+  number: 2
   merge_build_host: True
 
 requirements:
@@ -94,7 +94,7 @@ outputs:
         # host dependencies
         - apr
         - autograd
-        - astropy
+        - astropy =4
         - boost-cpp =1.70
         - boto3
         - bottleneck
@@ -102,7 +102,7 @@ outputs:
         - click <7.1
         - cython
         - deprecated
-        # - eigen
+        - eigen
         - esutil
         - fastavro
         - future
