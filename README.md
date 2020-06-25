@@ -11,7 +11,8 @@ core build tooling for stackvana
 It is best to create a brand new `conda` environment for the DM stack.
 
 ```bash
-conda create -c stackvana -n mystack stackvana-core
+conda create -c stackvana -n mystack stackvana-core 
+conda create -c stackvana -n mystack stackvana-afw 
 ```
 
 The command above will create a `conda` environment with all of the dependencies
@@ -56,51 +57,6 @@ downstream builds easier.
   Many thanks to Robert Lupton for pointing out how to do modify this configuration option
   elegantly!
 
-- On Linux and OSX, I have removed the build of many packages from `eups` to `conda`.
-  The list of packages with this is
-
-    - `doxygen`
-    - `boost`
-    - `fftw`
-    - `gsl`
-    - `apr`
-    - `apr_util`
-    - `pybind11`
-    - `mpich`
-    - `starlink_ast`
-    - `xpa`
-    - `log4cxx`
-    - `ndarray`
-    - `coord`
-    - `treecorr`
-    - `healpy`
-    - `python_psutil`
-    - `pep8_naming`
-    - `ws4py`
-    - `python_py`
-    - `python_execnet`
-    - `pytest`
-    - `pytest_forked`
-    - `pytest_xdist`
-    - `python_coverage`
-    - `pytest_cov`
-    - `pyflakes`
-    - `pycodestyle`
-    - `python_mccabe`
-    - `flake8`
-    - `pytest_flake8`
-    - `esutil`
-    - `requests`
-    - `mpi4py`
-    - `python_future`
-    - `sqlalchemy`
-    - `galsim`
-    - `pytest-session2file`
-
-  I used the `manifest.remap` feature of `eups` to make sure this works with the
-  existing stack installation routine. Many thanks to Jim Bosch for pointing out this
-  feature of `eups`!
-
 - I changed the first line, `#!${PREFIX}/bin/python`, in the `eups` and `eups_setup`
   scripts to `#!/usr/bin/env python`. This doesn't seem to make a difference and
   the CI services that build the stack were failing on the long prefixes used by
@@ -114,15 +70,3 @@ downstream builds easier.
   you must install the appropriate package using `conda`. `setuptools` should have been
   able to detect the dependencies in the `conda` environment in the first place, but sometimes
   this was failing for some reason unknown to me.
-
-- I applied patches to `sconsUtils` in order to ensure it finds the `conda` compilers
-  and uses the proper compiling/linking flags from the external environment. These
-  patches make sure that the `conda` library prefix is always added when linking,
-  that `-rpath` is always set, the right set of flags is used for the `conda` compilers,
-  and that the `conda` compilers are always used over the system ones.
-
-
-## Known Build Issues
-
-1. Builds of some/most packages on OSX from source with `conda`'s compilers currently
-   fail. The currently known packages are `doxygen` and `xpa`.
