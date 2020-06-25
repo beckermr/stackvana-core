@@ -48,7 +48,6 @@ outputs:
 
         # build dependencies
         - cmake
-        - curl
         - doxygen
         - flake8 <3.8
         - git
@@ -74,7 +73,6 @@ outputs:
 
         # build dependencies
         - cmake
-        - curl
         - doxygen
         - flake8 <3.8
         - git
@@ -137,6 +135,8 @@ outputs:
         - wcslib
         - ws4py
         - xpa
+
+        - curl
     test:
       script: run_test_impl.sh
       requires:
@@ -144,6 +144,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - cfitsio
+        - curl
         - fftw
         - gsl
         - hdf5
@@ -165,6 +166,7 @@ outputs:
         - {{ compiler('cxx') }}
         - {{ pin_subpackage('stackvana-core', exact=True) }}
         - cfitsio
+        - curl
         - fftw
         - gsl
         - hdf5
@@ -174,10 +176,11 @@ outputs:
         - liblapack
         - liblapacke
         - mpich
-        - numpy
+        - numpy 1.16.*
       run:
         - python
         - {{ pin_subpackage('stackvana-core', exact=True) }}
+        - curl
         - cfitsio
         - fftw
         - gsl
