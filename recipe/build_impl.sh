@@ -205,14 +205,29 @@ echo "
 Building sconsUtils..."
 eups distrib install -v -t ${LSST_TAG} sconsUtils
 
+echo "Patching sconsUtils for debugging..."
+if [[ `uname -s` == "Darwin" ]]; then
+    sconsdir="${LSST_HOME}/stack/miniconda/DarwinX86/sconsUtils/19.0.0-3-g1276964/python/lsst/sconsUtils"
+else
+    sconsdir="${LSST_HOME}/stack/miniconda/Linux64/sconsUtils/19.0.0-3-g1276964/python/lsst/sconsUtils"
+fi
+pushd ${sconsdir}
+patch tests.py ${RECIPE_DIR}/0001-print-test-env-sconsUtils.patch
+patch tests.py ${RECIPE_DIR}/0002-ignore-binsrc.patch
+if [[ "$?" != "0" ]]; then
+    exit 1
+fi
+popd
+echo " "
+
 ###############################################################################
 # now finalize the build
 
-# now fix up the python paths
-# we set the python #! line by hand so that we get the right thing coming out
-# in conda build for large prefixes this always has /usr/bin/env python
-export SHTRON_PYTHON=${PYTHON}
-curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
+# # now fix up the python paths
+# # we set the python #! line by hand so that we get the right thing coming out
+# # in conda build for large prefixes this always has /usr/bin/env python
+# export SHTRON_PYTHON=${PYTHON}
+# curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
 
 # clean out .pyc files made by eups installs
 # these cause problems later for a reason I don't understand
@@ -231,6 +246,7 @@ done
 # this bloats the packages, is usually a ton of files, and is not needed
 compgen -G "${EUPS_PATH}/*/*/*/tests/.tests/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/tests/*" | xargs rm -rf
+compgen -G "${EUPS_PATH}/*/*/*/bin.src/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/doc/html/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/doc/xml/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/share/doc/*" | xargs rm -rf
