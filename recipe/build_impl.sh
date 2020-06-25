@@ -224,10 +224,12 @@ echo " "
 # now finalize the build
 
 # # now fix up the python paths
-# # we set the python #! line by hand so that we get the right thing coming out
-# # in conda build for large prefixes this always has /usr/bin/env python
-# export SHTRON_PYTHON=${PYTHON}
-# curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
+# we set the python #! line by hand so that we get the right thing coming out
+# in conda build for large prefixes this always has /usr/bin/env python
+echo "Fixing the python scripts with shebangtron..."
+export SHTRON_PYTHON=${PYTHON}
+curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
+echo " "
 
 # clean out .pyc files made by eups installs
 # these cause problems later for a reason I don't understand

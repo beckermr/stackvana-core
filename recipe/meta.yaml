@@ -152,7 +152,7 @@ outputs:
         - liblapack
         - liblapacke
         - mpich
-        - numpy
+        - numpy >=1.17
 
   - name: stackvana-afw
     version: {{ version }}
@@ -174,7 +174,7 @@ outputs:
         - liblapack
         - liblapacke
         - mpich
-        - numpy 1.16.*
+        - numpy 1.17.*
       run:
         - python
         - {{ pin_subpackage('stackvana-core', exact=True) }}

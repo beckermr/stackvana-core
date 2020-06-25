@@ -115,10 +115,10 @@ fi
 # fix up the python paths
 # we set the python #! line by hand so that we get the right thing coming out
 # in conda build for large prefixes this always has /usr/bin/env python
-# export SHTRON_PYTHON=${PYTHON}
-# echo "Fixing the python scripts with shebangtron..."
-# curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
-# echo " "
+echo "Fixing the python scripts with shebangtron..."
+export SHTRON_PYTHON=${PYTHON}
+curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
+echo " "
 
 echo "Cleaning up extra data..."
 # clean out .pyc files made by eups installs
