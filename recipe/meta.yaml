@@ -135,8 +135,6 @@ outputs:
         - wcslib
         - ws4py
         - xpa
-
-        - curl
     test:
       script: run_test_impl.sh
       requires:
@@ -180,8 +178,8 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('stackvana-core', exact=True) }}
-        - curl
         - cfitsio
+        - curl
         - fftw
         - gsl
         - hdf5
