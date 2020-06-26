@@ -233,11 +233,7 @@ if [[ `uname -s` == "Darwin" ]]; then
 else
     eigendir="${LSST_HOME}/stack/miniconda/Linux64/eigen/3.3.7.lsst2"
 fi
-ln -s ${PREFIX}/include/eigen3 ${eigendir}/include/eigen3
-ln -s ${PREFIX}/include/Eigen ${eigendir}/include/Eigen
-mkdir -p ${PREFIX}/share/pkgconfig
-ln -s ${PREFIX}/share/eigen3 ${eigendir}/share/eigen3
-ln -s ${PREFIX}/share/pkgconfig/eigen3.pc ${eigendir}/share/pkgconfig/eigen3.pc
+ln -s ${eigendir}/include/Eigen ${PREFIX}/include/Eigen
 
 
 ###############################################################################
