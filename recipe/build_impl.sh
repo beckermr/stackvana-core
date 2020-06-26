@@ -224,7 +224,7 @@ popd
 
 
 ###############################################################################
-# now build eigen and symlink it to where it would be in conda
+# now build eigen and symlink it to where it can be found by default
 echo "
 Building eigen and making the symlinks..."
 eups distrib install -v -t ${LSST_TAG} eigen

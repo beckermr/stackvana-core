@@ -102,6 +102,7 @@ outputs:
         - click <7.1
         - cython
         - deprecated
+        - eigen
         - esutil
         - fastavro
         - future
