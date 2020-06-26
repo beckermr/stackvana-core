@@ -220,6 +220,24 @@ fi
 popd
 echo " "
 
+
+###############################################################################
+# now build eigen and symlink it to where it would be in conda
+echo "
+Building eigen and making the symlink..."
+eups distrib install -v -t ${LSST_TAG} eigen
+if [[ `uname -s` == "Darwin" ]]; then
+    eigendir="${LSST_HOME}/stack/miniconda/DarwinX86/eigen"
+else
+    eigendir="${LSST_HOME}/stack/miniconda/Linux64/eigen"
+fi
+ls -lah ${eigendir}
+ls -lah ${eigendir}/*
+ls -lah ${eigendir}/*/*
+ls -lah ${eigendir}/*/*/*
+# ln -s $PREFIX/include/Eigen
+
+
 ###############################################################################
 # now finalize the build
 
