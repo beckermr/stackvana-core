@@ -213,12 +213,28 @@ else
 fi
 pushd ${sconsdir}
 patch tests.py ${RECIPE_DIR}/0001-print-test-env-sconsUtils.patch
+if [[ "$?" != "0" ]]; then
+    exit 1
+fi
 patch tests.py ${RECIPE_DIR}/0002-ignore-binsrc.patch
 if [[ "$?" != "0" ]]; then
     exit 1
 fi
 popd
-echo " "
+
+
+###############################################################################
+# now build eigen and symlink it to where it can be found by default
+echo "
+Building eigen and making the symlinks..."
+eups distrib install -v -t ${LSST_TAG} eigen
+if [[ `uname -s` == "Darwin" ]]; then
+    eigendir="${LSST_HOME}/stack/miniconda/DarwinX86/eigen/3.3.7.lsst2"
+else
+    eigendir="${LSST_HOME}/stack/miniconda/Linux64/eigen/3.3.7.lsst2"
+fi
+ln -s ${eigendir}/include/Eigen ${PREFIX}/include/Eigen
+
 
 ###############################################################################
 # now finalize the build
@@ -226,7 +242,8 @@ echo " "
 # # now fix up the python paths
 # we set the python #! line by hand so that we get the right thing coming out
 # in conda build for large prefixes this always has /usr/bin/env python
-echo "Fixing the python scripts with shebangtron..."
+echo "
+Fixing the python scripts with shebangtron..."
 export SHTRON_PYTHON=${PYTHON}
 curl -sSL https://raw.githubusercontent.com/lsst/shebangtron/master/shebangtron | ${PYTHON}
 echo " "

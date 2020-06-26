@@ -18,7 +18,7 @@ package:
 
 build:
   skip: true  # [win or py != 37]
-  number: 2
+  number: 3
   merge_build_host: True
 
 requirements:
