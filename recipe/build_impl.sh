@@ -207,9 +207,9 @@ eups distrib install -v -t ${LSST_TAG} sconsUtils
 
 echo "Patching sconsUtils for debugging..."
 if [[ `uname -s` == "Darwin" ]]; then
-    sconsdir="${LSST_HOME}/stack/miniconda/DarwinX86/sconsUtils/19.0.0-3-g1276964/python/lsst/sconsUtils"
+    sconsdir=$(compgen -G "${LSST_HOME}/stack/miniconda/DarwinX86/sconsUtils/*/python/lsst/sconsUtils")
 else
-    sconsdir="${LSST_HOME}/stack/miniconda/Linux64/sconsUtils/19.0.0-3-g1276964/python/lsst/sconsUtils"
+    sconsdir=$(compgen -G "${LSST_HOME}/stack/miniconda/Linux64/sconsUtils/*/python/lsst/sconsUtils")
 fi
 pushd ${sconsdir}
 patch tests.py ${RECIPE_DIR}/0001-print-test-env-sconsUtils.patch
