@@ -10,7 +10,7 @@
 #  - for a major version 'v18_1', the conda version is '18.1.0'
 #
 # Note the exta micro version in order to match the tags in the DM eups system.
-{% set version = "2020.24w" %}
+{% set version = "2020.26w" %}
 
 package:
   name: {{ name|lower }}
@@ -18,7 +18,7 @@ package:
 
 build:
   skip: true  # [win or py != 37]
-  number: 3
+  number: 0
   merge_build_host: True
 
 requirements:
