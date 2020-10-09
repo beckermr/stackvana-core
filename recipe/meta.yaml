@@ -129,7 +129,7 @@ outputs:
         - scikit-image
         - scikit-learn
         - scipy
-        - starlink-ast
+        - starlink-ast <9
         - sqlalchemy
         - treecorr <4
         - wcslib
