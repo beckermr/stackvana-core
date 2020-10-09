@@ -121,7 +121,7 @@ outputs:
         - numexpr
         - pandas
         - pyarrow
-        - pybind11 <2.3
+        - pybind11
         - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         - pytables
         - pyyaml
