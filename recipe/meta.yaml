@@ -117,7 +117,7 @@ outputs:
         - minuit2
         - moto
         - mpi4py
-        - ndarray
+        - ndarray <1.6
         - numexpr
         - pandas
         - pyarrow
