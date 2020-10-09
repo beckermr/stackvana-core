@@ -10,7 +10,7 @@
 #  - for a major version 'v18_1', the conda version is '18.1.0'
 #
 # Note the exta micro version in order to match the tags in the DM eups system.
-{% set version = "2020.26w" %}
+{% set version = "2020.40w" %}
 
 package:
   name: {{ name|lower }}
@@ -121,7 +121,7 @@ outputs:
         - numexpr
         - pandas
         - pyarrow
-        - pybind11 <2.3
+        - pybind11
         - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
         - pytables
         - pyyaml
