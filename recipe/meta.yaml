@@ -18,7 +18,7 @@ package:
 
 build:
   skip: true  # [win or py != 37]
-  number: 0
+  number: 1
   merge_build_host: True
 
 requirements:
@@ -120,6 +120,7 @@ outputs:
         - ndarray <1.6
         - numexpr
         - pandas
+        - psycopg2
         - pyarrow
         - pybind11 <2.3
         - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
