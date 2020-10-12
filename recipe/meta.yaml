@@ -120,6 +120,7 @@ outputs:
         - ndarray <1.6
         - numexpr
         - pandas
+        - pgcli
         - psycopg2
         - pyarrow
         - pybind11 <2.3
