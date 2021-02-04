@@ -16,16 +16,6 @@ export LSST_CONDA_ENV_NAME=${CONDA_DEFAULT_ENV}
 # clean/backup any EUPS stuff
 export STACKVANA_BACKUP_EUPS_PKGROOT=${EUPS_PKGROOT}
 unset EUPS_PKGROOT
-export STACKVANA_BACKUP_EUPS_SHELL=${EUPS_SHELL}
-unset EUPS_SHELL
-export STACKVANA_BACKUP_SETUP_EUPS=${SETUP_EUPS}
-unset SETUP_EUPS
-export STACKVANA_BACKUP_EUPS_PATH=${EUPS_PATH}
-unset EUPS_PATH
-export STACKVANA_BACKUP_setup=`declare -f setup`
-unset -f setup
-export STACKVANA_BACKUP_unsetup=`declare -f unsetup`
-unset -f unsetup
 
 # backup the python path since eups will muck with it
 export STACKVANA_BACKUP_PYTHONPATH=${PYTHONPATH}
@@ -40,9 +30,6 @@ export STACKVANA_BACKUP_SCONSUTILS_USE_CONDA_COMPILERS=${SCONSUTILS_USE_CONDA_CO
 export SCONSUTILS_USE_CONDA_COMPILERS=1
 
 # now setup eups
-source ${EUPS_DIR}/bin/setups.sh
-export -f setup
-export -f unsetup
 export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
 
 # finally setup env so we can build packages

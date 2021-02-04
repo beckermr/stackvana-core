@@ -18,7 +18,7 @@ fi
 verbose="-v"
 
 function _report_logs {
-    for fname in `compgen -G "${LSST_HOME}/stack/miniconda/*/$1/*/ups/build.log"`; do
+    for fname in `compgen -G "${EUPS_PATH}/*/$1/*/ups/build.log"`; do
         echo "================================================================="
         echo "================================================================="
         echo "================================================================="
@@ -32,9 +32,9 @@ function _report_logs {
         echo " "
     done
 
-    for pth in "${LSST_HOME}/stack/miniconda/EupsBuildDir/*/*/build.log" \
-        "${LSST_HOME}/stack/miniconda/EupsBuildDir/*/*/*/config.log" \
-        "${LSST_HOME}/stack/miniconda/EupsBuildDir/*/*/*/CMakeFiles/*.log"; do
+    for pth in "${EUPS_PATH}/EupsBuildDir/*/*/build.log" \
+        "${EUPS_PATH}/EupsBuildDir/*/*/*/config.log" \
+        "${EUPS_PATH}/EupsBuildDir/*/*/*/CMakeFiles/*.log"; do
 
         for fname in `compgen -G $pth`; do
             echo "================================================================="
@@ -53,9 +53,9 @@ function _report_logs {
 }
 
 function _report_errors_and_exit {
-    for pth in "${LSST_HOME}/stack/miniconda/EupsBuildDir/*/*/build.log" \
-        "${LSST_HOME}/stack/miniconda/EupsBuildDir/*/*/*/config.log" \
-        "${LSST_HOME}/stack/miniconda/EupsBuildDir/*/*/*/CMakeFiles/*.log"; do
+    for pth in "${EUPS_PATH}/EupsBuildDir/*/*/build.log" \
+        "${EUPS_PATH}/EupsBuildDir/*/*/*/config.log" \
+        "${EUPS_PATH}/EupsBuildDir/*/*/*/CMakeFiles/*.log"; do
 
         for fname in `compgen -G $pth`; do
             echo "================================================================="
@@ -81,17 +81,17 @@ function _report_errors_and_exit {
 # get swallowed. Here we reinsert them right before the python executable.
 if [[ `uname -s` == "Darwin" ]]; then
     echo "Making the python shim for OSX..."
-    mv ${PREFIX}/bin/python3.7 ${PREFIX}/bin/python3.7.bak
+    mv ${PREFIX}/bin/python${LSST_PYVER} ${PREFIX}/bin/python${LSST_PYVER}.bak
     echo "#!/bin/bash
     if [[ \${LSST_LIBRARY_PATH} ]]; then
         DYLD_LIBRARY_PATH=\${LSST_LIBRARY_PATH} \\
         DYLD_FALLBACK_LIBRARY_PATH=\${LSST_LIBRARY_PATH} \\
-        python3.7.bak \"\$@\"
+        python${LSST_PYVER}.bak \"\$@\"
     else
-        python3.7.bak \"\$@\"
+        python${LSST_PYVER}.bak \"\$@\"
     fi
-" > ${PREFIX}/bin/python3.7
-    chmod u+x ${PREFIX}/bin/python3.7
+" > ${PREFIX}/bin/python${LSST_PYVER}
+    chmod u+x ${PREFIX}/bin/python${LSST_PYVER}
     echo " "
 fi
 
@@ -106,9 +106,9 @@ echo " "
 # undo the shim
 if [[ `uname -s` == "Darwin" ]]; then
     echo "Undoing the OSX python shim..."
-    mv ${PREFIX}/bin/python3.7.bak ${PREFIX}/bin/python3.7
+    mv ${PREFIX}/bin/python${LSST_PYVER}.bak ${PREFIX}/bin/python${LSST_PYVER}
     # leave behind a symlink just in case this path propagates
-    ln -s ${PREFIX}/bin/python3.7 ${PREFIX}/bin/python3.7.bak
+    ln -s ${PREFIX}/bin/python${LSST_PYVER} ${PREFIX}/bin/python${LSST_PYVER}.bak
     echo " "
 fi
 
@@ -124,7 +124,7 @@ echo "Cleaning up extra data..."
 # clean out .pyc files made by eups installs
 # these cause problems later for a reason I don't understand
 # conda remakes them IIUIC
-for dr in ${LSST_HOME} ${PREFIX}/lib/python3.7/site-packages; do
+for dr in ${LSST_HOME} ${PREFIX}/lib/python${LSST_PYVER}/site-packages; do
     pushd $dr
     if [[ `uname -s` == "Darwin" ]]; then
         find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
@@ -145,4 +145,4 @@ compgen -G "${EUPS_PATH}/*/*/*/share/doc/*" | xargs rm -rf
 compgen -G "${EUPS_PATH}/*/*/*/share/man/*" | xargs rm -rf
 
 # remove the global tags file since it tends to leak across envs
-rm -f ${LSST_HOME}/stack/miniconda/ups_db/global.tags
+rm -f ${EUPS_PATH}/ups_db/global.tags

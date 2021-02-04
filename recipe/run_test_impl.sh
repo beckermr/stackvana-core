@@ -41,17 +41,17 @@ echo " "
 
 if [[ `uname -s` == "Darwin" ]]; then
     echo "Making the python shim for OSX..."
-    mv ${PREFIX}/bin/python3.8 ${PREFIX}/bin/python3.8.bak
+    mv ${PREFIX}/bin/python${LSST_PYVER} ${PREFIX}/bin/python${LSST_PYVER}.bak
     echo "#!/bin/bash
     if [[ \${LSST_LIBRARY_PATH} ]]; then
         DYLD_LIBRARY_PATH=\${LSST_LIBRARY_PATH} \\
         DYLD_FALLBACK_LIBRARY_PATH=\${LSST_LIBRARY_PATH} \\
-        python3.8.bak \"\$@\"
+        python${LSST_PYVER}.bak \"\$@\"
     else
-        python3.8.bak \"\$@\"
+        python${LSST_PYVER}.bak \"\$@\"
     fi
-" > ${PREFIX}/bin/python3.8
-    chmod u+x ${PREFIX}/bin/python3.8
+" > ${PREFIX}/bin/python${LSST_PYVER}
+    chmod u+x ${PREFIX}/bin/python${LSST_PYVER}
     echo " "
 fi
 

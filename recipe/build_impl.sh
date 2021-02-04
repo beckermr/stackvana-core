@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "========================================================================="
-env
+env | sort
 echo "========================================================================="
 
 ###############################################################################
@@ -9,6 +9,7 @@ echo "========================================================================="
 
 LSST_HOME="${PREFIX}/lsst_home"
 export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
+export LSST_PYVER="3.8"
 
 # tell it where CURL is
 CURL="${PREFIX}/bin/curl"
@@ -85,12 +86,6 @@ n8l::ln_rel "${EUPS_PATH}" current
 
 popd  # LSST_HOME
 
-# eups needs these dirs to be around...
-mkdir -p "${EUPS_PATH}/ups_db"
-mkdir -p "${EUPS_PATH}/site"
-touch "${EUPS_PATH}/ups_db/.conda_keep_me_please"
-touch "${EUPS_PATH}/site/.conda_keep_me_please"
-
 # we use a separate set of activate and deactivate scripts that get sourced
 # by the main conda ones
 # this allows other packages which depend on this one to use them as well
@@ -105,7 +100,11 @@ echo "
 export STACKVANA_BACKUP_LSST_HOME=\${LSST_HOME}
 export LSST_HOME=\"\${CONDA_PREFIX}/lsst_home\"
 
+export STACKVANA_BACKUP_LSST_DM_TAG=\${LSST_DM_TAG}
 export LSST_DM_TAG=${LSST_TAG}
+
+export STACKVANA_BACKUP_LSST_PYVER=\${LSST_PYVER}
+export LSST_PYVER=${LSST_PYVER}
 
 # ==================== end of added stuff
 
@@ -128,9 +127,9 @@ eups distrib install -v -t ${LSST_TAG} sconsUtils
 
 echo "Patching sconsUtils for debugging..."
 if [[ `uname -s` == "Darwin" ]]; then
-    sconsdir=$(compgen -G "${LSST_HOME}/stack/miniconda/DarwinX86/sconsUtils/*/python/lsst/sconsUtils")
+    sconsdir=$(compgen -G "${EUPS_PATH}/DarwinX86/sconsUtils/*/python/lsst/sconsUtils")
 else
-    sconsdir=$(compgen -G "${LSST_HOME}/stack/miniconda/Linux64/sconsUtils/*/python/lsst/sconsUtils")
+    sconsdir=$(compgen -G "${EUPS_PATH}/Linux64/sconsUtils/*/python/lsst/sconsUtils")
 fi
 pushd ${sconsdir}
 patch tests.py ${RECIPE_DIR}/0001-print-test-env-sconsUtils.patch
@@ -158,7 +157,7 @@ echo " "
 # clean out .pyc files made by eups installs
 # these cause problems later for a reason I don't understand
 # conda remakes them IIUIC
-for dr in ${LSST_HOME} ${PREFIX}/lib/python3.7/site-packages; do
+for dr in ${LSST_HOME} ${PREFIX}/lib/python${LSST_PYVER}/site-packages; do
     pushd $dr
     if [[ `uname -s` == "Darwin" ]]; then
         find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
@@ -184,4 +183,4 @@ eups list -s --topological -D --raw 2>/dev/null
 echo "================================================="
 
 # remove the global tags file since it tends to leak across envs
-rm -f ${LSST_HOME}/stack/miniconda/ups_db/global.tags
+rm -f ${EUPS_DIR}/ups_db/global.tags

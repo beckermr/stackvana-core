@@ -198,6 +198,7 @@ outputs:
         - gsl
         - hdf5
         - hdf5 * mpi_mpich_*
+        - log4cxx
         - mpich
         - {{ pin_compatible('numpy') }}
     test:
