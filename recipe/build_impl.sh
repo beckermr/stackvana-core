@@ -8,15 +8,7 @@ echo "========================================================================="
 # env control
 
 LSST_HOME="${PREFIX}/lsst_home"
-
-LSST_EUPS_VERSION="2.1.5"
-LSST_EUPS_TARURL="https://github.com/RobertLuptonTheGood/eups/archive/${LSST_EUPS_VERSION}.tar.gz"
-EUPS_DIR="${LSST_HOME}/eups/${LSST_EUPS_VERSION}"
-export EUPS_PATH="${LSST_HOME}/stack/miniconda"
 export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
-
-# I am hard coding these options
-EUPS_PYTHON=$PYTHON  # use PYTHON in the host env for eups
 
 # tell it where CURL is
 CURL="${PREFIX}/bin/curl"
@@ -85,37 +77,6 @@ n8l::ln_rel "${PREFIX}" current
 echo "
 LSST DM TAG: "${LSST_TAG}
 
-# Install EUPS
-echo "
-Installing EUPS (${LSST_EUPS_VERSION})..."
-echo "Using python at ${EUPS_PYTHON} to install EUPS"
-echo "Configured EUPS_PKGROOT: ${EUPS_PKGROOT}"
-
-mkdir -p "$LSST_HOME/_build"
-pushd "$LSST_HOME/_build"
-
-"$CURL" "$CURL_OPTS" -L "$LSST_EUPS_TARURL" | tar xzvf -
-
-mkdir -p "eups-${LSST_EUPS_VERSION}"
-pushd "eups-${LSST_EUPS_VERSION}"
-
-mkdir -p "${EUPS_PATH}"
-mkdir -p "${EUPS_DIR}"
-./configure \
-    --prefix="${EUPS_DIR}" \
-    --with-eups="${EUPS_PATH}" \
-    --with-python="${EUPS_PYTHON}"
-make install
-
-popd  # eups-${LSST_EUPS_VERSION}
-popd  # $LSST_HOME/_build
-
-rm -rf "$LSST_HOME/_build"
-
-# the eups install messes up permissions?
-chmod -R a+r ${EUPS_DIR}
-chmod -R u+w ${EUPS_DIR}
-
 # update $EUPS_DIR current symlink
 n8l::ln_rel "${EUPS_DIR}" current
 
@@ -141,16 +102,10 @@ cp ${RECIPE_DIR}/stackvana_deactivate.sh ${LSST_HOME}/stackvana_deactivate.sh
 echo "
 # ==================== added by build.sh in recipe build
 
-export STACKVANA_BACKUP_LSST_EUPS_VERSION=\${LSST_EUPS_VERSION}
-export LSST_EUPS_VERSION=${LSST_EUPS_VERSION}
-
 export STACKVANA_BACKUP_LSST_HOME=\${LSST_HOME}
 export LSST_HOME=\"\${CONDA_PREFIX}/lsst_home\"
 
 export LSST_DM_TAG=${LSST_TAG}
-
-export STACKVANA_BACKUP_EUPS_DIR=\${EUPS_DIR}
-export EUPS_DIR=\"\${LSST_HOME}/eups/\${LSST_EUPS_VERSION}\"
 
 # ==================== end of added stuff
 
@@ -163,43 +118,9 @@ for CHANGE in "activate" "deactivate"; do
     cp "${RECIPE_DIR}/${CHANGE}.sh" "${PREFIX}/etc/conda/${CHANGE}.d/${PKG_NAME}_${CHANGE}.sh"
 done
 
-# configure and patch eups
-
-# turn off locking
-mkdir -p ${EUPS_DIR}/site
-echo "hooks.config.site.lockDirectoryBase = None" >> ${EUPS_DIR}/site/startup.py
-
-# make eups use a sane path python in scripts
-# the long line causes failures on linux
-for fname in "eups" "eups_setup"; do
-    cp ${EUPS_DIR}/bin/${fname} ${EUPS_DIR}/bin/${fname}.bak
-    echo "#!/usr/bin/env python" > ${EUPS_DIR}/bin/${fname}
-    tail -n +1 ${EUPS_DIR}/bin/${fname}.bak >> ${EUPS_DIR}/bin/${fname}
-    chmod 755 ${EUPS_DIR}/bin/${fname}
-    rm ${EUPS_DIR}/bin/${fname}.bak
-done
-
-# and now make sure eupspkg.sh doesn't install deps of its python packages
-# via setuptools by accident
-# we are reaching well into the source here and applying a patch
-# fundamentally this is a VERY bad thing to do
-# I feel ashamed to be doing this and ashamed that some other person might
-# actually see this. OTOH, IDK what else to do and YOLO. /shrug
-pushd ${EUPS_DIR}/lib
-patch eupspkg.sh ${RECIPE_DIR}/00001-eupspkg-setuptools-patch.patch
-if [[ "$?" != "0" ]]; then
-    exit 1
-fi
-popd
-
 ###############################################################################
 # now install sconsUtils
 # this brings most of the basic build tools into the env and lets us patch it
-
-export EUPS_DIR=${EUPS_DIR}
-source ${EUPS_DIR}/bin/setups.sh
-export -f setup
-export -f unsetup
 
 echo "
 Building sconsUtils..."
@@ -221,20 +142,6 @@ if [[ "$?" != "0" ]]; then
     exit 1
 fi
 popd
-
-
-###############################################################################
-# now build eigen and symlink it to where it can be found by default
-echo "
-Building eigen and making the symlinks..."
-eups distrib install -v -t ${LSST_TAG} eigen
-if [[ `uname -s` == "Darwin" ]]; then
-    eigendir="${LSST_HOME}/stack/miniconda/DarwinX86/eigen/3.3.7.lsst2"
-else
-    eigendir="${LSST_HOME}/stack/miniconda/Linux64/eigen/3.3.7.lsst2"
-fi
-ln -s ${eigendir}/include/Eigen ${PREFIX}/include/Eigen
-
 
 ###############################################################################
 # now finalize the build
@@ -278,11 +185,3 @@ echo "================================================="
 
 # remove the global tags file since it tends to leak across envs
 rm -f ${LSST_HOME}/stack/miniconda/ups_db/global.tags
-
-unset EUPS_DIR
-unset EUPS_PKGROOT
-unset -f setup
-unset -f unsetup
-unset EUPS_SHELL
-unset SETUP_EUPS
-unset EUPS_PATH

@@ -17,7 +17,7 @@ package:
   version: {{ version }}
 
 build:
-  skip: true  # [win or py != 37]
+  skip: true  # [win or py != 38]
   number: 1
   merge_build_host: True
 
@@ -28,6 +28,30 @@ requirements:
     - python
 
 outputs:
+  - name: stackvana-build
+    version: {{ version }}
+    requirements:
+      run:
+        - cmake
+        - doxygen
+        - flake8 >=3.8
+        - make
+        - pep8-naming
+        - pip
+        - psutil
+        - pytest <6
+        - pytest-cov
+        - pytest-doctestplus !=0.7.0
+        - pytest-flake8
+        - pytest-openfiles
+        - pytest-runner
+        - pytest-session2file !=0.1.10
+        - pytest-subtests
+        - pytest-xdist
+        - scons
+        - sysroot_linux-64 =2.17  # [linux64]
+        - curl
+
   - name: stackvana-core
     version: {{ version }}
     run_exports:
@@ -43,106 +67,91 @@ outputs:
       host:
         - python
         - pip
+        - eups
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
 
         # build dependencies
-        - cmake
-        - doxygen
-        - flake8 <3.8
-        - git
-        - git-lfs
-        - make
-        - patch
-        - pep8-naming
-        - psutil
-        - pytest <6
-        - pytest-cov
-        - pytest-doctestplus !=0.7.0
-        - pytest-flake8
-        - pytest-runner
-        - pytest-session2file !=0.1.10
-        - pytest-subtests
-        - pytest-xdist
-        - scons
-
-        - curl
+        - {{ pin_subpackage('stackvana-build', exact=True) }}
       run:
         - python
         - pip
+        - eups
 
-        # build dependencies
-        - cmake
-        - doxygen
-        - flake8 <3.8
-        - git
-        - git-lfs
-        - make
-        - patch
-        - pep8-naming
-        - psutil
-        - pytest <6
-        - pytest-cov
-        - pytest-doctestplus !=0.7.0
-        - pytest-flake8
-        - pytest-runner
-        - pytest-session2file !=0.1.10
-        - pytest-subtests
-        - pytest-xdist
-        - scons
-
-        # host dependencies
-        - apr
-        - autograd
-        - astropy =4
+        # host-like and run-like
+        # These are mostly run-like, but for the same reasons as
+        # above, we need most of these at build time, so they are mostly
+        # host-like
         - boost-cpp =1.70
+        - cfitsio
+        - eigen =3.3
+        - eups
+        - firefly-client
+        - galsim =2
+        - libaprutil =1
+        - log4cxx
+        - lsst-documenteer-pipelines
+        - lsst-documenteer-technote
+        - minuit2 =6
+        - mpich
+        - starlink-ast =9
+        - wcslib =7
+        - xpa =2
+        - gsl
+
+        # run-like
+        - apr =1
+        - autograd
+        - astropy
+        - backoff
         - boto3
         - bottleneck
-        - cffi
-        - click <7.1
-        - cython
+        # conda is required for runtime inspection of installed software
+        - conda
+        - cffi =1
+        - click >7
+        - cython =0
         - deprecated
-        - eigen
+        - dustmaps
         - esutil
         - fastavro <0.24
         - future
-        - galsim
+        - git
+        - git-lfs
         - h5py
         - healpy
-        - libaprutil
-        - log4cxx
+        - healsparse
         - lmfit
         - lsstdesc.coord
-        - matplotlib
-        - minuit2
-        - moto
+        - matplotlib-base
+        - mock =4.0.2
+        - moto =1.3.14
         - mpi4py
-        - ndarray <1.6
-        - numexpr
+        - ndarray =1
+        - numexpr =2
+        - numpy 1.17.*
         - pandas
         - pgcli
-        - psycopg2
+        - psycopg2 =2
         - pyarrow
-        - pybind11 <2.3
-        - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
+        - pybind11 =2.5
         - pytables
         - pyyaml
         - requests
         - scikit-image
         - scikit-learn
         - scipy
-        - starlink-ast <9
+        - seaborn
         - sqlalchemy
-        - treecorr <4
-        - wcslib
+        - treecorr =4
         - ws4py
-        - xpa
     test:
       script: run_test_impl.sh
       requires:
         - python
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
+        - {{ pin_subpackage('stackvana-build', exact=True) }}
         - cfitsio
         - curl
         - fftw
@@ -153,6 +162,7 @@ outputs:
         - libcblas
         - liblapack
         - liblapacke
+        - log4cxx
         - mpich
         - numpy >=1.17
 
@@ -165,6 +175,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - {{ pin_subpackage('stackvana-core', exact=True) }}
+        - {{ pin_subpackage('stackvana-build', exact=True) }}
         - cfitsio
         - curl
         - fftw
@@ -175,6 +186,7 @@ outputs:
         - libcblas
         - liblapack
         - liblapacke
+        - log4cxx
         - mpich
         - numpy 1.17.*
       run:
