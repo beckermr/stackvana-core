@@ -33,7 +33,10 @@ outputs:
     run_exports:
       - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
     requirements:
+      host:
+        - python
       run:
+        - python
         - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
 
   - name: stackvana-core-impl
@@ -44,9 +47,10 @@ outputs:
         - python
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - sysroot_linux-64 2.17.*
+        - sysroot_linux-64 2.17.*  # [linux64]
         - rubin-env
       run:
+        - python
         - rubin-env
     test:
       script: run_test_impl.sh
@@ -55,7 +59,7 @@ outputs:
         - rubin-env
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - sysroot_linux-64 2.17.*
+        - sysroot_linux-64 2.17.*  # [linux64]
 
   - name: stackvana-afw
     version: {{ version }}
@@ -66,6 +70,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - {{ pin_subpackage('stackvana-core', exact=True) }}
+        - sysroot_linux-64 2.17.*  # [linux64]
         - cfitsio
         - curl
         - fftw
