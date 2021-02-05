@@ -1,9 +1,5 @@
 #!/bin/bash
 
-echo "========================================================================="
-env | sort
-echo "========================================================================="
-
 ###############################################################################
 # env control
 
@@ -11,7 +7,7 @@ LSST_HOME="${PREFIX}/lsst_home"
 export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
 export LSST_PYVER="3.8"
 
-# tell it where CURL is
+# tell eups where CURL is
 CURL="${PREFIX}/bin/curl"
 # disable curl progress meter unless running under a tty -- this is intended
 # to reduce the amount of console output when running under CI
@@ -20,8 +16,8 @@ if [[ ! -t 1 ]]; then
     CURL_OPTS='-sS'
 fi
 
-if [[ ${PKG_VERSION} == *"w" ]]; then
-    LSST_TAG=${PKG_VERSION%w}
+if [[ ${PKG_VERSION} == "0."* ]]; then
+    LSST_TAG=${PKG_VERSION#0.}
     LSST_TAG="w_"${LSST_TAG//./_}
 else
     LSST_TAG="v"${PKG_VERSION//./_}
@@ -29,18 +25,6 @@ fi
 
 ###############################################################################
 # functions
-
-n8l::print_error() {
-    >&2 echo -e "$@"
-}
-
-n8l::fail() {
-    local code=${2:-1}
-    [[ -n $1 ]] && n8l::print_error "$1"
-    # shellcheck disable=SC2086
-    exit $code
-}
-
 #
 # create/update a *relative* symlink, in the basedir of the target. An existing
 # file or directory will be *stomped on*.
@@ -66,7 +50,7 @@ n8l::ln_rel() {
 
 
 ###############################################################################
-# actual eups build
+# actual stuff
 
 mkdir -p ${LSST_HOME}
 pushd ${LSST_HOME}
@@ -116,6 +100,9 @@ for CHANGE in "activate" "deactivate"; do
     mkdir -p "${PREFIX}/etc/conda/${CHANGE}.d"
     cp "${RECIPE_DIR}/${CHANGE}.sh" "${PREFIX}/etc/conda/${CHANGE}.d/${PKG_NAME}_${CHANGE}.sh"
 done
+
+cp ${RECIPE_DIR}/stackvana-build ${PREFIX}/bin/stackvana-build
+chmod u+x ${PREFIX}/bin/stackvana-build
 
 ###############################################################################
 # now install sconsUtils

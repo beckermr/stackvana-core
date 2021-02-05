@@ -9,13 +9,9 @@
 # a flag to indicate stackvana is activated
 export STACKVANA_ACTIVATED=1
 
-# LSST vars
-export STACKVANA_BACKUP_LSST_CONDA_ENV_NAME=${LSST_CONDA_ENV_NAME}
-export LSST_CONDA_ENV_NAME=${CONDA_DEFAULT_ENV}
-
 # clean/backup any EUPS stuff
 export STACKVANA_BACKUP_EUPS_PKGROOT=${EUPS_PKGROOT}
-unset EUPS_PKGROOT
+export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
 
 # backup the python path since eups will muck with it
 export STACKVANA_BACKUP_PYTHONPATH=${PYTHONPATH}
@@ -28,9 +24,6 @@ export STACKVANA_BACKUP_LSST_LIBRARY_PATH=${LSST_LIBRARY_PATH}
 # instruct sconsUtils to use the conda compilers
 export STACKVANA_BACKUP_SCONSUTILS_USE_CONDA_COMPILERS=${SCONSUTILS_USE_CONDA_COMPILERS}
 export SCONSUTILS_USE_CONDA_COMPILERS=1
-
-# now setup eups
-export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
 
 # finally setup env so we can build packages
 function stackvana_backup_and_append_envvar() {
@@ -61,32 +54,3 @@ function stackvana_backup_and_append_envvar() {
 }
 
 export -f stackvana_backup_and_append_envvar
-
-# conda env includes are searched after the command line -I paths
-stackvana_backup_and_append_envvar \
-    activate \
-    CPATH \
-    "${CONDA_PREFIX}/include" \
-    ":"
-
-# add conda env libraries for linking
-stackvana_backup_and_append_envvar \
-    activate \
-    LIBRARY_PATH \
-    "${CONDA_PREFIX}/lib" \
-    ":"
-
-# set rpaths to resolve links properly at run time and remove a problematic flag for osx
-if [[ `uname -s` == "Darwin" ]]; then
-    export STACKVANA_BACKUP_LDFLAGS=${LDFLAGS}
-    export LDFLAGS="${LDFLAGS//-Wl,-dead_strip_dylibs} -Wl,-rpath,${CONDA_PREFIX}/lib -L${CONDA_PREFIX}/lib"
-
-    export STACKVANA_BACKUP_LDFLAGS_LD=${LDFLAGS_LD}
-    export LDFLAGS_LD="${LDFLAGS_LD//-dead_strip_dylibs} -rpath ${CONDA_PREFIX}/lib -L${CONDA_PREFIX}/lib"
-else
-    stackvana_backup_and_append_envvar \
-        activate \
-        LDFLAGS \
-        "-Wl,-rpath,${CONDA_PREFIX}/lib -Wl,-rpath-link,${CONDA_PREFIX}/lib -L${CONDA_PREFIX}/lib" \
-        " "
-fi

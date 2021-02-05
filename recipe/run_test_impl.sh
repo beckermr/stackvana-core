@@ -1,16 +1,13 @@
 #!/bin/bash
-if [[ ! $LSST_HOME ]]
+if [[ ! ${LSST_HOME} ]]
 then
+    echo "LSST_HOME is not set!"
     exit 1
 fi
 
-if [[ ! $LSST_CONDA_ENV_NAME ]]
+if [[ ! ${STACKVANA_ACTIVATED} ]]
 then
-    exit 1
-fi
-
-if [[ ! $STACKVANA_ACTIVATED ]]
-then
+    echo "STACKVANA_ACTIVATED is not set!"
     exit 1
 fi
 
@@ -37,26 +34,7 @@ eups list:"
 
 # this should work
 echo "attempting to build 'pex_exceptions' ..."
-echo " "
-
-if [[ `uname -s` == "Darwin" ]]; then
-    echo "Making the python shim for OSX..."
-    mv ${PREFIX}/bin/python${LSST_PYVER} ${PREFIX}/bin/python${LSST_PYVER}.bak
-    echo "#!/bin/bash
-    if [[ \${LSST_LIBRARY_PATH} ]]; then
-        DYLD_LIBRARY_PATH=\${LSST_LIBRARY_PATH} \\
-        DYLD_FALLBACK_LIBRARY_PATH=\${LSST_LIBRARY_PATH} \\
-        python${LSST_PYVER}.bak \"\$@\"
-    else
-        python${LSST_PYVER}.bak \"\$@\"
-    fi
-" > ${PREFIX}/bin/python${LSST_PYVER}
-    chmod u+x ${PREFIX}/bin/python${LSST_PYVER}
-    echo " "
-fi
-
-echo "building 'pex_exceptions' ..."
-eups distrib install -v -t ${LSST_DM_TAG} pex_exceptions
+stackvana-build pex_exceptions
 echo " "
 
 echo -n "setting up 'pex_exceptions' ... "

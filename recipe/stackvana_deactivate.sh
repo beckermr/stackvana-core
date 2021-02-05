@@ -2,19 +2,15 @@
 unset STACKVANA_ACTIVATED
 
 # remove stackvana env changes
-for var in LSST_HOME LSST_PYVER CPATH \
-        LIBRARY_PATH LDFLAGS PYTHONPATH LD_LIBRARY_PATH DYLD_LIBRARY_PATH \
-        LSST_LIBRARY_PATH LSST_CONDA_ENV_NAME \
-        SCONSUTILS_USE_CONDA_COMPILERS LSST_DM_TAG; do
+for var in LSST_HOME LSST_PYVER LSST_DM_TAG \
+        PYTHONPATH \
+        LD_LIBRARY_PATH DYLD_LIBRARY_PATH \
+        LSST_LIBRARY_PATH \
+        SCONSUTILS_USE_CONDA_COMPILERS \
+        EUPS_PKGROOT; do
     stackvana_backup_and_append_envvar \
         deactivate \
         $var
 done
-
-if [[ `uname -s` == "Darwin" ]]; then
-    stackvana_backup_and_append_envvar \
-        deactivate \
-        LDFLAGS_LD
-fi
 
 unset -f stackvana_backup_and_append_envvar
