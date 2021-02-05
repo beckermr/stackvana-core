@@ -1,24 +1,13 @@
 #!/bin/bash
 
-echo "========================================================================="
-env
-echo "========================================================================="
-
 ###############################################################################
 # env control
 
 LSST_HOME="${PREFIX}/lsst_home"
-
-LSST_EUPS_VERSION="2.1.5"
-LSST_EUPS_TARURL="https://github.com/RobertLuptonTheGood/eups/archive/${LSST_EUPS_VERSION}.tar.gz"
-EUPS_DIR="${LSST_HOME}/eups/${LSST_EUPS_VERSION}"
-export EUPS_PATH="${LSST_HOME}/stack/miniconda"
 export EUPS_PKGROOT="https://eups.lsst.codes/stack/src"
+export LSST_PYVER="3.8"
 
-# I am hard coding these options
-EUPS_PYTHON=$PYTHON  # use PYTHON in the host env for eups
-
-# tell it where CURL is
+# tell eups where CURL is
 CURL="${PREFIX}/bin/curl"
 # disable curl progress meter unless running under a tty -- this is intended
 # to reduce the amount of console output when running under CI
@@ -27,8 +16,8 @@ if [[ ! -t 1 ]]; then
     CURL_OPTS='-sS'
 fi
 
-if [[ ${PKG_VERSION} == *"w" ]]; then
-    LSST_TAG=${PKG_VERSION%w}
+if [[ ${PKG_VERSION} == "0."* ]]; then
+    LSST_TAG=${PKG_VERSION#0.}
     LSST_TAG="w_"${LSST_TAG//./_}
 else
     LSST_TAG="v"${PKG_VERSION//./_}
@@ -36,18 +25,6 @@ fi
 
 ###############################################################################
 # functions
-
-n8l::print_error() {
-    >&2 echo -e "$@"
-}
-
-n8l::fail() {
-    local code=${2:-1}
-    [[ -n $1 ]] && n8l::print_error "$1"
-    # shellcheck disable=SC2086
-    exit $code
-}
-
 #
 # create/update a *relative* symlink, in the basedir of the target. An existing
 # file or directory will be *stomped on*.
@@ -73,7 +50,7 @@ n8l::ln_rel() {
 
 
 ###############################################################################
-# actual eups build
+# actual stuff
 
 mkdir -p ${LSST_HOME}
 pushd ${LSST_HOME}
@@ -85,37 +62,6 @@ n8l::ln_rel "${PREFIX}" current
 echo "
 LSST DM TAG: "${LSST_TAG}
 
-# Install EUPS
-echo "
-Installing EUPS (${LSST_EUPS_VERSION})..."
-echo "Using python at ${EUPS_PYTHON} to install EUPS"
-echo "Configured EUPS_PKGROOT: ${EUPS_PKGROOT}"
-
-mkdir -p "$LSST_HOME/_build"
-pushd "$LSST_HOME/_build"
-
-"$CURL" "$CURL_OPTS" -L "$LSST_EUPS_TARURL" | tar xzvf -
-
-mkdir -p "eups-${LSST_EUPS_VERSION}"
-pushd "eups-${LSST_EUPS_VERSION}"
-
-mkdir -p "${EUPS_PATH}"
-mkdir -p "${EUPS_DIR}"
-./configure \
-    --prefix="${EUPS_DIR}" \
-    --with-eups="${EUPS_PATH}" \
-    --with-python="${EUPS_PYTHON}"
-make install
-
-popd  # eups-${LSST_EUPS_VERSION}
-popd  # $LSST_HOME/_build
-
-rm -rf "$LSST_HOME/_build"
-
-# the eups install messes up permissions?
-chmod -R a+r ${EUPS_DIR}
-chmod -R u+w ${EUPS_DIR}
-
 # update $EUPS_DIR current symlink
 n8l::ln_rel "${EUPS_DIR}" current
 
@@ -123,12 +69,6 @@ n8l::ln_rel "${EUPS_DIR}" current
 n8l::ln_rel "${EUPS_PATH}" current
 
 popd  # LSST_HOME
-
-# eups needs these dirs to be around...
-mkdir -p "${EUPS_PATH}/ups_db"
-mkdir -p "${EUPS_PATH}/site"
-touch "${EUPS_PATH}/ups_db/.conda_keep_me_please"
-touch "${EUPS_PATH}/site/.conda_keep_me_please"
 
 # we use a separate set of activate and deactivate scripts that get sourced
 # by the main conda ones
@@ -141,16 +81,14 @@ cp ${RECIPE_DIR}/stackvana_deactivate.sh ${LSST_HOME}/stackvana_deactivate.sh
 echo "
 # ==================== added by build.sh in recipe build
 
-export STACKVANA_BACKUP_LSST_EUPS_VERSION=\${LSST_EUPS_VERSION}
-export LSST_EUPS_VERSION=${LSST_EUPS_VERSION}
-
 export STACKVANA_BACKUP_LSST_HOME=\${LSST_HOME}
 export LSST_HOME=\"\${CONDA_PREFIX}/lsst_home\"
 
+export STACKVANA_BACKUP_LSST_DM_TAG=\${LSST_DM_TAG}
 export LSST_DM_TAG=${LSST_TAG}
 
-export STACKVANA_BACKUP_EUPS_DIR=\${EUPS_DIR}
-export EUPS_DIR=\"\${LSST_HOME}/eups/\${LSST_EUPS_VERSION}\"
+export STACKVANA_BACKUP_LSST_PYVER=\${LSST_PYVER}
+export LSST_PYVER=${LSST_PYVER}
 
 # ==================== end of added stuff
 
@@ -163,43 +101,12 @@ for CHANGE in "activate" "deactivate"; do
     cp "${RECIPE_DIR}/${CHANGE}.sh" "${PREFIX}/etc/conda/${CHANGE}.d/${PKG_NAME}_${CHANGE}.sh"
 done
 
-# configure and patch eups
-
-# turn off locking
-mkdir -p ${EUPS_DIR}/site
-echo "hooks.config.site.lockDirectoryBase = None" >> ${EUPS_DIR}/site/startup.py
-
-# make eups use a sane path python in scripts
-# the long line causes failures on linux
-for fname in "eups" "eups_setup"; do
-    cp ${EUPS_DIR}/bin/${fname} ${EUPS_DIR}/bin/${fname}.bak
-    echo "#!/usr/bin/env python" > ${EUPS_DIR}/bin/${fname}
-    tail -n +1 ${EUPS_DIR}/bin/${fname}.bak >> ${EUPS_DIR}/bin/${fname}
-    chmod 755 ${EUPS_DIR}/bin/${fname}
-    rm ${EUPS_DIR}/bin/${fname}.bak
-done
-
-# and now make sure eupspkg.sh doesn't install deps of its python packages
-# via setuptools by accident
-# we are reaching well into the source here and applying a patch
-# fundamentally this is a VERY bad thing to do
-# I feel ashamed to be doing this and ashamed that some other person might
-# actually see this. OTOH, IDK what else to do and YOLO. /shrug
-pushd ${EUPS_DIR}/lib
-patch eupspkg.sh ${RECIPE_DIR}/00001-eupspkg-setuptools-patch.patch
-if [[ "$?" != "0" ]]; then
-    exit 1
-fi
-popd
+cp ${RECIPE_DIR}/stackvana-build ${PREFIX}/bin/stackvana-build
+chmod u+x ${PREFIX}/bin/stackvana-build
 
 ###############################################################################
 # now install sconsUtils
 # this brings most of the basic build tools into the env and lets us patch it
-
-export EUPS_DIR=${EUPS_DIR}
-source ${EUPS_DIR}/bin/setups.sh
-export -f setup
-export -f unsetup
 
 echo "
 Building sconsUtils..."
@@ -207,9 +114,9 @@ eups distrib install -v -t ${LSST_TAG} sconsUtils
 
 echo "Patching sconsUtils for debugging..."
 if [[ `uname -s` == "Darwin" ]]; then
-    sconsdir=$(compgen -G "${LSST_HOME}/stack/miniconda/DarwinX86/sconsUtils/*/python/lsst/sconsUtils")
+    sconsdir=$(compgen -G "${EUPS_PATH}/DarwinX86/sconsUtils/*/python/lsst/sconsUtils")
 else
-    sconsdir=$(compgen -G "${LSST_HOME}/stack/miniconda/Linux64/sconsUtils/*/python/lsst/sconsUtils")
+    sconsdir=$(compgen -G "${EUPS_PATH}/Linux64/sconsUtils/*/python/lsst/sconsUtils")
 fi
 pushd ${sconsdir}
 patch tests.py ${RECIPE_DIR}/0001-print-test-env-sconsUtils.patch
@@ -221,20 +128,6 @@ if [[ "$?" != "0" ]]; then
     exit 1
 fi
 popd
-
-
-###############################################################################
-# now build eigen and symlink it to where it can be found by default
-echo "
-Building eigen and making the symlinks..."
-eups distrib install -v -t ${LSST_TAG} eigen
-if [[ `uname -s` == "Darwin" ]]; then
-    eigendir="${LSST_HOME}/stack/miniconda/DarwinX86/eigen/3.3.7.lsst2"
-else
-    eigendir="${LSST_HOME}/stack/miniconda/Linux64/eigen/3.3.7.lsst2"
-fi
-ln -s ${eigendir}/include/Eigen ${PREFIX}/include/Eigen
-
 
 ###############################################################################
 # now finalize the build
@@ -251,7 +144,7 @@ echo " "
 # clean out .pyc files made by eups installs
 # these cause problems later for a reason I don't understand
 # conda remakes them IIUIC
-for dr in ${LSST_HOME} ${PREFIX}/lib/python3.7/site-packages; do
+for dr in ${LSST_HOME} ${PREFIX}/lib/python${LSST_PYVER}/site-packages; do
     pushd $dr
     if [[ `uname -s` == "Darwin" ]]; then
         find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
@@ -277,12 +170,4 @@ eups list -s --topological -D --raw 2>/dev/null
 echo "================================================="
 
 # remove the global tags file since it tends to leak across envs
-rm -f ${LSST_HOME}/stack/miniconda/ups_db/global.tags
-
-unset EUPS_DIR
-unset EUPS_PKGROOT
-unset -f setup
-unset -f unsetup
-unset EUPS_SHELL
-unset SETUP_EUPS
-unset EUPS_PATH
+rm -f ${EUPS_DIR}/ups_db/global.tags

@@ -6,18 +6,22 @@
 #
 # In order to play nice with conda, we take the following conventions
 #
-#  - for a weekly build 'w_2018_50', the conda version is '2018.50w'
+#  - for a weekly build 'w_2018_50', the conda version is '0.2018.50'
 #  - for a major version 'v18_1', the conda version is '18.1.0'
 #
-# Note the exta micro version in order to match the tags in the DM eups system.
-{% set version = "2020.40w" %}
+{% set version = "0.2021.06" %}
+{% set dm_tag = "w_" + version[2:].replace(".", "_") if version.startswith("0.") else "v" + version.replace(".", "_") %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
+source:
+  url: https://eups.lsst.codes/stack/src/tags/{{ dm_tag }}.list
+  sha256: 75086858514c4a3380e541b9d21a1ce953147fa911d50e36a14cadbbcae5f30d
+
 build:
-  skip: true  # [win or py != 37]
+  skip: true  # [win or py != 38]
   number: 1
   merge_build_host: True
 
@@ -33,7 +37,10 @@ outputs:
     run_exports:
       - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
     requirements:
+      host:
+        - python
       run:
+        - python
         - {{ pin_subpackage('stackvana-core-impl', exact=True) }}
 
   - name: stackvana-core-impl
@@ -42,119 +49,21 @@ outputs:
     requirements:
       host:
         - python
-        - pip
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-
-        # build dependencies
-        - cmake
-        - doxygen
-        - flake8 <3.8
-        - git
-        - git-lfs
-        - make
-        - patch
-        - pep8-naming
-        - psutil
-        - pytest <6
-        - pytest-cov
-        - pytest-doctestplus !=0.7.0
-        - pytest-flake8
-        - pytest-runner
-        - pytest-session2file !=0.1.10
-        - pytest-subtests
-        - pytest-xdist
-        - scons
-
-        - curl
+        - sysroot_linux-64 2.17.*  # [linux64]
+        - rubin-env
       run:
         - python
-        - pip
-
-        # build dependencies
-        - cmake
-        - doxygen
-        - flake8 <3.8
-        - git
-        - git-lfs
-        - make
-        - patch
-        - pep8-naming
-        - psutil
-        - pytest <6
-        - pytest-cov
-        - pytest-doctestplus !=0.7.0
-        - pytest-flake8
-        - pytest-runner
-        - pytest-session2file !=0.1.10
-        - pytest-subtests
-        - pytest-xdist
-        - scons
-
-        # host dependencies
-        - apr
-        - autograd
-        - astropy =4
-        - boost-cpp =1.70
-        - boto3
-        - bottleneck
-        - cffi
-        - click <7.1
-        - cython
-        - deprecated
-        - eigen
-        - esutil
-        - fastavro <0.24
-        - future
-        - galsim
-        - h5py
-        - healpy
-        - libaprutil
-        - log4cxx
-        - lmfit
-        - lsstdesc.coord
-        - matplotlib
-        - minuit2
-        - moto
-        - mpi4py
-        - ndarray <1.6
-        - numexpr
-        - pandas
-        - pgcli
-        - psycopg2
-        - pyarrow
-        - pybind11 <2.3
-        - pyqt <5.12 # For matplotlib on linux. See https://github.com/conda-forge/pyqt-feedstock/issues/77
-        - pytables
-        - pyyaml
-        - requests
-        - scikit-image
-        - scikit-learn
-        - scipy
-        - starlink-ast <9
-        - sqlalchemy
-        - treecorr <4
-        - wcslib
-        - ws4py
-        - xpa
+        - rubin-env
     test:
       script: run_test_impl.sh
       requires:
         - python
+        - rubin-env
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - cfitsio
-        - curl
-        - fftw
-        - gsl
-        - hdf5
-        - hdf5 * mpi_mpich_*
-        - libblas
-        - libcblas
-        - liblapack
-        - liblapacke
-        - mpich
-        - numpy >=1.17
+        - sysroot_linux-64 2.17.*  # [linux64]
 
   - name: stackvana-afw
     version: {{ version }}
@@ -165,6 +74,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - {{ pin_subpackage('stackvana-core', exact=True) }}
+        - sysroot_linux-64 2.17.*  # [linux64]
         - cfitsio
         - curl
         - fftw
@@ -175,8 +85,8 @@ outputs:
         - libcblas
         - liblapack
         - liblapacke
+        - log4cxx
         - mpich
-        - numpy 1.17.*
       run:
         - python
         - {{ pin_subpackage('stackvana-core', exact=True) }}
@@ -190,7 +100,6 @@ outputs:
         - {{ pin_compatible('numpy') }}
     test:
       script: run_test_afw.sh
-
 
 about:
   home: https://github.com/beckermr/stackvana-core
