@@ -17,8 +17,12 @@ if [[ ! -t 1 ]]; then
 fi
 
 if [[ ${PKG_VERSION} == "0."* ]]; then
-    LSST_TAG=${PKG_VERSION#0.}
-    LSST_TAG="w_"${LSST_TAG//./_}
+    patchv=$(echo $PKG_VERSION | cut -d. -f3)
+    if [[ ${#patchv} == "1" ]]; then
+      LSST_TAG="w_"$(echo $PKG_VERSION | cut -d. -f2)"_0"${patchv}
+    else
+      LSST_TAG="w_"$(echo $PKG_VERSION | cut -d. -f2)"_"${patchv}
+    fi
 else
     LSST_TAG="v"${PKG_VERSION//./_}
 fi
