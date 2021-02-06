@@ -88,6 +88,16 @@ function _report_errors {
             echo " "
         done
     done
+    
+    # undo the shim
+    if [[ `uname -s` == "Darwin" ]]; then
+        echo "Undoing the OSX python shim..."
+        mv ${CONDA_PREFIX}/bin/python${LSST_PYVER}.bak ${CONDA_PREFIX}/bin/python${LSST_PYVER}
+        # leave behind a symlink just in case this path propagates
+        ln -s ${CONDA_PREFIX}/bin/python${LSST_PYVER} ${CONDA_PREFIX}/bin/python${LSST_PYVER}.bak
+        echo " "
+    fi
+
     exit 1
 }
 
